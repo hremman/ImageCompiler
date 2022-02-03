@@ -1,11 +1,15 @@
-#include "mainwindow.h"
+#include "CompilerMainWin.h"
 
 #include <QApplication>
+
+#include <QImage>
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
+    CompilerMainWin w;
     w.show();
     return a.exec();
+
 }
