@@ -9,16 +9,40 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    ColorFunctions.cpp \
+    AlgColorFunctions.cpp \
+    AlgImageTransformation.cpp \
+    AlgLayer.cpp \
     CompilerMainWin.cpp \
+    DataLayer.cpp \
+    DataProject.cpp \
+    FileFormat.cpp \
+    LayerView.cpp \
+    ProjTab.cpp \
+    ViewColorItem.cpp \
+    ViewColorSettings.cpp \
     main.cpp
 
 HEADERS += \
-    ColorFunctions.h \
-    CompilerMainWin.h
+    AlgColorFunctions.h \
+    AlgImageTransformation.hpp \
+    AlgLayer.hpp \
+    CompilerMainWin.h \
+    DataColor.hpp \
+    DataLayer.hpp \
+    DataProject.hpp \
+    FileFormat.hpp \
+    ImageTransformationInterface.hpp \
+    LayerView.h \
+    ProjTab.h \
+    ViewColorItem.h \
+    ViewColorSettings.h
 
 FORMS += \
-    CompilerMainWin.ui
+    CompilerMainWin.ui \
+    LayerView.ui \
+    ProjTab.ui \
+    ViewColorItem.ui \
+    ViewColorSettings.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

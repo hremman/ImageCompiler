@@ -1,9 +1,9 @@
-#include "ColorFunctions.h"
+#include "AlgColorFunctions.h"
 #include <QtGlobal>
 
-std::uniform_int_distribution<unsigned char> ColorFunctions::__M_random;
+std::uniform_int_distribution<unsigned> ColorFunctions::__M_random(0,255);
 std::random_device ColorFunctions::__M_device;
-std::mt19937 ColorFunctions::__M_generator(__M_device);
+std::mt19937 ColorFunctions::__M_generator(__M_device());
 
 QImage ColorFunctions::CompositeAlpha(const QImage & img_up, const QImage & img_down)
 {
@@ -75,24 +75,3 @@ QImage ColorFunctions::ChangeColor(const QImage & img, int hue)
     return img_res;
 }
 
-QImage ColorFunctions::Fill(const QImage & img)
-{
-    QImage img_res(img.width(), img.height(), img.format());
-    for (auto col = 0; col < img.width(); col++)
-    {
-        for (auto row = 0; row < img.height(); row++)
-        {
-            QColor p_i = img.pixelColor(col, row);
-            QColor p_r(255,255,255,0);
-            if ( p_i.alpha() != 0)
-            {
-                p_r.setRed(__M_random(__M_generator));
-                p_r.setGreen(__M_random(__M_generator));
-                p_r.setBlue(__M_random(__M_generator));
-                p_r.setAlpha(p_i.alpha());
-            }
-            img_res.setPixelColor(col, row, p_r);
-        }
-    }
-    return img_res;
-}

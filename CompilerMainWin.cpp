@@ -1,9 +1,11 @@
 #include "CompilerMainWin.h"
-#include "ui_mainwindow.h"
+#include "ui_CompilerMainWin.h"
+
 #include <QPixmap>
 #include <QImage>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
+#include "ProjTab.h"
 
 QImage img;
 
@@ -12,7 +14,11 @@ CompilerMainWin::CompilerMainWin(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QImage img_1, img_2;
+    ui->tabs->removeTab(1);
+    ui->tabs->addTab(new ProjTab, "пустой проект");
+
+
+    /*QImage img_1, img_2;
     img_1.load("h:\\mix_r.png");
     img_2.load("h:\\mix_b.png");
     img.~QImage();
@@ -58,17 +64,17 @@ CompilerMainWin::CompilerMainWin(QWidget *parent)
     ui->show_img->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->show_img->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->show_img->update();
-
+*/
 }
 
 void CompilerMainWin::resizeEvent(QResizeEvent* event)
 {
     QMainWindow::resizeEvent(event);
-    m_scene.clear();
+    /*m_scene.clear();
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(img.scaled(ui->show_img->width(), ui->show_img->height(), Qt::KeepAspectRatio)));
     m_scene.addItem(item);
     m_scene.setSceneRect(m_scene.itemsBoundingRect());
-    ui->show_img->update();
+    ui->show_img->update();*/
 
 }
 

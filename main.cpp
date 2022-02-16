@@ -1,5 +1,4 @@
 #include "CompilerMainWin.h"
-
 #include <QApplication>
 
 #include <QImage>
