@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CLayer</class>
- <widget class="QWidget" name="CLayer">
+ <class>UiLayer</class>
+ <widget class="QWidget" name="UiLayer">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -106,6 +106,10 @@
        </property>
        <property name="text">
         <string>⚙</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res.qrc">
+         <normaloff>:/image/icon/resourses/gear.ico</normaloff>:/image/icon/resourses/gear.ico</iconset>
        </property>
       </widget>
      </item>
@@ -272,6 +276,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../res.qrc"/>
+ </resources>
  <connections/>
 </ui>

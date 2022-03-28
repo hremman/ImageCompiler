@@ -7,7 +7,7 @@
 
 CLayer::CLayer(Data::CLayer * const data, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::CLayer),
+    ui(new Ui::UiLayer),
     m_data(data),
     m_changed(false)
 
@@ -53,7 +53,7 @@ void CLayer::file_dc(bool)
 
 void CLayer::settings_button(bool)
 {
-    ColorSettings dial(this);
+    ColorSettings dial(&(m_data->m_colors),4,this);
     if ( dial.exec() == QDialog::Accepted )
             m_changed = true;
 }

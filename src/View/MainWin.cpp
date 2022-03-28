@@ -11,10 +11,12 @@ QImage img;
 
 CompilerMainWin::CompilerMainWin(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWin)
+    , ui(new Ui::UiMainWin)
 {
     ui->setupUi(this);
-    ui->tabs->removeTab(1);
+    setWindowIcon(QIcon(":/image/icon/resourses/App.ico"));
+    setWindowTitle("Компилятор изображений");
+    ui->tabs->clear();
     ui->tabs->addTab(new ProjTab, "пустой проект");
 
 

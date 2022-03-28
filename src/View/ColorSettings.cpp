@@ -3,7 +3,7 @@
 
 ColorSettings::ColorSettings(QList<Data::CColor> * colors, int num, QWidget *parent):
     QDialog(parent),
-    ui(new Ui::ColorSettings),
+    ui(new Ui::UiColorSettings),
     m_colors(colors)
 {
     ui->setupUi(this);

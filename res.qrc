@@ -2,5 +2,8 @@
     <qresource prefix="/image/icon">
         <file>resourses/CMinus.ico</file>
         <file>resourses/CPlus.ico</file>
+        <file>resourses/App.ico</file>
+        <file>resourses/Folder.ico</file>
+        <file>resourses/gear.ico</file>
     </qresource>
 </RCC>

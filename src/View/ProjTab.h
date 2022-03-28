@@ -4,7 +4,7 @@
 #include <QWidget>
 
 namespace Ui {
-class ProjTab;
+class UiProjTab;
 }
 
 class ProjTab : public QWidget
@@ -16,7 +16,7 @@ public:
     ~ProjTab();
 
 private:
-    Ui::ProjTab *ui;
+    Ui::UiProjTab *ui;
 };
 
 #endif // PROJTAB_H

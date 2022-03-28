@@ -8,7 +8,7 @@
 
 
 namespace Ui {
-class CFileList;
+class UiFileList;
 }
 
 class CFileList : public QDialog
@@ -24,7 +24,7 @@ private slots:
     void close_clicked(bool);
 
 private:
-    Ui::CFileList *ui;
+    Ui::UiFileList *ui;
     QStringList &m_files;
 };
 

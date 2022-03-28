@@ -7,7 +7,7 @@
 
 CFileList::CFileList(QStringList &files, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::CFileList),
+    ui(new Ui::UiFileList),
     m_files(files)
 {
     ui->setupUi(this);

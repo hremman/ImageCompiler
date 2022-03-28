@@ -8,7 +8,7 @@
 
 
 namespace Ui {
-class ColorSettings;
+class UiColorSettings;
 }
 
 class ColorSettings : public QDialog
@@ -20,7 +20,7 @@ public:
     ~ColorSettings();
 
 private:
-    Ui::ColorSettings *ui;
+    Ui::UiColorSettings *ui;
     QList<Data::CColor> * m_colors;
 };
 

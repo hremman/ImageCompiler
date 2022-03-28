@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CFileList</class>
- <widget class="QDialog" name="CFileList">
+ <class>UiFileList</class>
+ <widget class="QDialog" name="UiFileList">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -23,16 +23,7 @@
    <item>
     <widget class="QPlainTextEdit" name="plainTextEdit">
      <property name="plainText">
-      <string>1
-2
-3
-4
-5
-6
-7
-8
-9
-10</string>
+      <string/>
      </property>
     </widget>
    </item>
@@ -77,6 +68,10 @@
        <property name="text">
         <string>➕</string>
        </property>
+       <property name="icon">
+        <iconset resource="../res.qrc">
+         <normaloff>:/image/icon/resourses/CPlus.ico</normaloff>:/image/icon/resourses/CPlus.ico</iconset>
+       </property>
       </widget>
      </item>
      <item>
@@ -96,6 +91,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../res.qrc"/>
+ </resources>
  <connections/>
 </ui>

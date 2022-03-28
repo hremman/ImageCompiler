@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ProjTab</class>
- <widget class="QWidget" name="ProjTab">
+ <class>UiProjTab</class>
+ <widget class="QWidget" name="UiProjTab">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,7 +13,7 @@
   <property name="minimumSize">
    <size>
     <width>460</width>
-    <height>541</height>
+    <height>500</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -91,6 +91,10 @@
        <property name="text">
         <string>📂</string>
        </property>
+       <property name="icon">
+        <iconset resource="../res.qrc">
+         <normaloff>:/image/icon/resourses/Folder.ico</normaloff>:/image/icon/resourses/Folder.ico</iconset>
+       </property>
       </widget>
      </item>
     </layout>
@@ -146,6 +150,10 @@
        <property name="text">
         <string>➖</string>
        </property>
+       <property name="icon">
+        <iconset resource="../res.qrc">
+         <normaloff>:/image/icon/resourses/CMinus.ico</normaloff>:/image/icon/resourses/CMinus.ico</iconset>
+       </property>
       </widget>
      </item>
      <item>
@@ -165,12 +173,18 @@
        <property name="text">
         <string>➕</string>
        </property>
+       <property name="icon">
+        <iconset resource="../res.qrc">
+         <normaloff>:/image/icon/resourses/CPlus.ico</normaloff>:/image/icon/resourses/CPlus.ico</iconset>
+       </property>
       </widget>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../res.qrc"/>
+ </resources>
  <connections/>
 </ui>

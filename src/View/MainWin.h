@@ -6,7 +6,7 @@
 #include <QGraphicsPixmapItem>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWin; }
+namespace Ui { class UiMainWin; }
 QT_END_NAMESPACE
 
 class CompilerMainWin : public QMainWindow
@@ -19,7 +19,7 @@ public:
     void resizeEvent(QResizeEvent* event);
 
 private:
-    Ui::MainWin *ui;
+    Ui::UiMainWin *ui;
 
 
 private:

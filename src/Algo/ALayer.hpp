@@ -1,7 +1,7 @@
 #ifndef CALGLAYER_HPP
 #define CALGLAYER_HPP
 
-#include "Data/Layer.hpp"
+#include "Data/DLayer.hpp"
 #include "ImageTransformation.hpp"
 
 class CAlgLayer

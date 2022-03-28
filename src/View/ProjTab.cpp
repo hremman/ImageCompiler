@@ -5,7 +5,7 @@
 
 ProjTab::ProjTab(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ProjTab)
+    ui(new Ui::UiProjTab)
 {
     ui->setupUi(this);
 

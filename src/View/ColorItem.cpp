@@ -4,7 +4,7 @@
 
 ColorItem::ColorItem(Data::CColor *const data, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ColorItem),
+    ui(new Ui::UiColorItem),
     m_data(data)
 {
     ui->setupUi(this);

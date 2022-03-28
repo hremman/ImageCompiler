@@ -9,10 +9,10 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/Algo/ALayer.cpp \
     src/Algo/ColorFunctions.cpp \
     src/Algo/ImageTransformation.cpp \
-    src/Algo/Layer.cpp \
-    src/Data/Layer.cpp \
+    src/Data/DLayer.cpp \
     src/Data/Project.cpp \
     src/File/Formats.cpp \
     src/View/ColorItem.cpp \
@@ -24,11 +24,11 @@ SOURCES += \
     src/main.cpp
 
 HEADERS += \
+    src/Algo/ALayer.hpp \
     src/Algo/ColorFunctions.hpp \
     src/Algo/ImageTransformation.hpp \
-    src/Algo/Layer.hpp \
     src/Data/Color.hpp \
-    src/Data/Layer.hpp \
+    src/Data/DLayer.hpp \
     src/Data/Project.hpp \
     src/File/Formats.hpp \
     src/View/ColorItem.h \

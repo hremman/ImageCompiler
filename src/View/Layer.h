@@ -2,10 +2,10 @@
 #define LAYER_H
 
 #include <QWidget>
-#include "Data/Layer.hpp"
+#include "Data/DLayer.hpp"
 
 namespace Ui {
-class CLayer;
+class UiLayer;
 }
 
 class CLayer : public QWidget
@@ -22,7 +22,7 @@ private slots:
     void mode_changed(int);
 
 private:
-    Ui::CLayer *ui;
+    Ui::UiLayer *ui;
     Data::CLayer * const m_data;
     bool m_changed;
 

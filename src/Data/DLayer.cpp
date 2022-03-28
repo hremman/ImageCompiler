@@ -1,4 +1,4 @@
-#include "Data/Layer.hpp"
+#include "Data/DLayer.hpp"
 
 Data::CLayer::CLayer()
     : m_name("Новый Слой")

@@ -41,7 +41,7 @@ bool CGenerateTransformation::haveWork() const
     if (m_remember)
         return m_current != m_used_colors.end();
     else
-        return m_used_colors.size() < m_number;
+        return m_used_colors.size() < static_cast<size_t>(m_number);
 }
 
 void CGenerateTransformation::reset()

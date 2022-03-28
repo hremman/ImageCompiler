@@ -6,7 +6,7 @@
 
 
 namespace Ui {
-class ColorItem;
+class UiColorItem;
 }
 
 class ColorItem : public QWidget
@@ -23,7 +23,7 @@ private slots:
     void change_s(int);
 
 private:
-    Ui::ColorItem *ui;
+    Ui::UiColorItem *ui;
     Data::CColor *const m_data;
 
     void update_button_color();

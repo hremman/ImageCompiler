@@ -3,7 +3,7 @@
 
 #include <QString>
 #include <QList>
-#include "Layer.hpp"
+#include "DLayer.hpp"
 
 namespace Data {
     class CProject
