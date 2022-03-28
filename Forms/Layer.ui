@@ -111,6 +111,12 @@
         <iconset resource="../res.qrc">
          <normaloff>:/image/icon/resourses/gear.ico</normaloff>:/image/icon/resourses/gear.ico</iconset>
        </property>
+       <property name="iconSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
       </widget>
      </item>
     </layout>

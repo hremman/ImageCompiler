@@ -5,5 +5,6 @@
         <file>resourses/App.ico</file>
         <file>resourses/Folder.ico</file>
         <file>resourses/gear.ico</file>
+        <file>resourses/cross.ico</file>
     </qresource>
 </RCC>
