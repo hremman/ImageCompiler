@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/image/icon">
+        <file>resourses/CMinus.ico</file>
+        <file>resourses/CPlus.ico</file>
+    </qresource>
+</RCC>
