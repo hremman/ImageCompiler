@@ -1,17 +1,17 @@
 #ifndef CALGLAYER_HPP
 #define CALGLAYER_HPP
 
-#include "Data/DLayer.hpp"
+#include "Data/Layer.hpp"
 #include "ImageTransformation.hpp"
 
-class CAlgLayer
+class CLayer
 {
 public:
-    CAlgLayer();
+    CLayer();
 
 protected: //fields
     Data::CLayer * m_layer_data;
-    CImageTransformation * m_transform;
+    CImageTransform * m_transform;
 };
 
 #endif // CALGLAYER_HPP

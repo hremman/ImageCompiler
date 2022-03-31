@@ -2,12 +2,13 @@
 #define IMAGETRANSFORMATIONINTERFACE_HPP
 
 #include <QImage>
+#include <unordered_map>
 
 
-class CImageTransformationInterface
+class CImageTransformInterface
 {
 public:
-    CImageTransformationInterface()
+    CImageTransformInterface()
     {}
 
     virtual QImage transform(const QImage &) = 0;
@@ -15,5 +16,6 @@ public:
     virtual bool haveWork() const = 0;
 
 };
+
 
 #endif // IMAGETRANSFORMATIONINTERFACE_HPP

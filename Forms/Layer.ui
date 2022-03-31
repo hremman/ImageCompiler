@@ -27,7 +27,59 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLineEdit" name="layer_name"/>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLineEdit" name="layer_name">
+       <property name="toolTip">
+        <string>Название слоя</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="minimumSize">
+        <size>
+         <width>21</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>21</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Идентификатор слоя</string>
+       </property>
+       <property name="text">
+        <string>Ид: </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lid">
+       <property name="minimumSize">
+        <size>
+         <width>31</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>31</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Идентификатор слоя</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -44,6 +96,9 @@
          <width>60</width>
          <height>16</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Тип преобразования:&lt;/p&gt;&lt;p&gt;  *  Не изменять - брать готовые изображения как есть&lt;/p&gt;&lt;p&gt;  *  Замена цвета - перебрать цвет сгенерированные случайно или по заданной палитре. Требует настройки&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="text">
         <string>Изменение:</string>
@@ -64,6 +119,9 @@
          <height>20</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Тип преобразования:&lt;/p&gt;&lt;p&gt;  *  Не изменять - брать готовые изображения как есть&lt;/p&gt;&lt;p&gt;  *  Замена цвета - перебрать цвет сгенерированные случайно или по заданной палитре. Требует настройки&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="currentIndex">
         <number>-1</number>
        </property>
@@ -75,17 +133,12 @@
        </property>
        <item>
         <property name="text">
-         <string>Неизменяемый</string>
+         <string>Не изменять</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Цветовой генератор</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Перебор цветов в палитре</string>
+         <string>Замена цвета</string>
         </property>
        </item>
       </widget>
@@ -103,6 +156,9 @@
          <width>25</width>
          <height>25</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Настройка цветовой замены</string>
        </property>
        <property name="text">
         <string>⚙</string>
@@ -156,6 +212,9 @@
          <height>20</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Список файлов. Двойное нажатие для расширения редакотра.</string>
+       </property>
        <property name="inputMask">
         <string notr="true"/>
        </property>
@@ -182,6 +241,10 @@
          <height>20</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Вероятность использования слоя в каждом выходном изображении.
+От 0 до 1</string>
+       </property>
        <property name="text">
         <string>Вероятность использования</string>
        </property>
@@ -200,6 +263,10 @@
          <width>50</width>
          <height>20</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Вероятность использования слоя в каждом выходном изображении.
+От 0 до 1</string>
        </property>
        <property name="decimals">
         <number>3</number>
@@ -242,6 +309,10 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Вероятность использовать 1 раз  слой с принудительной заменой цвета на белый шум.
+Значение от 0 до 1</string>
+       </property>
        <property name="text">
         <string>Вероятность шума</string>
        </property>
@@ -260,6 +331,10 @@
          <width>50</width>
          <height>16777215</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Вероятность использовать 1 раз  слой с принудительной заменой цвета на белый шум.
+Значение от 0 до 1</string>
        </property>
        <property name="decimals">
         <number>3</number>

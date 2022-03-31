@@ -1,3 +1,6 @@
+#include <QPainter>
+#include <QFile>
+#include <QVector>
 #include "FileList.hpp"
 #include "ui_FileList.h"
 
@@ -11,12 +14,18 @@ CFileList::CFileList(QStringList &files, QWidget *parent) :
     m_files(files)
 {
     ui->setupUi(this);
-    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::Dialog);
-    setWindowModality(Qt::WindowModal);
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint );
+    //setWindowModality(Qt::ApplicationModal);
     QObject::connect(ui->close, &QToolButton::clicked, this, &CFileList::close_clicked);
     QObject::connect(ui->add, &QToolButton::clicked, this, &CFileList::add_clicked);
 
     ui->plainTextEdit->setPlainText(m_files.join("\n"));
+
+    ui->plainTextEdit->setUndoRedoEnabled(true);
+    ui->plainTextEdit->setFocus();
+    auto cur = ui->plainTextEdit->textCursor();
+    cur.movePosition(QTextCursor::End);
+    ui->plainTextEdit->setTextCursor(cur);
 
 }
 
@@ -32,7 +41,9 @@ void CFileList::add_clicked(bool)
     if (additional.size() )
     {
         auto cur = ui->plainTextEdit->textCursor();
-        cur.setPosition(QTextCursor::End);
+        cur.movePosition(QTextCursor::End);
+        ui->plainTextEdit->setTextCursor(cur);
+        cur.insertText("\n");
         cur.insertText(additional.join("\n"));
     }
 }
@@ -61,4 +72,5 @@ void CFileList::close_clicked(bool)
     else
         this->reject();
 }
+
 

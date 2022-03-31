@@ -2,7 +2,7 @@
 #define CDATALAYER_HPP
 
 #include <QList>
-#include "Color.hpp"
+#include "Data/ColorSettings.h"
 #include "File/Formats.hpp"
 
 namespace Data {
@@ -22,9 +22,8 @@ namespace Data {
         QStringList m_files;
         double m_use_probability;
         double m_noise_probability;
-        int m_generations_number;
-        QList<CColor> m_colors;
         WorkType m_type;
+        CColorSettings m_colors;
 
     public:
         CLayer();

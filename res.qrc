@@ -6,5 +6,10 @@
         <file>resourses/Folder.ico</file>
         <file>resourses/gear.ico</file>
         <file>resourses/cross.ico</file>
+        <file>resourses/save.ico</file>
+        <file>resourses/save_all.ico</file>
+        <file>resourses/new.ico</file>
+        <file>resourses/redo.ico</file>
+        <file>resourses/undo.ico</file>
     </qresource>
 </RCC>

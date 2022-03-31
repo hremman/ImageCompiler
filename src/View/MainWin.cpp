@@ -7,6 +7,8 @@
 #include <QGraphicsScene>
 #include "ProjTab.h"
 
+#include "View/FileList.hpp"
+
 QImage img;
 
 CompilerMainWin::CompilerMainWin(QWidget *parent)
@@ -17,7 +19,10 @@ CompilerMainWin::CompilerMainWin(QWidget *parent)
     setWindowIcon(QIcon(":/image/icon/resourses/App.ico"));
     setWindowTitle("Компилятор изображений");
     ui->tabs->clear();
-    ui->tabs->addTab(new ProjTab, "пустой проект");
+    ui->tabs->addTab(new ProjTab, "Новый проект");
+
+    QObject::connect(ui->do_it, &QPushButton::clicked, this, &CompilerMainWin::button_clicked);
+
 
 
     /*QImage img_1, img_2;
@@ -85,3 +90,19 @@ CompilerMainWin::~CompilerMainWin()
     delete ui;
 }
 
+void CompilerMainWin::button_clicked(bool)
+{
+    qDebug() << "clicked";
+    QStringList list;
+    list.append("asd");
+    list.append("zxc");
+    CFileList window(list, this);
+    window.resize(ui->do_it->width(), 159);
+    qDebug() << QWidget::mapToGlobal( ui->do_it->pos() );
+    window.move(QWidget::mapToGlobal( ui->do_it->pos()) + (ui->do_it->rect().bottomLeft() + QPoint(0,1 + ui->do_it->height() / 2)));
+
+    if (window.exec() == QDialog::Accepted)
+        qDebug() << "Accepted";
+
+     qDebug() << list.join("?");
+}

@@ -2,8 +2,8 @@
 #define CDATAPROJECT_HPP
 
 #include <QString>
-#include <QList>
-#include "DLayer.hpp"
+#include <list>
+#include "Layer.hpp"
 
 namespace Data {
     class CProject
@@ -12,7 +12,7 @@ namespace Data {
         QString m_name;
         QString m_out_path;
         QString m_root_path;
-        QList<CLayer> m_layers;
+        std::list<CLayer> m_layers;
 
 
     public:

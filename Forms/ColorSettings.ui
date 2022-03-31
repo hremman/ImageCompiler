@@ -48,6 +48,9 @@
             <height>17</height>
            </size>
           </property>
+          <property name="toolTip">
+           <string>Положимся на удачу. Цвета генерируются для каждого слоя 1 раз</string>
+          </property>
           <property name="text">
            <string>Случайный</string>
           </property>
@@ -102,6 +105,9 @@
             <height>22</height>
            </size>
           </property>
+          <property name="toolTip">
+           <string>Сколько цветов сгенерировать.</string>
+          </property>
           <property name="wrapping">
            <bool>false</bool>
           </property>
@@ -124,16 +130,22 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QCheckBox" name="random_value">
+         <widget class="QCheckBox" name="random_saturation">
+          <property name="toolTip">
+           <string>Указывает, нужно ли при подмене цвета на указанный так же заменять насыщенность.</string>
+          </property>
           <property name="text">
-           <string>Корректировая яркость</string>
+           <string>Заменять насыщенность</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="random_saturation">
+         <widget class="QCheckBox" name="random_value">
+          <property name="toolTip">
+           <string>Указывает, что при подмене цвета необходимо сдвинуть усреднённую яркость исходника к яркости выбранного цвета</string>
+          </property>
           <property name="text">
-           <string>Заменять насыщенность</string>
+           <string>Корректировая яркость</string>
           </property>
          </widget>
         </item>
@@ -167,6 +179,9 @@
             <height>17</height>
            </size>
           </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Позволяет перебрать заранее настроенные цвета из списка. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="text">
            <string>Перебор</string>
           </property>
@@ -194,6 +209,21 @@
        <widget class="QListWidget" name="colors_list">
         <property name="enabled">
          <bool>false</bool>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="showDropIndicator" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="dragDropMode">
+         <enum>QAbstractItemView::NoDragDrop</enum>
+        </property>
+        <property name="defaultDropAction">
+         <enum>Qt::MoveAction</enum>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::ExtendedSelection</enum>
         </property>
        </widget>
       </item>
@@ -229,6 +259,9 @@
             <height>25</height>
            </size>
           </property>
+          <property name="toolTip">
+           <string>Удаляет выбранные цвета из набора</string>
+          </property>
           <property name="text">
            <string>➖</string>
           </property>
@@ -260,6 +293,9 @@
             <width>25</width>
             <height>25</height>
            </size>
+          </property>
+          <property name="toolTip">
+           <string>Добавить цвет в набор</string>
           </property>
           <property name="styleSheet">
            <string notr="true">font: 75 8pt &quot;MS Shell Dlg 2&quot;; color: rgb(0, 222, 0)</string>

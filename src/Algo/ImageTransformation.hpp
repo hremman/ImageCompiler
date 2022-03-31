@@ -7,7 +7,7 @@
 #include "ImageTransformationInterface.hpp"
 #include "Data/Color.hpp"
 
-class CNullTransformation : public CImageTransformationInterface
+class CNullTransform : public CImageTransformInterface
 {
 
 public:
@@ -21,7 +21,7 @@ protected:
 };
 
 
-class CGenerateTransformation : public CImageTransformationInterface
+class CGenerateTransform : public CImageTransformInterface
 {
 
 public: //fields
@@ -29,7 +29,7 @@ public: //fields
     bool m_remember;
 
 public: //methods
-    CGenerateTransformation();
+    CGenerateTransform();
 
     QImage transform(const QImage &) override;
     void reset() override;
@@ -41,11 +41,11 @@ protected: //fields
     std::unordered_set<Data::CColor, Data::CColorHash>::const_iterator m_current;
 };
 
-class CPaletteTransformation : public CImageTransformationInterface
+class CPaletteTransform : public CImageTransformInterface
 {
 
 public: //methods
-    CPaletteTransformation();
+    CPaletteTransform();
 
     QImage transform(const QImage &) override;
     void reset() override;
@@ -58,7 +58,7 @@ protected: //fields
     QList<Data::CColor>::ConstIterator m_current;
 };
 
-using CImageTransformation = CImageTransformationInterface;
+using CImageTransform = CImageTransformInterface;
 
 
 #endif // CIMAGETRANSFORMATION_HPP

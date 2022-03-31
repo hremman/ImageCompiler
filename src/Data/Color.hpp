@@ -12,7 +12,11 @@ namespace Data
         QColor m_color;
         bool m_saturation;
         bool m_value;
-
+        CColor()
+            : m_color(Qt::gray)
+            , m_saturation(false)
+            , m_value(false)
+        {}
         CColor(const CColor & ref)
             : m_color(ref.m_color)
             , m_saturation(ref.m_saturation)

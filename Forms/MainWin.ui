@@ -19,6 +19,12 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonIconOnly</enum>
+  </property>
+  <property name="dockNestingEnabled">
+   <bool>false</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
@@ -26,7 +32,7 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,1">
     <item>
      <widget class="QTabWidget" name="tabs">
       <property name="enabled">
@@ -35,7 +41,7 @@
       <property name="minimumSize">
        <size>
         <width>460</width>
-        <height>541</height>
+        <height>510</height>
        </size>
       </property>
       <property name="tabPosition">
@@ -103,7 +109,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="do_it">
         <property name="minimumSize">
          <size>
           <width>320</width>
@@ -115,6 +128,9 @@
           <width>320</width>
           <height>40</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>Запустить генерацию выходного массива изображений</string>
         </property>
         <property name="text">
          <string>Генерировать</string>
@@ -138,23 +154,62 @@
     <property name="title">
      <string>Файл</string>
     </property>
-    <addaction name="action_3"/>
-    <addaction name="action"/>
-    <addaction name="action_2"/>
+    <addaction name="new_prog"/>
+    <addaction name="open"/>
+    <addaction name="save"/>
+    <addaction name="save_all"/>
+    <addaction name="close_all"/>
     <addaction name="separator"/>
     <addaction name="action_4"/>
    </widget>
    <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="action">
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftToolBarArea|Qt::TopToolBarArea</set>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="new_prog"/>
+   <addaction name="save"/>
+   <addaction name="save_all"/>
+   <addaction name="close_all"/>
+   <addaction name="undo"/>
+   <addaction name="redo"/>
+  </widget>
+  <action name="open">
+   <property name="icon">
+    <iconset resource="../res.qrc">
+     <normaloff>:/image/icon/resourses/Folder.ico</normaloff>:/image/icon/resourses/Folder.ico</iconset>
+   </property>
    <property name="text">
     <string>Открыть проект</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
-  <action name="action_2">
+  <action name="save">
+   <property name="icon">
+    <iconset resource="../res.qrc">
+     <normaloff>:/image/icon/resourses/save.ico</normaloff>:/image/icon/resourses/save.ico</iconset>
+   </property>
    <property name="text">
-    <string>Сохранить проект</string>
+    <string>Сохранить</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="action_4">
@@ -162,12 +217,75 @@
     <string>Выход</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="new_prog">
+   <property name="icon">
+    <iconset resource="../res.qrc">
+     <normaloff>:/image/icon/resourses/new.ico</normaloff>:/image/icon/resourses/new.ico</iconset>
+   </property>
    <property name="text">
     <string>Новый проект</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="save_all">
+   <property name="icon">
+    <iconset resource="../res.qrc">
+     <normaloff>:/image/icon/resourses/save_all.ico</normaloff>:/image/icon/resourses/save_all.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Сохранить все</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="close_all">
+   <property name="icon">
+    <iconset resource="../res.qrc">
+     <normaloff>:/image/icon/resourses/cross.ico</normaloff>:/image/icon/resourses/cross.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Закрыть все</string>
+   </property>
+   <property name="toolTip">
+    <string>Закрыть все открытые</string>
+   </property>
+  </action>
+  <action name="undo">
+   <property name="icon">
+    <iconset resource="../res.qrc">
+     <normaloff>:/image/icon/resourses/undo.ico</normaloff>:/image/icon/resourses/undo.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Отмена</string>
+   </property>
+   <property name="toolTip">
+    <string>Отменить последнее</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="redo">
+   <property name="icon">
+    <iconset resource="../res.qrc">
+     <normaloff>:/image/icon/resourses/redo.ico</normaloff>:/image/icon/resourses/redo.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Повторить</string>
+   </property>
+   <property name="toolTip">
+    <string>Вернуть отменённое</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../res.qrc"/>
+ </resources>
  <connections/>
 </ui>

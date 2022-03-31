@@ -2,7 +2,6 @@
 #define FILELIST_H
 
 #include <QDialog>
-#include <QDialog>
 #include <QStringList>
 #include <QFileDialog>
 
@@ -26,6 +25,8 @@ private slots:
 private:
     Ui::UiFileList *ui;
     QStringList &m_files;
+
+
 };
 
 

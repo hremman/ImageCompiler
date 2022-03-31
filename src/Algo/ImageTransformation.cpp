@@ -2,41 +2,41 @@
 
 //CNullTransformation
 
-QImage CNullTransformation::transform(const QImage & img)
+QImage CNullTransform::transform(const QImage & img)
     {return img;}
 
-void CNullTransformation::reset()
+void CNullTransform::reset()
     {m_done = true;}
 
-bool CNullTransformation::haveWork() const
+bool CNullTransform::haveWork() const
     {return m_done;}
 
 
 //CPaletteTransformation
 
-CPaletteTransformation::CPaletteTransformation()
+CPaletteTransform::CPaletteTransform()
 {}
 
-QImage CPaletteTransformation::transform(const QImage & img)
+QImage CPaletteTransform::transform(const QImage & img)
     {return img;}
 
-void CPaletteTransformation::reset()
+void CPaletteTransform::reset()
     {m_current = m_colors->cbegin();}
 
-bool CPaletteTransformation::haveWork() const
+bool CPaletteTransform::haveWork() const
     {return m_current != m_colors->cend();}
 
-void CPaletteTransformation::setColors(const QList<Data::CColor> * colors)
+void CPaletteTransform::setColors(const QList<Data::CColor> * colors)
     {m_colors = colors;}
 
 
 
 //CGenerateTransformation
 
-QImage CGenerateTransformation::transform(const QImage & img)
+QImage CGenerateTransform::transform(const QImage & img)
     {return img;}
 
-bool CGenerateTransformation::haveWork() const
+bool CGenerateTransform::haveWork() const
 {
     if (m_remember)
         return m_current != m_used_colors.end();
@@ -44,7 +44,7 @@ bool CGenerateTransformation::haveWork() const
         return m_used_colors.size() < static_cast<size_t>(m_number);
 }
 
-void CGenerateTransformation::reset()
+void CGenerateTransform::reset()
 {
     if (m_remember)
         m_current = m_used_colors.begin();

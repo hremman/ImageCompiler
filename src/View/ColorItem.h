@@ -16,6 +16,8 @@ class ColorItem : public QWidget
 public:
     explicit ColorItem(Data::CColor *const data, QWidget *parent = nullptr);
     ~ColorItem();
+    Data::CColor const * getData()
+        {return m_data;}
 
 private slots:
     void button_clicked(bool);

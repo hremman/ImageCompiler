@@ -8,8 +8,8 @@
 CLayer::CLayer(Data::CLayer * const data, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UiLayer),
-    m_data(data),
-    m_changed(false)
+    m_data(data)
+
 
 {
     ui->setupUi(this);
@@ -26,6 +26,7 @@ CLayer::CLayer(Data::CLayer * const data, QWidget *parent) :
     QObject::connect(ui->settings, &QToolButton::clicked, this, &CLayer::settings_button);
     QObject::connect(ui->mode_choose, &QComboBox::activated, this, &CLayer::mode_changed);
 
+
 }
 
 CLayer::~CLayer()
@@ -38,24 +39,25 @@ void CLayer::mode_changed(int mode)
 {
     m_data->m_type = static_cast<Data::CLayer::WorkType>(mode);
     switchElements();
-    m_changed = true;
+
 }
 
 void CLayer::file_dc(bool)
-{
+{  
     CFileList window(m_data->m_files, this);
     window.resize(ui->path_edit->width(), 159);
-    window.move(ui->path_edit->rect().bottomLeft());
+
+    window.move(QWidget::mapToGlobal( ui->path_edit->pos()) + (ui->path_edit->rect().bottomLeft() + QPoint(0,1 + ui->path_edit->height() / 2)));
+
     if (window.exec() == QDialog::Accepted)
-        m_changed = true;
-    ui->path_edit->setText(m_data->m_files.join("?"));
+        ui->path_edit->setText(m_data->m_files.join("?"));
 }
 
 void CLayer::settings_button(bool)
 {
-    ColorSettings dial(&(m_data->m_colors),4,this);
+    ColorSettings dial(&(m_data->m_colors),this);
     if ( dial.exec() == QDialog::Accepted )
-            m_changed = true;
+    ;
 }
 
 void CLayer::switchElements()
@@ -100,5 +102,3 @@ void CLayer::switchElements()
     }
 }
 
-bool CLayer::isChanged() const
-    {return m_changed;}

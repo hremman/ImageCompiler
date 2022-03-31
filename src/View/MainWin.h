@@ -21,6 +21,8 @@ public:
 private:
     Ui::UiMainWin *ui;
 
+private slots:
+    void button_clicked(bool);
 
 private:
      QGraphicsScene m_scene;
