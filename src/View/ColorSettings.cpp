@@ -32,8 +32,8 @@ ColorSettings::ColorSettings(Data::CColorSettings * data, QWidget *parent):
         ui->colors_list->setEnabled(true);
         ui->tb_add->setEnabled(true);
         ui->tb_rem->setEnabled(true);
-
-        for(auto i = m_data->m_colors.begin(); i != m_data->m_colors.end(); i++)
+        m_colors = m_data->m_colors;
+        for(auto i = m_colors.begin(); i != m_colors.end(); i++)
         {
             // Add to list a new item (item is simply an entry in your list)
             QListWidgetItem *item = new QListWidgetItem(ui->colors_list);
@@ -101,9 +101,11 @@ void ColorSettings::react_accepted()
     {
         m_data->m_mode = Data::CColorSettings::Mode::ENUMERATION;
         for (auto i = m_rem_colors.begin(); i != m_rem_colors.end(); i++)
-            m_data->m_colors.remove(**i);
+            m_colors.remove(**i);
         for (auto i = m_new_colors.begin(); i != m_new_colors.end(); i++)
-            m_data->m_colors.emplace_back(*i);
+            m_colors.emplace_back(*i);
+
+        m_data->m_colors = std::move(m_colors);
     }
 }
 

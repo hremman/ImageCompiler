@@ -99,7 +99,8 @@ void CompilerMainWin::button_clicked(bool)
     CFileList window(list, this);
     window.resize(ui->do_it->width(), 159);
     qDebug() << QWidget::mapToGlobal( ui->do_it->pos() );
-    window.move(QWidget::mapToGlobal( ui->do_it->pos()) + (ui->do_it->rect().bottomLeft() + QPoint(0,1 + ui->do_it->height() / 2)));
+    qDebug() << ui->do_it->rect().bottomLeft();
+    window.move(QWidget::mapToGlobal( ui->do_it->pos()) + (ui->do_it->rect().bottomLeft() + QPoint(0,1 + ui->do_it->height())));
 
     if (window.exec() == QDialog::Accepted)
         qDebug() << "Accepted";

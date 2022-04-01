@@ -2,13 +2,19 @@
 #define CDATALAYER_HPP
 
 #include <QList>
+#include <set>
+#include <stdexcept>
 #include "Data/ColorSettings.h"
 #include "File/Formats.hpp"
 
 namespace Data {
+
     class CLayer
     {
-
+    public:
+        using uid_t = unsigned short;
+        static std::set<uid_t> __M_used_lid;
+        static uid_t new_lid();
     public: //types
         enum class WorkType{
             NOTHING = 0,
@@ -27,9 +33,13 @@ namespace Data {
 
     public:
         CLayer();
+        ~CLayer();
+        uid_t get_lid() const
+            {return m_lid;}
 
 
-
+    protected:  //fields
+        uid_t m_lid;
     };
 }
 #endif // CDATALAYER_HPP

@@ -21,6 +21,7 @@ public:
 private:
     Ui::UiColorSettings *ui;
     Data::CColorSettings * m_data;
+    std::list<Data::CColor> m_colors;
     std::list<Data::CColor> m_new_colors;
     std::list<Data::CColor const *> m_rem_colors;
 

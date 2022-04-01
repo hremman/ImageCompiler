@@ -16,10 +16,18 @@ class CLayer : public QWidget
 public:
     explicit CLayer(Data::CLayer * const, QWidget *parent = nullptr);
     ~CLayer();
+
+public:
+signals:
+    void changed();
+
 private slots:
-    void file_dc(bool);
+    void file_dc();
     void settings_button(bool);
     void mode_changed(int);
+    void name_changed();
+    void noise_changed(double);
+    void probe_changed(double);
 
 private:
     Ui::UiLayer *ui;

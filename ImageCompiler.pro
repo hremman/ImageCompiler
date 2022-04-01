@@ -16,6 +16,7 @@ SOURCES += \
     src/Data/ColorSettings.cpp \
     src/Data/Layer.cpp \
     src/Data/Project.cpp \
+    src/Data/ProjectStory.cpp \
     src/File/Formats.cpp \
     src/View/ColorItem.cpp \
     src/View/ColorSettings.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
     src/View/Layer.cpp \
     src/View/MainWin.cpp \
     src/View/ProjTab.cpp \
+    src/View/qlineeditdc.cpp \
     src/main.cpp
 
 HEADERS += \
@@ -33,6 +35,7 @@ HEADERS += \
     src/Data/ColorSettings.h \
     src/Data/Layer.hpp \
     src/Data/Project.hpp \
+    src/Data/ProjectStory.hpp \
     src/File/Formats.hpp \
     src/View/ColorItem.h \
     src/View/ColorSettings.h \
@@ -40,7 +43,8 @@ HEADERS += \
     src/View/FileList.hpp \
     src/View/Layer.h \
     src/View/MainWin.h \
-    src/View/ProjTab.h
+    src/View/ProjTab.h \
+    src/View/qlineeditdc.h
 
 FORMS += \
     Forms/ColorItem.ui \

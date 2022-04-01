@@ -1,4 +1,4 @@
-#include "Project.hpp"
+#include "Data/Project.hpp"
 
 Data::CProject::CProject()
     : m_name("Новый проект")

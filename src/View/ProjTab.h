@@ -2,6 +2,9 @@
 #define PROJTAB_H
 
 #include <QWidget>
+#include <Data/ProjectStory.hpp>
+#include "Data/Project.hpp"
+
 
 namespace Ui {
 class UiProjTab;
@@ -15,8 +18,12 @@ public:
     explicit ProjTab(QWidget *parent = nullptr);
     ~ProjTab();
 
+    void rebuild();
+
 private:
     Ui::UiProjTab *ui;
+    Data::CProjectStory m_story;
+
 };
 
 #endif // PROJTAB_H

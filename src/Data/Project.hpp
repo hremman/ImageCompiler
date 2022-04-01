@@ -17,6 +17,9 @@ namespace Data {
 
     public:
         CProject();
+        CProject(const CProject &);
+
+        CProject& operator =(const CProject &);
     };
 }
 #endif // CDATAPROJECT_HPP
