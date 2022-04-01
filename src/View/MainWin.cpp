@@ -19,7 +19,7 @@ CompilerMainWin::CompilerMainWin(QWidget *parent)
     setWindowIcon(QIcon(":/image/icon/resourses/App.ico"));
     setWindowTitle("Компилятор изображений");
     ui->tabs->clear();
-    ui->tabs->addTab(new ProjTab, "Новый проект");
+    ui->tabs->addTab(new ProjTab(*(new Data::CProject)), "Новый проект");
 
     QObject::connect(ui->do_it, &QPushButton::clicked, this, &CompilerMainWin::button_clicked);
 

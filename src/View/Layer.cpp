@@ -26,9 +26,9 @@ CLayer::CLayer(Data::CLayer * const data, QWidget *parent) :
 
     QObject::connect(ui->settings, &QToolButton::clicked, this, &CLayer::settings_button);
     QObject::connect(ui->mode_choose, &QComboBox::activated, this, &CLayer::mode_changed);
-    QObject::connect(ui->layer_name, &QLineEdit::editingFinished, this, &CLayer::mode_changed);
-    QObject::connect(ui->probe_val, &QDoubleSpinBox::valueChanged, this, &CLayer::mode_changed);
-    QObject::connect(ui->noise_probe, &QDoubleSpinBox::valueChanged, this, &CLayer::mode_changed);
+    QObject::connect(ui->layer_name, &QLineEdit::editingFinished, this, &CLayer::name_changed);
+    QObject::connect(ui->probe_val, &QDoubleSpinBox::valueChanged, this, &CLayer::probe_changed);
+    QObject::connect(ui->noise_probe, &QDoubleSpinBox::valueChanged, this, &CLayer::noise_changed);
 
 
 }

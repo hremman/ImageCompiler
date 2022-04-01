@@ -9,7 +9,7 @@ public:
     explicit QLineEditDC(QWidget *parent = nullptr);
 
 protected:
-    void mouseDoubleClickEvent(QMouseEvent *e)
+    void mouseDoubleClickEvent(QMouseEvent *e);
 };
 
 #endif // QLINEEDITDC_H
