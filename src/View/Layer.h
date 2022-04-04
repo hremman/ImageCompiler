@@ -16,8 +16,11 @@ class CLayer : public QWidget
 public:
     explicit CLayer(Data::CLayer * const, QWidget *parent = nullptr);
     ~CLayer();
+    Data::CLayer * getData()
+        {return m_data;}
 
 public:
+
 signals:
     void changed();
 

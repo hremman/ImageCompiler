@@ -11,5 +11,7 @@
         <file>resourses/new.ico</file>
         <file>resourses/redo.ico</file>
         <file>resourses/undo.ico</file>
+        <file>resourses/down.ico</file>
+        <file>resourses/up.ico</file>
     </qresource>
 </RCC>

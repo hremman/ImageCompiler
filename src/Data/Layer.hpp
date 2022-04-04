@@ -11,10 +11,7 @@ namespace Data {
 
     class CLayer
     {
-    public:
-        using uid_t = unsigned short;
-        static std::set<uid_t> __M_used_lid;
-        static uid_t new_lid();
+
     public: //types
         enum class WorkType{
             NOTHING = 0,
@@ -22,6 +19,7 @@ namespace Data {
             ENUMERATION = 2,
             NO_TYPE = -1
         };
+        using uid_t = unsigned short;
 
     public: //fields
         QString m_name;
@@ -32,10 +30,11 @@ namespace Data {
         CColorSettings m_colors;
 
     public:
-        CLayer();
+        CLayer(uid_t);
         ~CLayer();
         uid_t get_lid() const
             {return m_lid;}
+        bool operator == (const CLayer &);
 
 
     protected:  //fields

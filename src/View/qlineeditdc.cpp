@@ -8,4 +8,5 @@ QLineEditDC::QLineEditDC(QWidget *parent)
 void QLineEditDC::mouseDoubleClickEvent(QMouseEvent *e)
 {
     (void)e;
+    emit mouseDoubleClicked();
 }

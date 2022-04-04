@@ -2,6 +2,7 @@
 #define PROJTAB_H
 
 #include <QWidget>
+#include <QModelIndexList>
 #include "Data/ProjectStory.hpp"
 #include "Data/Project.hpp"
 
@@ -27,12 +28,19 @@ public slots:
     void folder_clicked(bool);
     void rem_clicked(bool);
     void add_clicked(bool);
+    void up_clicked(bool);
+    void down_clicked(bool);
+
+    void do_redo(bool);
+    void do_undo(bool);
+
+    const Data::CProject& getLast() const;
 
 
 private:
     Ui::UiProjTab *ui;
-    Data::CProject &m_proj;
-    Data::CProjectStory m_story;
+    Data::CProjectStory m_proj_v;
+    Data::CProject m_proj;
 
 };
 
