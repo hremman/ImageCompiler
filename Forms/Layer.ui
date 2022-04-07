@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>442</width>
-    <height>127</height>
+    <width>420</width>
+    <height>138</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>442</width>
-    <height>127</height>
+    <width>420</width>
+    <height>136</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>16777215</width>
-    <height>127</height>
+    <height>138</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -147,8 +147,8 @@
       <widget class="QToolButton" name="settings">
        <property name="minimumSize">
         <size>
-         <width>25</width>
-         <height>25</height>
+         <width>24</width>
+         <height>24</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -169,8 +169,8 @@
        </property>
        <property name="iconSize">
         <size>
-         <width>24</width>
-         <height>24</height>
+         <width>23</width>
+         <height>23</height>
         </size>
        </property>
       </widget>
@@ -199,7 +199,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEditDC" name="path_edit">
+      <widget class="QLineEdit" name="path_edit">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -213,13 +213,48 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Список файлов. Двойное нажатие для расширения редакотра.</string>
+        <string/>
        </property>
        <property name="inputMask">
         <string notr="true"/>
        </property>
        <property name="text">
         <string notr="true"/>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="path_buton">
+       <property name="minimumSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Редактировать в диалоге</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res.qrc">
+         <normaloff>:/image/icon/resourses/edit.ico</normaloff>:/image/icon/resourses/edit.ico</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>23</width>
+         <height>23</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -357,13 +392,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QLineEditDC</class>
-   <extends>QLineEdit</extends>
-   <header>qlineeditdc.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../res.qrc"/>
  </resources>

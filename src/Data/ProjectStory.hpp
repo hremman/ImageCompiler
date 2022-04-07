@@ -39,6 +39,7 @@ public:
 protected:
     std::list<Data::CProject> m_storage;
     std::list<Data::CProject>::iterator m_current;
+    std::list<Data::CProject>::iterator m_last;
     size_t m_pos;
     Data::CProject &m_root;
     static const unsigned short __M_MAX = 128;

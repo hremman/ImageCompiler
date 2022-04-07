@@ -50,7 +50,8 @@ ColorSettings::ColorSettings(Data::CColorSettings * data, QWidget *parent):
             ui->colors_list->setItemWidget(item, row);
         }
     }
-    QObject::connect(ui->random_ch, &QRadioButton::toggled, this, &ColorSettings::react_toogled);
+    QObject::connect(ui->random_ch, &QRadioButton::clicked, this, &ColorSettings::react_toogled_rand);
+    QObject::connect(ui->enumer_ch, &QRadioButton::clicked, this, &ColorSettings::react_toogled_enum);
     QObject::connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &ColorSettings::react_accepted);
     QObject::connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &ColorSettings::react_rejected);
     QObject::connect(ui->tb_add, &QToolButton::clicked, this, &ColorSettings::react_add);
@@ -61,11 +62,21 @@ ColorSettings::~ColorSettings()
 {
     delete ui;
 }
-
-
-void ColorSettings::react_toogled(bool)
+void ColorSettings::react_toogled_enum(bool)
 {
-    if ( ui->random_ch->isChecked() )
+    if ( ui->enumer_ch->isChecked() )
+    {
+        ui->colors_list->setEnabled(true);
+        ui->tb_add->setEnabled(true);
+        ui->tb_rem->setEnabled(true);
+
+        ui->generation_number->setEnabled(false);
+        ui->random_saturation->setEnabled(false);
+        ui->random_value->setEnabled(false);
+
+        ui->random_ch->setChecked(false);
+    }
+    else
     {
         ui->colors_list->setEnabled(false);
         ui->tb_add->setEnabled(false);
@@ -74,16 +85,37 @@ void ColorSettings::react_toogled(bool)
         ui->generation_number->setEnabled(true);
         ui->random_saturation->setEnabled(true);
         ui->random_value->setEnabled(true);
+
+        ui->random_ch->setChecked(true);
+    }
+}
+void ColorSettings::react_toogled_rand(bool)
+{
+    if ( ui->random_ch->isChecked() )
+    {
+
+
+        ui->colors_list->setEnabled(false);
+        ui->tb_add->setEnabled(false);
+        ui->tb_rem->setEnabled(false);
+
+        ui->generation_number->setEnabled(true);
+        ui->random_saturation->setEnabled(true);
+        ui->random_value->setEnabled(true);
+
+        ui->enumer_ch->setChecked(false);
     }
     else
     {
+        ui->colors_list->setEnabled(true);
+        ui->tb_add->setEnabled(true);
+        ui->tb_rem->setEnabled(true);
+
         ui->generation_number->setEnabled(false);
         ui->random_saturation->setEnabled(false);
         ui->random_value->setEnabled(false);
 
-        ui->colors_list->setEnabled(true);
-        ui->tb_add->setEnabled(true);
-        ui->tb_rem->setEnabled(true);
+        ui->enumer_ch->setChecked(true);
     }
 }
 
@@ -107,6 +139,7 @@ void ColorSettings::react_accepted()
 
         m_data->m_colors = std::move(m_colors);
     }
+    this->accept();
 }
 
 void ColorSettings::react_rejected()

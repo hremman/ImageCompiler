@@ -20,7 +20,8 @@ public:
 
 private slots:
     void add_clicked(bool);
-    void close_clicked(bool);
+    void accept_clicked(bool);
+    void reject_clicked(bool);
 
 private:
     Ui::UiFileList *ui;

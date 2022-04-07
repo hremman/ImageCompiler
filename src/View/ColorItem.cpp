@@ -28,6 +28,7 @@ void ColorItem::button_clicked(bool)
 {
     QColorDialog dial(m_data->m_color, this->parentWidget() );
     m_data->m_color = QColorDialog::getColor(m_data->m_color, this->parentWidget(), "Выбор цвета...", QColorDialog::ColorDialogOption::DontUseNativeDialog);
+    update_button_color();
 
 }
 

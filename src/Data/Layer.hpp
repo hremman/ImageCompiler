@@ -5,7 +5,23 @@
 #include <set>
 #include <stdexcept>
 #include "Data/ColorSettings.h"
-#include "File/Formats.hpp"
+
+
+
+
+#pragma pack(1)
+struct layer_data_file
+{
+    unsigned char m_mode;
+    unsigned int m_name_pos;
+    unsigned int m_files_pos;
+    unsigned int m_files_num;
+    unsigned int m_color_pos;
+    unsigned int m_color_num;
+};
+#pragma pack()
+
+
 
 namespace Data {
 
@@ -14,10 +30,10 @@ namespace Data {
 
     public: //types
         enum class WorkType{
+            NO_TYPE = -1,
             NOTHING = 0,
-            GENERATION = 1,
-            ENUMERATION = 2,
-            NO_TYPE = -1
+            ENUMERATION = 1
+
         };
         using uid_t = unsigned short;
 
@@ -35,7 +51,8 @@ namespace Data {
         uid_t get_lid() const
             {return m_lid;}
         bool operator == (const CLayer &);
-
+        const nlohmann::json to_json()  const;
+        void from_jsom(const nlohmann::json & json);
 
     protected:  //fields
         uid_t m_lid;

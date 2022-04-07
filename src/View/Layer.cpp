@@ -9,8 +9,6 @@ CLayer::CLayer(Data::CLayer * const data, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UiLayer),
     m_data(data)
-
-
 {
     ui->setupUi(this);
 
@@ -51,16 +49,17 @@ void CLayer::mode_changed(int mode)
 
 }
 
-void CLayer::file_dc()
+void CLayer::file_edit(bool)
 {  
-    CFileList window(m_data->m_files, this);
+    QStringList temp_list = m_data->m_files;
+    CFileList window(temp_list, this);
     window.resize(ui->path_edit->width(), 159);
-
-    window.move(QWidget::mapToGlobal( ui->path_edit->pos()) + (ui->path_edit->rect().bottomLeft() + QPoint(0,1 + ui->path_edit->height() / 2)));
 
     if (window.exec() == QDialog::Accepted)
     {
+        m_data->m_files = temp_list;
         ui->path_edit->setText(m_data->m_files.join("?"));
+        ui->path_edit->setToolTip(m_data->m_files.join("\n"));
         emit changed();
     }
 }
@@ -87,7 +86,6 @@ void CLayer::switchElements()
         ui->noise_label->setEnabled(true);
         ui->noise_probe->setEnabled(true);
         break;
-    case Data::CLayer::WorkType::GENERATION:
     case Data::CLayer::WorkType::ENUMERATION:
         ui->settings->setHidden(false);
         ui->settings->setEnabled(true);

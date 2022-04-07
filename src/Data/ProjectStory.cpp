@@ -5,6 +5,7 @@ Data::CProjectStory::CProjectStory(CProject & proj)
 {
     m_storage.emplace_back(m_root);
     m_current = m_storage.begin();
+    m_last = m_current;
 }
 
 const Data::CProject & Data::CProjectStory::getCurrent() const
@@ -28,7 +29,7 @@ const Data::CProject & Data::CProjectStory::undo()
 
 const Data::CProject & Data::CProjectStory::redo()
 {
-    if ( m_current != --(m_storage.end()) )
+    if ( m_current != m_last )
         return *(++m_current);
     else
         throw story_top_reached("No more elements in story");
@@ -39,12 +40,13 @@ void Data::CProjectStory::clear()
     m_storage.clear();
     m_storage.emplace_back(m_root);
     m_current = m_storage.begin();
+    m_last = m_current;
 }
 
 bool Data::CProjectStory::haveUndo() const
-    {return m_current != m_storage.begin();}
+    {return m_storage.size() == 0 ? false : m_current != m_storage.begin();}
 bool Data::CProjectStory::haveRedo() const
-    {return m_current != --(m_storage.end());}
+    {return m_storage.size() == 0 ? false : m_current != m_last;}
 
 Data::CProject & Data::CProjectStory::commit(const CProject & ver)
 {
@@ -55,6 +57,7 @@ Data::CProject & Data::CProjectStory::commit(const CProject & ver)
     }
     m_storage.push_back(ver);
     ++m_current;
+    m_last = m_current;
     if ( m_storage.size() > __M_MAX)
         m_storage.pop_front();
     return *m_current;

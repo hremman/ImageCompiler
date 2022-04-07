@@ -14,9 +14,8 @@ CFileList::CFileList(QStringList &files, QWidget *parent) :
     m_files(files)
 {
     ui->setupUi(this);
-    setWindowFlags(windowFlags() | Qt::FramelessWindowHint );
-    //setWindowModality(Qt::ApplicationModal);
-    QObject::connect(ui->close, &QToolButton::clicked, this, &CFileList::close_clicked);
+    QObject::connect(ui->reject, &QToolButton::clicked, this, &CFileList::reject_clicked);
+    QObject::connect(ui->apply, &QToolButton::clicked, this, &CFileList::accept_clicked);
     QObject::connect(ui->add, &QToolButton::clicked, this, &CFileList::add_clicked);
 
     ui->plainTextEdit->setPlainText(m_files.join("\n"));
@@ -48,7 +47,7 @@ void CFileList::add_clicked(bool)
     }
 }
 
-void CFileList::close_clicked(bool)
+void CFileList::accept_clicked(bool)
 {
 
     QString temp = ui->plainTextEdit->toPlainText().trimmed();
@@ -64,13 +63,12 @@ void CFileList::close_clicked(bool)
                 it.remove();
         }
     }
-    if ( temp_list != m_files)
-    {
         m_files.swap(temp_list);
         this->accept();
-    }
-    else
-        this->reject();
+
 }
+
+void CFileList::reject_clicked(bool)
+    {this->reject();}
 
 

@@ -2,21 +2,24 @@
 #define COLOR_H
 
 #include <QColor>
-#include "File/Formats.hpp"
+#include "Algo/json.hpp"
 
 namespace Data
 {
-    class CColor
+    struct CColor
     {
     public:
         QColor m_color;
         bool m_saturation;
         bool m_value;
+
+
         CColor()
             : m_color(Qt::gray)
             , m_saturation(false)
             , m_value(false)
         {}
+
         CColor(const CColor & ref)
             : m_color(ref.m_color)
             , m_saturation(ref.m_saturation)
@@ -40,7 +43,27 @@ namespace Data
             return m_color == ref.m_color && m_saturation == ref.m_saturation && m_value == ref.m_value;
         }
 
+        const nlohmann::json to_json()  const
+        {
+            nlohmann::json json;
+            json["color"] = { {"red", m_color.red()}, {"green", m_color.green()}, {"blue", m_color.blue()}};
+            json["sat"] = m_saturation;
+            json["sav"] = m_value;
+            return json;
+        }
+
+        void from_jsom(const nlohmann::json & json)
+        {
+            m_color.setRgb(json.at("color").at("red"), json.at("color").at("green"), json.at("color").at("blue"));
+            m_saturation = json.at("sat");
+            m_value = json.at("val");
+        }
+
     };
+
+
+
+
 
     struct CColorHash{
     public:

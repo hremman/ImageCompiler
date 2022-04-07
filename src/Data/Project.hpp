@@ -6,6 +6,9 @@
 #include <map>
 #include "Layer.hpp"
 
+
+
+
 namespace Data {
     class CProject
     {
@@ -13,8 +16,7 @@ namespace Data {
     public:
         QString m_name;
         QString m_out_path;
-        QString m_root_path;
-
+        QString m_file;
 
 
     public:
@@ -25,6 +27,9 @@ namespace Data {
         void moveLayerUp(size_t);
         void moveLayerDown(size_t);
 
+        const std::list<CLayer*> & layers() const;
+        const nlohmann::json to_json()  const;
+        void from_jsom(const nlohmann::json & json);
         CProject& operator =(const CProject &);
     protected:
         using uid_t = unsigned short;

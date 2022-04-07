@@ -20,8 +20,7 @@ Data::CProject::uid_t Data::CProject::new_lid()
 
 Data::CProject::CProject()
     : m_name("Новый проект")
-    , m_out_path(".\\")
-    , m_root_path(".\\")
+    , m_out_path("./")
     , m_used_lid()
     , m_layers()
 {
@@ -31,7 +30,6 @@ Data::CProject::CProject()
 Data::CProject::CProject(const CProject& ref)
     : m_name(ref.m_name)
     , m_out_path(ref.m_out_path)
-    , m_root_path(ref.m_root_path)
     , m_used_lid(ref.m_used_lid)
     , m_layers(ref.m_layers)
 {}
@@ -42,7 +40,6 @@ Data::CProject& Data::CProject::operator =(const CProject & ref)
     {
         m_name = ref.m_name;
         m_out_path = ref.m_out_path;
-        m_root_path = ref.m_root_path;
         m_used_lid = ref.m_used_lid;
         m_layers = ref.m_layers;
     }
@@ -94,4 +91,36 @@ void  Data::CProject::moveLayerDown(size_t row)
     m_layers.insert(++i, p);
 }
 
+const std::list<Data::CLayer*> & Data::CProject::layers() const
+{
+    return m_layers;
+}
 
+
+const nlohmann::json Data::CProject::to_json()  const
+{
+    nlohmann::json json = {
+        {"name", m_name.toStdString()},
+        {"out", m_out_path.toStdString()},
+    };
+
+    for (auto it = m_layers.begin(); it != m_layers.end(); it++)
+        json["layers"].push_back( (*it)->to_json() );
+
+    return json;
+}
+
+void Data::CProject::from_jsom(const nlohmann::json & json)
+{
+    m_name.fromStdString(json.at("name"));
+    m_out_path.fromStdString(json.at("out"));
+    m_layers.clear();
+    m_used_lid.clear();
+    for (auto it = json.at("layers").begin(); it != json.end(); ++it)
+    {
+        m_layers.emplace_back(new CLayer(it->at("lid")));
+        m_layers.back()->from_jsom(*it);
+        m_used_lid.insert(m_layers.back()->get_lid());
+    }
+
+}

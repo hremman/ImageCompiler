@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QModelIndexList>
+#include <QSet>
+#include <stdexcept>
 #include "Data/ProjectStory.hpp"
 #include "Data/Project.hpp"
 
@@ -10,6 +12,12 @@
 namespace Ui {
 class UiProjTab;
 }
+
+class to_big_id: std::runtime_error
+{
+public:
+    to_big_id(const std::string & msg) : std::runtime_error(msg) {}
+};
 
 class ProjTab : public QWidget
 {
@@ -20,6 +28,16 @@ public:
     ~ProjTab();
 
     void reload();
+    void do_redo(bool);
+    void do_undo(bool);
+
+    bool have_undo();
+    bool have_redo();
+
+
+    const Data::CProject& getLast() const;
+    int getId() const
+        {return m_id;}
 
 public slots:
     void changes();
@@ -30,18 +48,21 @@ public slots:
     void add_clicked(bool);
     void up_clicked(bool);
     void down_clicked(bool);
+    void slot_select_changed();
 
-    void do_redo(bool);
-    void do_undo(bool);
-
-    const Data::CProject& getLast() const;
-
+public:
+signals:
+    void changed(unsigned int);
+    void project_renamed(unsigned int);
 
 private:
     Ui::UiProjTab *ui;
     Data::CProjectStory m_proj_v;
     Data::CProject m_proj;
+    unsigned int m_id;
 
+private:
+    static QSet<unsigned int> __M_used_id;
 };
 
 #endif // PROJTAB_H

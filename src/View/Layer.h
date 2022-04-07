@@ -25,7 +25,7 @@ signals:
     void changed();
 
 private slots:
-    void file_dc();
+    void file_edit(bool);
     void settings_button(bool);
     void mode_changed(int);
     void name_changed();

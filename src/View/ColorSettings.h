@@ -27,7 +27,8 @@ private:
 
     void copyOnWrite();
 private slots:
-    void react_toogled(bool);
+    void react_toogled_rand(bool);
+    void react_toogled_enum(bool);
     void react_rejected();
     void react_accepted();
     void react_add(bool);
