@@ -47,3 +47,10 @@ void Data::CLayer::from_jsom(const nlohmann::json & json)
     if (m_type == WorkType::ENUMERATION)
         m_colors.from_jsom(json.at("colors"));
 }
+size_t  Data::CLayer::count() const
+{
+    if ( ! m_files.count() )
+        return 0;
+    size_t temp = m_files.count() * (m_type == WorkType::ENUMERATION ? m_colors.count() : 1);
+    return temp + (m_noise_probability == 0 ? 0 : 1);
+}

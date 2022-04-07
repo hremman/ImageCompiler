@@ -55,6 +55,9 @@ signals:
     void changed(unsigned int);
     void project_renamed(unsigned int);
 
+public:
+    int m_number;
+    void count_vars();
 private:
     Ui::UiProjTab *ui;
     Data::CProjectStory m_proj_v;

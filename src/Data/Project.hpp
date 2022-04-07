@@ -31,6 +31,7 @@ namespace Data {
         const nlohmann::json to_json()  const;
         void from_jsom(const nlohmann::json & json);
         CProject& operator =(const CProject &);
+        size_t count() const;
     protected:
         using uid_t = unsigned short;
 

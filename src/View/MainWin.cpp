@@ -27,9 +27,6 @@ CompilerMainWin::CompilerMainWin(QWidget *parent)
 
     ui->label_curr->setText("0");
     ui->label_outof->setText("0");
-    ui->label_tail->setText("0");
-    ui->label_tail->setHidden(true);
-    ui->label_pm->setHidden(true);
 
 
     QObject::connect(ui->menu_create, &QAction::triggered, this, &CompilerMainWin::slot_create);
@@ -353,6 +350,10 @@ void CompilerMainWin::slot_close_tab(int index)
         ui->menu_save_all->setEnabled(false);
         ui->toolbar_save_all->setEnabled(false);
         ui->menu_save_copy->setEnabled(false);
+        ui->label_curr->setText("0");
+        ui->label_outof->setText("0");
+        ui->toolbar_undo->setEnabled(false);
+        ui->toolbar_redo->setEnabled(false);
     }
     else
     {
@@ -388,6 +389,7 @@ void CompilerMainWin::slot_tab_edited(unsigned int id)
     }
     ui->toolbar_save_all->setEnabled(true);
     ui->menu_save_all->setEnabled(true);
+    show_counters();
 }
 
 void CompilerMainWin::slot_tab_changed(int index)
@@ -417,6 +419,7 @@ void CompilerMainWin::slot_tab_changed(int index)
         ui->toolbar_undo->setEnabled(true);
     else
         ui->toolbar_undo->setEnabled(false);
+    show_counters();
 
 }
 
@@ -489,7 +492,10 @@ void CompilerMainWin::slot_redo(bool)
         ui->toolbar_undo->setEnabled(true);
     else
         ui->toolbar_undo->setEnabled(false);
+    show_counters(temp);
 }
+
+
 
 void CompilerMainWin::slot_undo(bool)
 {
@@ -506,6 +512,7 @@ void CompilerMainWin::slot_undo(bool)
         ui->toolbar_redo->setEnabled(true);
     else
         ui->toolbar_redo->setEnabled(false);
+    show_counters(temp);
 }
 
 void CompilerMainWin::slot_tab_renamed(unsigned int id)
@@ -517,6 +524,13 @@ void CompilerMainWin::slot_tab_renamed(unsigned int id)
         if (ui->tabs->widget(i) == temp_tab)
             ui->tabs->setTabText(i, m_proj_index[id]->m_name);
     }
+}
+
+void CompilerMainWin::show_counters(ProjTab *temp)
+{
+    if (temp == nullptr)
+        temp = static_cast<ProjTab*>(ui->tabs->widget(ui->tabs->currentIndex()));
+    ui->label_outof->setText(QString::number(temp->m_number));
 }
 
 void CompilerMainWin::slot_generate(bool)

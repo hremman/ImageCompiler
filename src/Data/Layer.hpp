@@ -53,6 +53,7 @@ namespace Data {
         bool operator == (const CLayer &);
         const nlohmann::json to_json()  const;
         void from_jsom(const nlohmann::json & json);
+        size_t count() const;
 
     protected:  //fields
         uid_t m_lid;

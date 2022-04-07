@@ -31,6 +31,7 @@ public:
 
         const nlohmann::json to_json()  const;
         void from_jsom(const nlohmann::json & json);
+        size_t  count() const;
     };
 
 }

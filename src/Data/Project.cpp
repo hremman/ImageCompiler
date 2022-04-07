@@ -124,3 +124,23 @@ void Data::CProject::from_jsom(const nlohmann::json & json)
     }
 
 }
+
+size_t Data::CProject::count() const
+{
+    std::vector<size_t> ret_v;
+    for (auto it = m_layers.begin(); it != m_layers.end(); it++ )
+    {
+        size_t temp = (*it)->count();
+        if (temp)
+            ret_v.push_back(temp);
+    }
+    if (ret_v.size() == 0 )
+    {
+        return 0;
+    }
+
+    size_t ret = 1;
+    for(auto it: ret_v)
+        ret *= it;
+    return ret;
+}

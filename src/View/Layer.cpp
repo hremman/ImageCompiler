@@ -27,6 +27,7 @@ CLayer::CLayer(Data::CLayer * const data, QWidget *parent) :
     QObject::connect(ui->layer_name, &QLineEdit::editingFinished, this, &CLayer::name_changed);
     QObject::connect(ui->probe_val, &QDoubleSpinBox::valueChanged, this, &CLayer::probe_changed);
     QObject::connect(ui->noise_probe, &QDoubleSpinBox::valueChanged, this, &CLayer::noise_changed);
+    QObject::connect(ui->path_buton, &QToolButton::clicked, this, &CLayer::file_edit);
 
 
 }

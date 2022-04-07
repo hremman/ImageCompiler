@@ -54,3 +54,8 @@ void Data::CColorSettings::from_jsom(const nlohmann::json & json)
         throw wrong_val("Wrong val mode");
 
 }
+
+size_t  Data::CColorSettings::count() const
+{
+     return m_mode == Mode::ENUMERATION ? m_colors.size() : m_generations_number;
+}

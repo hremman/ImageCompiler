@@ -23,6 +23,7 @@ public:
 
     void save(const Data::CProject &) const;
     void load(Data::CProject &);
+    void show_counters(ProjTab *temp = nullptr);
 
 private:
     Ui::UiMainWin *ui;

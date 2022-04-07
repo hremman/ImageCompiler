@@ -10,10 +10,12 @@ QSet<unsigned int> ProjTab::__M_used_id;
 
 ProjTab::ProjTab(Data::CProject& proj, QWidget *parent) :
     QWidget(parent),
+    m_number(0),
     ui(new Ui::UiProjTab),
     m_proj_v(proj),
     m_proj(m_proj_v.getCurrent()),
     m_id()
+
 {
     for (unsigned int i = 0; i <= UINT_MAX ; i++)
     {
@@ -53,6 +55,7 @@ ProjTab::~ProjTab()
 void ProjTab::changes()
 {
     m_proj = m_proj_v.commit(m_proj);
+    count_vars();
     emit changed(m_id);
 }
 
@@ -243,4 +246,10 @@ bool ProjTab::have_undo()
 bool ProjTab::have_redo()
 {
     return m_proj_v.haveRedo();
+}
+
+void ProjTab::count_vars()
+{
+    m_number = 0;
+    m_number = m_proj.count();
 }
