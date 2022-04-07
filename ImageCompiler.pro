@@ -11,8 +11,9 @@ CONFIG += c++17 \
 
 SOURCES += \
     src/Algo/ColorFunctions.cpp \
-    src/Algo/ImageTransformation.cpp \
-    src/Algo/Layer.cpp \
+    src/Algo/old_ColorFunctions.cpp \
+    src/Algo/old_ImageTransformation.cpp \
+    src/Algo/old_Layer.cpp \
     src/Data/ColorSettings.cpp \
     src/Data/Layer.cpp \
     src/Data/Project.cpp \
@@ -26,10 +27,12 @@ SOURCES += \
     src/main.cpp
 
 HEADERS += \
-    src/Algo/ColorFunctions.hpp \
-    src/Algo/ImageTransformation.hpp \
-    src/Algo/Layer.hpp \
+    src/Algo/ColorFunctions.h \
     src/Algo/json.hpp \
+    src/Algo/old_ColorFunctions.hpp \
+    src/Algo/old_ImageTransformation.hpp \
+    src/Algo/old_ImageTransformationInterface.hpp \
+    src/Algo/old_Layer.hpp \
     src/Data/Color.hpp \
     src/Data/ColorSettings.h \
     src/Data/Layer.hpp \
@@ -37,7 +40,6 @@ HEADERS += \
     src/Data/ProjectStory.hpp \
     src/View/ColorItem.h \
     src/View/ColorSettings.h \
-    src/Algo/ImageTransformationInterface.hpp \
     src/View/FileList.hpp \
     src/View/Layer.h \
     src/View/MainWin.h \

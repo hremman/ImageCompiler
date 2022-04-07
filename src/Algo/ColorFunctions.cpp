@@ -1,73 +1,60 @@
-#include "ColorFunctions.hpp"
-#include <QtGlobal>
+#include "ColorFunctions.h"
 
-QImage ColorFunctions::CompositeAlpha(const QImage & img_up, const QImage & img_down)
+QColor CColorFunctions::CompositeAlphaPixel(const QColor & top, const QColor &down)
 {
-
-    QImage img_res(qMax(img_up.width(), img_down.width()), qMax(img_up.height(), img_down.height()), img_down.format());
-    img_res.fill(QColor(0,0,0,0));
-
-    QPoint down_shift(
-                (img_res.width() - img_down.width())/2,
-                (img_res.height() - img_down.height())/2
-                );
-
-    for (auto col = 0; col < img_down.width(); col++)
+    if( top.alpha() == 0 )
     {
-        for (auto row = 0; row < img_down.height(); row++)
-
-        {
-            img_res.setPixelColor(col + down_shift.rx(), row + down_shift.ry(), img_down.pixelColor(col, row) );
-        }
+        return down;
     }
+    if ( top.alpha() == 255 )
+        return top;
 
-    QPoint up_shift(
-                (img_res.width() - img_up.width())/2,
-                (img_res.height() - img_up.height())/2
-                );
-
-    for (auto col = 0; col < img_up.width(); col++)
-    {
-        for (auto row = 0; row < img_up.height(); row++)
-        {
-            QColor p_up = img_up.pixelColor(col, row);
-            QColor p_down = img_res.pixelColor(col + up_shift.rx(), row + up_shift.ry());
-
-            if( p_up.alpha() == 0 )
-            {
-                continue;
-            }
-            if ( p_down.alpha() == 255 || p_down.alpha() == 0 )
-            {
-                img_res.setPixelColor(col + up_shift.rx(), row + up_shift.ry(), p_up);
-                continue;
-            }
-
-            QColor p_res(0,0,0,0);
-            p_res.setAlphaF( p_up.alphaF() + p_down.alphaF()*(1-p_up.alphaF()) );
-            p_res.setRed((p_up.red()*p_up.alphaF() + p_down.red()*p_down.alphaF()*(1-p_up.alphaF()))/p_res.alphaF() );
-            p_res.setGreen((p_up.green()*p_up.alphaF() + p_down.green()*p_down.alphaF()*(1-p_up.alphaF()))/p_res.alphaF());
-            p_res.setBlue((p_up.blue()*p_up.alphaF() + p_down.blue()*p_down.alphaF()*(1-p_up.alphaF()))/p_res.alphaF());
-
-            img_res.setPixelColor(col + up_shift.rx(), row + up_shift.ry(), p_res);
-
-        }
-    }
-    return img_res;
+    QColor res(0,0,0,0);
+    res.setAlphaF( top.alphaF() + down.alphaF()*(1-top.alphaF()) );
+    res.setRed((top.red()*top.alphaF() + down.red()*down.alphaF()*(1-top.alphaF()))/res.alphaF() );
+    res.setGreen((top.green()*top.alphaF() + down.green()*down.alphaF()*(1-top.alphaF()))/res.alphaF());
+    res.setBlue((top.blue()*top.alphaF() + down.blue()*down.alphaF()*(1-top.alphaF()))/res.alphaF());
+    return res;
 }
 
-QImage ColorFunctions::ChangeColor(const QImage & img, int hue)
+QColor CColorFunctions::SetHue(const QColor & pixel, int hue)
 {
-    QImage img_res(img.width(), img.height(), img.format());
-    for (auto col = 0; col < img.width(); col++)
-    {
-        for (auto row = 0; row < img.height(); row++)
-        {
-            QColor p = img.pixelColor(col, row);
-            p.setHsv(hue % 361, p.saturation(), p.value(), p.alpha());
-            img_res.setPixelColor(col, row, p);
-        }
-    }
-    return img_res;
+    QColor p;
+    p.setHsv(hue % 361, pixel.saturation(), pixel.value(), pixel.alpha());
+    return p;
 }
 
+QColor CColorFunctions::SetSaturation(const QColor & pixel, const RangeMapper & mapper)
+{
+    QColor p;
+    p.setHsv(pixel.hsvHue(), mapper(pixel.hsvSaturation()), pixel.value(), pixel.alpha());
+    return p;
+}
+
+QColor CColorFunctions::SetValue(const QColor & pixel, const RangeMapper & mapper)
+{
+    QColor p;
+    p.setHsv(pixel.hsvHue(), pixel.hsvSaturation(), mapper(pixel.value()), pixel.alpha());
+    return p;
+}
+
+CColorFunctions::RangeMapper::RangeMapper()
+    : m_k(0)
+    , m_down(0)
+    , m_down_old(0)
+{}
+CColorFunctions::RangeMapper::RangeMapper(const AverageRange & range, int new_val)
+    : RangeMapper()
+{
+    AverageRange new_range;
+    new_range.m_average= new_val - range.m_average;
+    new_range.m_top = range.m_top + new_range.m_average;
+    new_range.m_down = range.m_top + new_range.m_average;
+    if ( new_range.m_top > 100 ) new_range.m_top = 100;
+    if ( new_range.m_down >= 100 ) new_range.m_down = 95;
+    if ( new_range.m_down < 0 ) new_range.m_down = 0;
+    if ( new_range.m_top <= 0 ) new_range.m_top = 95;
+
+    m_k = (double)(new_range.m_top - new_range.m_down) / (double)(range.m_top - range.m_down);
+
+}

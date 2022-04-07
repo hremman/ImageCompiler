@@ -2,7 +2,7 @@
 #define CALGLAYER_HPP
 
 #include "Data/Layer.hpp"
-#include "ImageTransformation.hpp"
+#include "old_ImageTransformation.hpp"
 
 class CLayer
 {

@@ -4,7 +4,7 @@
 
 #include <QList>
 #include <unordered_set>
-#include "ImageTransformationInterface.hpp"
+#include "old_ImageTransformationInterface.hpp"
 #include "Data/Color.hpp"
 
 class CNullTransform : public CImageTransformInterface
