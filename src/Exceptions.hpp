@@ -38,11 +38,16 @@ public:
     story_out_of_range(const QString & msg) : ICException(msg) {}
 };
 
-
 class nullpointer : public ICException
 {
 public:
     nullpointer(const QString & msg) : ICException(msg) {}
+};
+
+class wrong_arg : public ICException
+{
+public:
+    wrong_arg(const QString & msg) : ICException(msg) {}
 };
 
 #endif // EXCEPTIONS_HPP
