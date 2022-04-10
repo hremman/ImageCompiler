@@ -53,7 +53,7 @@
       <bool>false</bool>
      </property>
      <attribute name="horizontalHeaderVisible">
-      <bool>true</bool>
+      <bool>false</bool>
      </attribute>
      <attribute name="horizontalHeaderMinimumSectionSize">
       <number>20</number>
@@ -97,8 +97,14 @@
        </property>
       </widget>
      </item>
-     <item>
+     <item alignment="Qt::AlignRight|Qt::AlignBottom">
       <widget class="QPushButton" name="pushButton">
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>23</height>
+        </size>
+       </property>
        <property name="text">
         <string>Отмена</string>
        </property>

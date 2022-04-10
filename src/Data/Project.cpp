@@ -14,7 +14,7 @@ Data::CProject::uid_t Data::CProject::new_lid()
         prev = *it;
     }
     if ( prev == 9999)
-        throw too_many_id("Превышен лимит идентификаторов для объекта Data::CProject");
+        throw too_many_id("Превышен лимит идентификаторов для объекта Data::CLayer");
 
     return *(m_used_lid.emplace(prev + 1).first);
 }

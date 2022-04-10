@@ -70,7 +70,7 @@ void CImageProcessing::CompositeAlpha(QImage *down, const QImage &top, size_t nu
 }
 
 template <bool SATURATION, bool VALUE>
-void CImageProcessing::ChangeColor(QImage * image, int hue, size_t num, size_t count,  const RangeMapper* saturation = nullptr, const RangeMapper* value = nullptr )
+void CImageProcessing::ChangeColor(QImage * image, int hue, size_t num, size_t count,  const RangeMapper* saturation, const RangeMapper* value )
 {
     if ( count < 1)
         throw wrong_arg("[CImageProcessing::ChangeColor]: Передано число потоков обработки меньше одного");

@@ -1,5 +1,7 @@
 #include <QPushButton>
 #include <QFileDialog>
+#include <QMessageBox>
+
 #include <algorithm>
 
 #include "Exceptions.hpp"
@@ -18,7 +20,7 @@ ProjTab::ProjTab(Data::CProject& proj, QWidget *parent) :
     m_id()
 
 {
-    for (unsigned int i = 0; i <= UINT_MAX ; i++)
+    for (unsigned int i = 0; i <= UINT_MAX - 2 ; i++)
     {
         if ( !(__M_used_id.contains(i)) )
         {
@@ -26,8 +28,11 @@ ProjTab::ProjTab(Data::CProject& proj, QWidget *parent) :
             m_id = i;
             break;
         }
-        if ( i == UINT_MAX )
+        if ( i == UINT_MAX - 2 )
+        {
+            m_id = i;   //Для корректного удаления объекта.
             throw too_many_id("Превышен лимит идентификаторов для объекта ProjTab");
+        }
     }
     ui->setupUi(this);
     QObject::connect(ui->proj_name, &QLineEdit::editingFinished, this, &ProjTab::name_edited);
@@ -105,9 +110,18 @@ void ProjTab::rem_clicked(bool)
 
 void ProjTab::add_clicked(bool)
 {
+    CLayer * new_item = nullptr;
+    try { new_item = new CLayer(m_proj.newLayer()); }
+    catch (const too_many_id & e)
+    {
+        QMessageBox::warning(this, "Невозможно создать новй слой", "Возникла ошибка:\n" + e.message() + "\nСлой создан не будет. Не стоит превышать число слоёв в 9999.");
+        return;
+    }
+
+
     QListWidgetItem *item = new QListWidgetItem(ui->layer_list);
     ui->layer_list->addItem(item);
-    CLayer * new_item = new CLayer(m_proj.newLayer());
+
     item->setSizeHint(new_item->minimumSizeHint());
     ui->layer_list->setItemWidget(item, new_item);
     QObject::connect(new_item, &CLayer::changed, this, &ProjTab::changes);

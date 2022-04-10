@@ -9,6 +9,7 @@
 #include <QCloseEvent>
 #include <QFileDialog>
 
+#include "Exceptions.hpp"
 
 #include "View/dialogprogress.h"
 
@@ -175,9 +176,32 @@ void CompilerMainWin::slot_open(bool){
     Data::CProject &temp_proj = m_projects.front();
     auto it = m_projects.begin();
     temp_proj.m_file = file;
-    load(temp_proj);
+    try
+        {load(temp_proj);}
+    catch (const  ICException& e)
+    {
+        QMessageBox::critical(this, "Невозможно открыть проект", "Возникла неустранимая ошибка:\n" + e.message() + "\nПроект не будет загружен.");
+        m_projects.pop_front();
+        return;
+    }
+    catch (const  nlohmann::json::exception & e)
+    {
+        QMessageBox::critical(this, "Невозможно открыть проект", "Возникла неустранимая ошибка:\n" + QString(e.what()) + "\nПроект не будет загружен.");
+        m_projects.pop_front();
+        return;
+    }
 
-    ProjTab *temp_tab = new ProjTab(temp_proj);
+    ProjTab *temp_tab = nullptr;
+    try {
+        temp_tab = new ProjTab(temp_proj);
+    }  catch (const too_many_id &e)
+    {
+        QMessageBox::critical(this, "Невозможно отобразить проект", "Возникла неустранимая ошибка:\n" + e.message() + "\nПроект будет закрыт. Следует закрыть хотя бы 1 открытый проект перед повторной попыткой");
+        m_projects.pop_front();
+        delete temp_tab;
+        return;
+    }
+
     m_proj_index.insert(temp_tab->getId(), it);
     m_tabs_index.insert(temp_tab->getId(), temp_tab);
     m_tabs_edited.insert(temp_tab->getId(), false);
