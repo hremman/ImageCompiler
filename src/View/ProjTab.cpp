@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include <algorithm>
 
+#include "Exceptions.hpp"
 #include "ProjTab.h"
 #include "ui_ProjTab.h"
 #include "View/Layer.h"
@@ -26,7 +27,7 @@ ProjTab::ProjTab(Data::CProject& proj, QWidget *parent) :
             break;
         }
         if ( i == UINT_MAX )
-            throw to_big_id("ProjectTab try to generate too big id");
+            throw too_many_id("Превышен лимит идентификаторов для объекта ProjTab");
     }
     ui->setupUi(this);
     QObject::connect(ui->proj_name, &QLineEdit::editingFinished, this, &ProjTab::name_edited);

@@ -14,5 +14,12 @@
         <file>resourses/down.ico</file>
         <file>resourses/up.ico</file>
         <file>resourses/edit.ico</file>
+        <file>resourses/left.ico</file>
+        <file>resourses/Ok.ico</file>
+        <file>resourses/pending.ico</file>
+        <file>resourses/right.ico</file>
+    </qresource>
+    <qresource prefix="/image/animation">
+        <file>resourses/wait.gif</file>
     </qresource>
 </RCC>

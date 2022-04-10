@@ -167,6 +167,10 @@
           <property name="text">
            <string>&lt;</string>
           </property>
+          <property name="icon">
+           <iconset resource="../res.qrc">
+            <normaloff>:/image/icon/resourses/left.ico</normaloff>:/image/icon/resourses/left.ico</iconset>
+          </property>
          </widget>
         </item>
         <item>
@@ -224,6 +228,10 @@
           </property>
           <property name="text">
            <string>&gt;</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../res.qrc">
+            <normaloff>:/image/icon/resourses/right.ico</normaloff>:/image/icon/resourses/right.ico</iconset>
           </property>
          </widget>
         </item>

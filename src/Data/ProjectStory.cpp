@@ -1,3 +1,4 @@
+#include "Exceptions.hpp"
 #include "ProjectStory.hpp"
 
 Data::CProjectStory::CProjectStory(CProject & proj)
@@ -23,7 +24,7 @@ const Data::CProject & Data::CProjectStory::undo()
     if ( m_current != m_storage.begin() )
         return *(--m_current);
     else
-        throw story_botom_reached("No more elements in story");
+        throw story_out_of_range("Нет действий для отмены");
 
 }
 
@@ -32,7 +33,7 @@ const Data::CProject & Data::CProjectStory::redo()
     if ( m_current != m_last )
         return *(++m_current);
     else
-        throw story_top_reached("No more elements in story");
+        throw story_out_of_range("Нет действий для повтора");
 }
 
 void Data::CProjectStory::clear()

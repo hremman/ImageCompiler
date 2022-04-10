@@ -6,22 +6,6 @@
 
 namespace Data {
 
-class story_botom_reached: public std::runtime_error
-{
-public:
-    story_botom_reached(const std::string & msg)
-        : std::runtime_error(msg)
-    {}
-};
-
-class story_top_reached: public std::runtime_error
-{
-public:
-    story_top_reached(const std::string & msg)
-        : std::runtime_error(msg)
-    {}
-};
-
 class CProjectStory
 {
 public:

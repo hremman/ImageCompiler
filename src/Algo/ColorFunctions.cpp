@@ -37,24 +37,3 @@ QColor CColorFunctions::SetValue(const QColor & pixel, const RangeMapper & mappe
     p.setHsv(pixel.hsvHue(), pixel.hsvSaturation(), mapper(pixel.value()), pixel.alpha());
     return p;
 }
-
-CColorFunctions::RangeMapper::RangeMapper()
-    : m_k(0)
-    , m_down(0)
-    , m_down_old(0)
-{}
-CColorFunctions::RangeMapper::RangeMapper(const AverageRange & range, int new_val)
-    : RangeMapper()
-{
-    AverageRange new_range;
-    new_range.m_average= new_val - range.m_average;
-    new_range.m_top = range.m_top + new_range.m_average;
-    new_range.m_down = range.m_top + new_range.m_average;
-    if ( new_range.m_top > 100 ) new_range.m_top = 100;
-    if ( new_range.m_down >= 100 ) new_range.m_down = 95;
-    if ( new_range.m_down < 0 ) new_range.m_down = 0;
-    if ( new_range.m_top <= 0 ) new_range.m_top = 95;
-
-    m_k = (double)(new_range.m_top - new_range.m_down) / (double)(range.m_top - range.m_down);
-
-}

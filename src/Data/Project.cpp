@@ -1,3 +1,4 @@
+#include "Exceptions.hpp"
 #include "Data/Project.hpp"
 
 
@@ -13,7 +14,7 @@ Data::CProject::uid_t Data::CProject::new_lid()
         prev = *it;
     }
     if ( prev == 9999)
-        throw QString("Превышен лимит идентификаторов");
+        throw too_many_id("Превышен лимит идентификаторов для объекта Data::CProject");
 
     return *(m_used_lid.emplace(prev + 1).first);
 }

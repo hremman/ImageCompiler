@@ -11,6 +11,7 @@ CONFIG += c++17 \
 
 SOURCES += \
     src/Algo/ColorFunctions.cpp \
+    src/Algo/ImageProcessing.cpp \
     src/Algo/old_ColorFunctions.cpp \
     src/Algo/old_ImageTransformation.cpp \
     src/Algo/old_Layer.cpp \
@@ -24,10 +25,15 @@ SOURCES += \
     src/View/Layer.cpp \
     src/View/MainWin.cpp \
     src/View/ProjTab.cpp \
+    src/View/dialogprogress.cpp \
     src/main.cpp
+    #src/View/colordialog.cpp \
+
 
 HEADERS += \
     src/Algo/ColorFunctions.h \
+    src/Algo/ImageProcessing.hpp \
+    src/Algo/ProcessingTypes.h \
     src/Algo/json.hpp \
     src/Algo/old_ColorFunctions.hpp \
     src/Algo/old_ImageTransformation.hpp \
@@ -38,12 +44,15 @@ HEADERS += \
     src/Data/Layer.hpp \
     src/Data/Project.hpp \
     src/Data/ProjectStory.hpp \
+    src/Exceptions.hpp \
     src/View/ColorItem.h \
     src/View/ColorSettings.h \
     src/View/FileList.hpp \
     src/View/Layer.h \
     src/View/MainWin.h \
-    src/View/ProjTab.h
+    src/View/ProjTab.h \
+    src/View/dialogprogress.h
+    #src/View/colordialog.h \
 
 FORMS += \
     Forms/ColorItem.ui \
@@ -51,7 +60,9 @@ FORMS += \
     Forms/FileList.ui \
     Forms/Layer.ui \
     Forms/MainWin.ui \
-    Forms/ProjTab.ui
+    Forms/ProjTab.ui \
+ \    #Forms/colordialog.ui
+    Forms/dialogprogress.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

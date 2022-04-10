@@ -7,8 +7,10 @@
 #include <QGraphicsScene>
 #include <QMessageBox>
 #include <QCloseEvent>
+#include <QFileDialog>
 
-#include "View/FileList.hpp"
+
+#include "View/dialogprogress.h"
 
 QImage img;
 
@@ -535,5 +537,6 @@ void CompilerMainWin::show_counters(ProjTab *temp)
 
 void CompilerMainWin::slot_generate(bool)
 {
-
+    DialogProgress dialog(this);
+    dialog.exec();
 }

@@ -1,4 +1,4 @@
-
+#include "Exceptions.hpp"
 #include "Data/Layer.hpp"
 
 Data::CLayer::CLayer(uid_t lid)
@@ -28,7 +28,7 @@ const nlohmann::json Data::CLayer::to_json() const
                            {"lid", m_lid}
                           };
     if (m_type == WorkType::ENUMERATION)
-        json["colors"] = m_colors.to_json();
+        json["colors_settings"] = m_colors.to_json();
     for (auto i: m_files)
         json["files"].push_back(i.toStdString());
 
@@ -43,9 +43,9 @@ void Data::CLayer::from_jsom(const nlohmann::json & json)
     json.at("lid").get_to(m_lid);
     json.at("type").get_to(m_type);
     if (m_type < WorkType::NO_TYPE || m_type > WorkType::ENUMERATION)
-        throw wrong_val("Wrong layer type in json");
+        throw wrong_mode("Ошибка разбора файла: неверное значение \"type\" объекта \"layer\". Допустимы: [-1, 0, 1]");
     if (m_type == WorkType::ENUMERATION)
-        m_colors.from_jsom(json.at("colors"));
+        m_colors.from_jsom(json.at("colors_settings"));
 }
 size_t  Data::CLayer::count() const
 {

@@ -7,11 +7,7 @@
 
 
 namespace Data {
-class wrong_val : public std::runtime_error
-{
-public:
-    wrong_val(const std::string & msg) : std::runtime_error(msg) {}
-};
+
     class CColorSettings
     {
     public:

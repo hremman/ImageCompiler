@@ -1,3 +1,4 @@
+#include "Exceptions.hpp"
 #include "ColorSettings.h"
 
 Data::CColorSettings::CColorSettings()
@@ -51,7 +52,7 @@ void Data::CColorSettings::from_jsom(const nlohmann::json & json)
             m_colors.emplace_back().from_jsom(*it);
     }
     else
-        throw wrong_val("Wrong val mode");
+        throw wrong_mode("Ошибка разбора файла: неверное значение \"mode\" объекта \"colors_settings\". Допустимы: [0, 1]");
 
 }
 
