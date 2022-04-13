@@ -32,10 +32,7 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="4,1">
-    <property name="sizeConstraint">
-     <enum>QLayout::SetDefaultConstraint</enum>
-    </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QTabWidget" name="tabs">
       <property name="enabled">
@@ -151,7 +148,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QToolButton" name="left">
+         <widget class="QToolButton" name="prev_file">
           <property name="minimumSize">
            <size>
             <width>25</width>
@@ -169,7 +166,42 @@
           </property>
           <property name="icon">
            <iconset resource="../res.qrc">
-            <normaloff>:/image/icon/resourses/left.ico</normaloff>:/image/icon/resourses/left.ico</iconset>
+            <normaloff>:/image/icon/resourses/left_picture.ico</normaloff>:/image/icon/resourses/left_picture.ico</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>24</width>
+            <height>24</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="prev_color">
+          <property name="minimumSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>&lt;</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../res.qrc">
+            <normaloff>:/image/icon/resourses/left_palete.ico</normaloff>:/image/icon/resourses/left_palete.ico</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>24</width>
+            <height>24</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -213,7 +245,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="right">
+         <widget class="QToolButton" name="nex_color">
           <property name="minimumSize">
            <size>
             <width>25</width>
@@ -231,7 +263,42 @@
           </property>
           <property name="icon">
            <iconset resource="../res.qrc">
-            <normaloff>:/image/icon/resourses/right.ico</normaloff>:/image/icon/resourses/right.ico</iconset>
+            <normaloff>:/image/icon/resourses/right_palete.ico</normaloff>:/image/icon/resourses/right_palete.ico</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>24</width>
+            <height>24</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="next_file">
+          <property name="minimumSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>&gt;</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../res.qrc">
+            <normaloff>:/image/icon/resourses/right_picture.ico</normaloff>:/image/icon/resourses/right_picture.ico</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>24</width>
+            <height>24</height>
+           </size>
           </property>
          </widget>
         </item>

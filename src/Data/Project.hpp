@@ -12,6 +12,14 @@
 namespace Data {
     class CProject
     {
+    public:
+        class State
+        {
+        public:
+            std::list<CLayer*>::const_iterator m_current_layer;
+            size_t m_current_file;
+            std::list<CColor>::const_iterator m_current_color;
+        };
 
     public:
         QString m_name;

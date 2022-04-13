@@ -16,10 +16,15 @@
         <file>resourses/edit.ico</file>
         <file>resourses/left.ico</file>
         <file>resourses/Ok.ico</file>
-        <file>resourses/pending.ico</file>
         <file>resourses/right.ico</file>
+        <file>resourses/left_palete.ico</file>
+        <file>resourses/left_picture.ico</file>
+        <file>resourses/right_palete.ico</file>
+        <file>resourses/right_picture.ico</file>
+        <file>resourses/wait.ico</file>
+		<file>resourses/warn.ico</file>
     </qresource>
     <qresource prefix="/image/animation">
-        <file>resourses/wait.gif</file>
+        <file>resourses/pending.gif</file>
     </qresource>
 </RCC>

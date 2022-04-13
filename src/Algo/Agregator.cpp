@@ -1,6 +1,6 @@
 #include "Agregator.hpp"
 
-CAgregator::CAgregator()
+/*CAgregator::CAgregator()
 {
 
-}
+}*/

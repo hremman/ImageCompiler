@@ -6,7 +6,7 @@
 #include "Algo/ProcessingTypes.h"
 #include "Data/Project.hpp"
 
-
+/*
 class CAgregator
 {
 
@@ -39,6 +39,6 @@ protected:
 
 
 };
-
+*/
 
 #endif // CAGREGATOR_HPP
