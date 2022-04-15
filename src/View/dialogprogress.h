@@ -5,6 +5,8 @@
 #include <QPixmap>
 #include <QLabel>
 #include <QMovie>
+#include "Data/Project.hpp"
+#include "Algo/Processor.hpp"
 
 namespace Ui {
 class DialogProgress;
@@ -29,6 +31,7 @@ private:
     QPixmap m_error;
     QPixmap m_warn;
     QMovie m_pending;
+    CProcessor m_processor;
 
 private:
     void add_line(const QString &);

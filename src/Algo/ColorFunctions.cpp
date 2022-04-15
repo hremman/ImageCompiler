@@ -1,5 +1,6 @@
 #include "ColorFunctions.h"
 
+
 QColor CColorFunctions::CompositeAlphaPixel(const QColor & top, const QColor &down)
 {
     if( top.alpha() == 0 )

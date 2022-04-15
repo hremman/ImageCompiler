@@ -10,6 +10,11 @@ struct AverageRange
     int m_down = 100;
 };
 
+struct ImageCache {
+    AverageRange m_saturation;
+    AverageRange m_value;
+};
+
 class RangeMapper
 {
 public:

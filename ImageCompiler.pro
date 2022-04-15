@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui concurrent
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,9 +10,9 @@ CONFIG += c++17 \
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    src/Algo/Agregator.cpp \
     src/Algo/ColorFunctions.cpp \
     src/Algo/ImageProcessing.cpp \
+    src/Algo/Processor.cpp \
     src/Algo/old_ColorFunctions.cpp \
     src/Algo/old_ImageTransformation.cpp \
     src/Algo/old_Layer.cpp \
@@ -32,10 +32,10 @@ SOURCES += \
 
 
 HEADERS += \
-    src/Algo/Agregator.hpp \
     src/Algo/ColorFunctions.h \
     src/Algo/ImageProcessing.hpp \
     src/Algo/ProcessingTypes.h \
+    src/Algo/Processor.hpp \
     src/Algo/json.hpp \
     src/Algo/old_ColorFunctions.hpp \
     src/Algo/old_ImageTransformation.hpp \

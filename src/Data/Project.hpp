@@ -13,27 +13,25 @@ namespace Data {
     class CProject
     {
     public:
-        class State
-        {
-        public:
-            std::list<CLayer*>::const_iterator m_current_layer;
-            size_t m_current_file;
-            std::list<CColor>::const_iterator m_current_color;
-        };
+        using CChain = std::map<const CLayer* const, CLayer::CState>;
 
     public:
         QString m_name;
         QString m_out_path;
         QString m_file;
+        CChain *m_current_chain;
 
 
     public:
         CProject();
+        ~CProject();
         CProject(const CProject &);
         CLayer * newLayer();
         void removeLayer(CLayer *);
         void moveLayerUp(size_t);
         void moveLayerDown(size_t);
+        bool hasChain() const;
+        void useChain(bool);
 
         const std::list<CLayer*> & layers() const;
         const nlohmann::json to_json()  const;

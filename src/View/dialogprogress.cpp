@@ -10,7 +10,8 @@ DialogProgress::DialogProgress(QWidget *parent) :
     m_done(":/image/icon/resourses/Ok.ico"),
     m_error(":/image/icon/resourses/cross.ico"),
     m_warn(":/image/icon/resourses/warn.ico"),
-    m_pending(":/image/animation/resourses/pending.gif")
+    m_pending(":/image/animation/resourses/pending.gif"),
+    m_start()
 {
     ui->setupUi(this);
     ui->tableWidget->setColumnWidth(0, 25);

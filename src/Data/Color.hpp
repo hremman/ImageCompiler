@@ -26,6 +26,12 @@ namespace Data
             , m_value(ref.m_value)
         {}
 
+        CColor(int r, int g, int b, bool saturation = false, bool value = false)
+            : m_color(r,g,b)
+            , m_saturation(saturation)
+            , m_value(value)
+        {}
+
         CColor & operator=(const CColor & ref)
         {
             if ( this != &ref)
