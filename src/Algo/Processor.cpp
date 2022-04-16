@@ -6,8 +6,11 @@
 #include "Processor.hpp"
 #include "ImageProcessing.hpp"
 
+CProcessor CProcessor::__M_instance = CProcessor();
+
 CProcessor::CProcessor()
-    : m_workers(0)
+    : QObject(nullptr)
+    , m_workers(0)
 {
 
 }

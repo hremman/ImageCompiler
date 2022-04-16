@@ -7,6 +7,7 @@
 #include <QMovie>
 #include "Data/Project.hpp"
 #include "Algo/Processor.hpp"
+#include "Algo/SpinLock.hpp"
 
 namespace Ui {
 class DialogProgress;
@@ -21,7 +22,8 @@ public:
     ~DialogProgress();
 
 public slots:
-    void clicked(bool);
+    void slot_clicked(bool);
+    void slot_processorEvent(CProcessor::Event);
 
 private:
     Ui::DialogProgress *ui;
@@ -31,8 +33,13 @@ private:
     QPixmap m_error;
     QPixmap m_warn;
     QMovie m_pending;
-    CProcessor m_processor;
+    CProcessor & m_processor;
+    CSpinLock m_lock;
+    std::list<CProcessor::Event> m_event_que;
 
+
+protected:
+    virtual void showEvent(QShowEvent *event) override;
 private:
     void add_line(const QString &);
 

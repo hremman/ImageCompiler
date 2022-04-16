@@ -1,7 +1,6 @@
 #ifndef PROCESSINGTYPES_H
 #define PROCESSINGTYPES_H
 
-#include <stdexcept>
 
 struct AverageRange
 {
@@ -50,10 +49,6 @@ protected:
     int m_down_old;
 };
 
-class nullpr_arg : std::exception
-{
-
-};
 
 
 

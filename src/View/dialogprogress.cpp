@@ -2,6 +2,7 @@
 #include "dialogprogress.h"
 #include "ui_dialogprogress.h"
 
+
 DialogProgress::DialogProgress(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogProgress),
@@ -11,7 +12,7 @@ DialogProgress::DialogProgress(QWidget *parent) :
     m_error(":/image/icon/resourses/cross.ico"),
     m_warn(":/image/icon/resourses/warn.ico"),
     m_pending(":/image/animation/resourses/pending.gif"),
-    m_start()
+    m_processor(CProcessor::getProcessor())
 {
     ui->setupUi(this);
     ui->tableWidget->setColumnWidth(0, 25);
@@ -29,7 +30,8 @@ DialogProgress::DialogProgress(QWidget *parent) :
     add_line("Подготовка заданий");
     add_line("Генерация изображений");
 
-    QObject::connect(ui->pushButton, &QPushButton::clicked, this, &DialogProgress::clicked);
+    QObject::connect(ui->pushButton, &QPushButton::clicked, this, &DialogProgress::slot_clicked);
+    QObject::connect(&m_processor, &CProcessor::sendEvent, this, &DialogProgress::slot_processorEvent);
 
 
 }
@@ -74,6 +76,17 @@ void DialogProgress::set_in_work()
 }
 
 
+void DialogProgress::showEvent(QShowEvent *event)
+{
+    m_lock.lock();
+    //Извлечь события процессора и обработать их
+
+
+    m_lock.unlock();
+    QDialog::showEvent(event);
+}
+
+
 void DialogProgress::set_error(const QString & text)
 {
     if (m_current_line >= 0)
@@ -112,8 +125,13 @@ void DialogProgress::set_warn(const QString & text)
 
 
 
-void DialogProgress::clicked(bool)
+void DialogProgress::slot_clicked(bool)
 {
-    set_warn("Предупреждение");
 }
 
+void DialogProgress::slot_processorEvent(CProcessor::Event event)
+{
+    m_lock.lock();
+    m_event_que.push_back(event);
+    m_lock.unlock();
+}

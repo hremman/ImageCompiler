@@ -36,6 +36,7 @@ HEADERS += \
     src/Algo/ImageProcessing.hpp \
     src/Algo/ProcessingTypes.h \
     src/Algo/Processor.hpp \
+    src/Algo/SpinLock.hpp \
     src/Algo/json.hpp \
     src/Algo/old_ColorFunctions.hpp \
     src/Algo/old_ImageTransformation.hpp \
