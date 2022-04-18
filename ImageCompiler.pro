@@ -11,8 +11,8 @@ CONFIG += c++17 \
 
 SOURCES += \
     src/Algo/ColorFunctions.cpp \
+    src/Algo/Compiler.cpp \
     src/Algo/ImageProcessing.cpp \
-    src/Algo/Processor.cpp \
     src/Algo/old_ColorFunctions.cpp \
     src/Algo/old_ImageTransformation.cpp \
     src/Algo/old_Layer.cpp \
@@ -33,9 +33,9 @@ SOURCES += \
 
 HEADERS += \
     src/Algo/ColorFunctions.h \
+    src/Algo/Compiler.hpp \
     src/Algo/ImageProcessing.hpp \
     src/Algo/ProcessingTypes.h \
-    src/Algo/Processor.hpp \
     src/Algo/SpinLock.hpp \
     src/Algo/json.hpp \
     src/Algo/old_ColorFunctions.hpp \

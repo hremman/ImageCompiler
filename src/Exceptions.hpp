@@ -50,4 +50,22 @@ public:
     wrong_arg(const QString & msg) : ICException(msg) {}
 };
 
+class CompilerError : public ICException
+{
+public:
+    CompilerError(const QString & msg) : ICException(msg) {}
+};
+
+class CompilerBusy : public CompilerError
+{
+public:
+    CompilerBusy(const QString & msg) : CompilerError(msg) {}
+};
+
+class NoSuchKey : public CompilerError
+{
+public:
+    NoSuchKey(const QString & msg) : CompilerError(msg) {}
+};
+
 #endif // EXCEPTIONS_HPP

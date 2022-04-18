@@ -12,7 +12,7 @@ DialogProgress::DialogProgress(QWidget *parent) :
     m_error(":/image/icon/resourses/cross.ico"),
     m_warn(":/image/icon/resourses/warn.ico"),
     m_pending(":/image/animation/resourses/pending.gif"),
-    m_processor(CProcessor::getProcessor())
+    m_processor(CCompiler::getProcessor())
 {
     ui->setupUi(this);
     ui->tableWidget->setColumnWidth(0, 25);
@@ -31,7 +31,7 @@ DialogProgress::DialogProgress(QWidget *parent) :
     add_line("Генерация изображений");
 
     QObject::connect(ui->pushButton, &QPushButton::clicked, this, &DialogProgress::slot_clicked);
-    QObject::connect(&m_processor, &CProcessor::sendEvent, this, &DialogProgress::slot_processorEvent);
+    QObject::connect(&m_processor, &CCompiler::sendEvent, this, &DialogProgress::slot_processorEvent);
 
 
 }
@@ -129,7 +129,7 @@ void DialogProgress::slot_clicked(bool)
 {
 }
 
-void DialogProgress::slot_processorEvent(CProcessor::Event event)
+void DialogProgress::slot_processorEvent(CCompiler::Event event)
 {
     m_lock.lock();
     m_event_que.push_back(event);

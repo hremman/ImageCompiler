@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QMovie>
 #include "Data/Project.hpp"
-#include "Algo/Processor.hpp"
+#include "Algo/Compiler.hpp"
 #include "Algo/SpinLock.hpp"
 
 namespace Ui {
@@ -23,7 +23,7 @@ public:
 
 public slots:
     void slot_clicked(bool);
-    void slot_processorEvent(CProcessor::Event);
+    void slot_processorEvent(CCompiler::Event);
 
 private:
     Ui::DialogProgress *ui;
@@ -33,9 +33,9 @@ private:
     QPixmap m_error;
     QPixmap m_warn;
     QMovie m_pending;
-    CProcessor & m_processor;
+    CCompiler & m_processor;
     CSpinLock m_lock;
-    std::list<CProcessor::Event> m_event_que;
+    std::list<CCompiler::Event> m_event_que;
 
 
 protected:
