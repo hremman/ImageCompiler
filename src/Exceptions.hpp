@@ -68,4 +68,41 @@ public:
     NoSuchKey(const QString & msg) : CompilerError(msg) {}
 };
 
+class WrongType : public CompilerError
+{
+public:
+    WrongType(const QString & msg) : CompilerError(msg) {}
+};
+
+class ImageStorage : public ICException
+{
+public:
+    ImageStorage(const QString & msg) : ICException(msg) {}
+};
+
+
+class TooBigId : public ImageStorage
+{
+public:
+    TooBigId(const QString & msg) : ImageStorage(msg) {}
+};
+
+class LoadImageError : public ImageStorage
+{
+public:
+    LoadImageError(const QString & msg) : ImageStorage(msg) {}
+};
+
+class NoSuchImage : public ImageStorage
+{
+public:
+    NoSuchImage(const QString & msg) : ImageStorage(msg) {}
+};
+
+class NoFreeMemory : public ImageStorage
+{
+public:
+    NoFreeMemory(const QString & msg) : ImageStorage(msg) {}
+};
+
 #endif // EXCEPTIONS_HPP

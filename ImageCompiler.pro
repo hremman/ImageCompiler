@@ -12,10 +12,11 @@ CONFIG += c++17 \
 SOURCES += \
     src/Algo/ColorFunctions.cpp \
     src/Algo/Compiler.cpp \
+    src/Algo/CompilerContext.cpp \
+    src/Algo/CompilerEvent.cpp \
+    src/Algo/CompilerTask.cpp \
     src/Algo/ImageProcessing.cpp \
-    src/Algo/old_ColorFunctions.cpp \
-    src/Algo/old_ImageTransformation.cpp \
-    src/Algo/old_Layer.cpp \
+    src/Algo/ImageStorage.cpp \
     src/Data/ColorSettings.cpp \
     src/Data/Layer.cpp \
     src/Data/Project.cpp \
@@ -34,14 +35,14 @@ SOURCES += \
 HEADERS += \
     src/Algo/ColorFunctions.h \
     src/Algo/Compiler.hpp \
+    src/Algo/CompilerContext.hpp \
+    src/Algo/CompilerEvent.hpp \
+    src/Algo/CompilerTask.hpp \
     src/Algo/ImageProcessing.hpp \
+    src/Algo/ImageStorage.hpp \
     src/Algo/ProcessingTypes.h \
     src/Algo/SpinLock.hpp \
     src/Algo/json.hpp \
-    src/Algo/old_ColorFunctions.hpp \
-    src/Algo/old_ImageTransformation.hpp \
-    src/Algo/old_ImageTransformationInterface.hpp \
-    src/Algo/old_Layer.hpp \
     src/Data/Color.hpp \
     src/Data/ColorSettings.h \
     src/Data/Layer.hpp \

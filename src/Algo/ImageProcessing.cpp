@@ -98,7 +98,7 @@ void CImageProcessing::ChangeColor(QImage * image, int hue, size_t num, size_t c
 }
 
 template <bool SATURATION, bool VALUE>
-void CImageProcessing::getAverageValue(const QImage & image, size_t num, size_t count, AverageRange & saturation, AverageRange & value)
+void CImageProcessing::getAverage(const QImage & image, size_t num, size_t count, AverageRange & saturation, AverageRange & value)
 {
     if ( count < 1)
         throw wrong_arg("[CImageProcessing::getAverageValue]: Передано число потоков обработки меньше одного");
