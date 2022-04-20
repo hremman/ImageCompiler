@@ -1,9 +1,8 @@
-
-#include "Exceptions.hpp"
 #include "Compiler.hpp"
 #include "CompilerEvent.hpp"
 #include "CompilerContext.hpp"
 #include "CompilerTask.hpp"
+#include "Exceptions.hpp"
 
 
 CCompiler CCompiler::__M_instance = CCompiler();
@@ -54,8 +53,7 @@ bool CCompiler::build(const Data::CProject & proj, Context ** ctx_ptr)
 
     emit sendEvent(Event(Event::Stage::RANDOMISE_PREPARE, Event::Type::OK));
 
-   if ( !eventLoop(ctx_ptr, ctx_ptr_local) ) return false;
-
+    if ( !eventLoop(ctx_ptr, ctx_ptr_local) ) return false;
 
 
     ctx.init_paletes(proj);
@@ -64,8 +62,6 @@ bool CCompiler::build(const Data::CProject & proj, Context ** ctx_ptr)
 
 
     if ( !eventLoop(ctx_ptr, ctx_ptr_local) ) return false;
-
-
 
     {
         QStringList not_exists;
@@ -99,12 +95,14 @@ bool CCompiler::build(const Data::CProject & proj, Context ** ctx_ptr)
             QImage img = ctx.m_file_cache.get(*it);
             std::vector<ImageCache> cache;
             cache.resize(m_pool.maxThreadCount());
-            std::vector<QFutureWatcher<void>> watchdog;
-            watchdog.resize(m_pool.maxThreadCount());
+            QFutureWatcher<void> * watchdog = new QFutureWatcher<void>[m_pool.maxThreadCount()] ;
 
-            for (size_t i = 0 ; i < watchdog.size(); i++)
-                watchdog[i].setFuture(QtConcurrent::run(&m_pool, CImageProcessing::getAverage<true, true>, img, 0, m_pool.maxThreadCount(), cache[i].m_saturation, cache[i].m_value));
-            for (size_t i = 0 ; i < watchdog.size(); i++)
+            for (size_t i = 0 ; i < m_pool.maxThreadCount(); i++)
+            {
+                //watchdog.emplace_back(nullptr);
+                watchdog[i].setFuture(QtConcurrent::run(&m_pool,[&](){ CImageProcessing::getAverage(img, static_cast<size_t>(0), static_cast<size_t>(m_pool.maxThreadCount()), cache[i].m_saturation, cache[i].m_value);}));
+            }
+            for (size_t i = 0 ; i < m_pool.maxThreadCount(); i++)
                 watchdog[i].waitForFinished();
 
             ImageCache fin;
@@ -129,7 +127,7 @@ bool CCompiler::build(const Data::CProject & proj, Context ** ctx_ptr)
             ctx.m_caches.push_back(fin);
             ctx.m_id_to_cache[*it] = --ctx.m_caches.end();
 
-
+            delete [] watchdog;
             if (done % 10 == 0)
                 emit sendEvent(Event(Event::Stage::RANDOMISE_PREPARE, Event::Type::OK, std::make_pair(ctx.m_file_cache.count(),done)));
         }

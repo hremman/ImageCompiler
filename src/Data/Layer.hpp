@@ -6,23 +6,6 @@
 #include <stdexcept>
 #include "Data/ColorSettings.h"
 
-
-
-
-#pragma pack(1)
-struct layer_data_file
-{
-    unsigned char m_mode;
-    unsigned int m_name_pos;
-    unsigned int m_files_pos;
-    unsigned int m_files_num;
-    unsigned int m_color_pos;
-    unsigned int m_color_num;
-};
-#pragma pack()
-
-
-
 namespace Data {
 
     class CLayer
@@ -55,6 +38,7 @@ namespace Data {
         QStringList m_files;
         double m_use_probability;
         double m_noise_probability;
+        bool m_blink;
         WorkType m_type;
         CColorSettings m_colors;
 

@@ -6,6 +6,7 @@
 #include <list>
 #include <vector>
 #include <map>
+#include <unordered_map>
 
 class CImageStorage
 {
@@ -74,6 +75,18 @@ public:
         if (m_file.isOpen())
             m_file.close();
     }
+protected:
+    struct ImageHolder_iterator_hash {
+        size_t operator()(const std::list<ImageHolder>::iterator &i) const {
+            return std::hash<ImageHolder*>()(&*i);
+        }
+    };
+
+    struct QImage_iterator_hash {
+        size_t operator()(const std::list<QImage>::iterator &i) const {
+            return std::hash<QImage*>()(&*i);
+        }
+    };
 
 protected:
     qint64 to_file(const QImage &);
@@ -83,13 +96,19 @@ protected:
     QTemporaryFile m_file;
 
     std::map<iid_t, std::list<ImageHolder>::iterator>   m_index_primary;
-    std::map<std::list<ImageHolder>::iterator, iid_t>   m_index_primary_reverse;
+
+    std::unordered_map<std::list<ImageHolder>::iterator, iid_t, ImageHolder_iterator_hash>
+                                                        m_index_primary_reverse;
+
     std::map<QString, iid_t>                            m_index_reverse;
-    std::map<std::list<QImage>::iterator, iid_t>        m_index_loaded_reverse;
-    std::list<QImage> m_images;
-    std::list<ImageHolder> m_holders;
-    long long m_size_in_memory;
-    long long m_size_in_file;
+
+    std::unordered_map<std::list<QImage>::iterator, iid_t, QImage_iterator_hash>
+                                                        m_index_loaded_reverse;
+
+    std::list<QImage>                                   m_images;
+    std::list<ImageHolder>                              m_holders;
+    long long                                           m_size_in_memory;
+    long long                                           m_size_in_file;
 };
 
 #endif // CIMAGESTORAGE_HPP

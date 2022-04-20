@@ -22,6 +22,8 @@ ColorSettings::ColorSettings(Data::CColorSettings * data, QWidget *parent):
         ui->generation_number->setValue(m_data->m_generations_number);
         ui->random_saturation->setCheckState(m_data->m_saturatiom ?  Qt::Checked : Qt::Unchecked);
         ui->random_value->setCheckState(m_data->m_value ?  Qt::Checked : Qt::Unchecked);
+
+
     }
     else
     {
@@ -73,6 +75,7 @@ void ColorSettings::react_toogled_enum(bool)
         ui->generation_number->setEnabled(false);
         ui->random_saturation->setEnabled(false);
         ui->random_value->setEnabled(false);
+        ui->for_each->setEnabled(false);
 
         ui->random_ch->setChecked(false);
     }
@@ -85,6 +88,7 @@ void ColorSettings::react_toogled_enum(bool)
         ui->generation_number->setEnabled(true);
         ui->random_saturation->setEnabled(true);
         ui->random_value->setEnabled(true);
+        ui->for_each->setEnabled(true);
 
         ui->random_ch->setChecked(true);
     }
@@ -102,6 +106,7 @@ void ColorSettings::react_toogled_rand(bool)
         ui->generation_number->setEnabled(true);
         ui->random_saturation->setEnabled(true);
         ui->random_value->setEnabled(true);
+        ui->for_each->setEnabled(true);
 
         ui->enumer_ch->setChecked(false);
     }
@@ -114,6 +119,7 @@ void ColorSettings::react_toogled_rand(bool)
         ui->generation_number->setEnabled(false);
         ui->random_saturation->setEnabled(false);
         ui->random_value->setEnabled(false);
+        ui->for_each->setEnabled(false);
 
         ui->enumer_ch->setChecked(true);
     }
@@ -125,9 +131,10 @@ void ColorSettings::react_accepted()
     {
         m_data->m_mode = Data::CColorSettings::Mode::GENERATION;
         m_data->m_colors.clear();
-        m_data->m_saturatiom = ui->random_saturation;
-        m_data->m_value = ui->random_value;
+        m_data->m_saturatiom = ui->random_saturation->isChecked();
+        m_data->m_value = ui->random_value->isChecked();
         m_data->m_generations_number = ui->generation_number->value();
+        m_data->m_for_each = ui->for_each->isChecked();
     }
     else
     {

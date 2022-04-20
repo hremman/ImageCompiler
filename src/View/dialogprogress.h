@@ -8,6 +8,7 @@
 #include "Data/Project.hpp"
 #include "Algo/Compiler.hpp"
 #include "Algo/SpinLock.hpp"
+#include "Algo/CompilerEvent.hpp"
 
 namespace Ui {
 class DialogProgress;

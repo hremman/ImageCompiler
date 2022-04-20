@@ -6,6 +6,7 @@ Data::CColorSettings::CColorSettings()
     , m_colors()
     , m_saturatiom(false)
     , m_value(false)
+    , m_for_each(false)
     , m_mode(Mode::GENERATION)
 {}
 
@@ -15,7 +16,17 @@ Data::CColorSettings::CColorSettings(const CColorSettings  * ptr)
     , m_colors(ptr->m_colors)
     , m_saturatiom(ptr->m_saturatiom)
     , m_value(ptr->m_value)
+    , m_for_each(ptr->m_for_each)
     , m_mode(ptr->m_mode)
+{}
+
+Data::CColorSettings::CColorSettings(const CColorSettings & ref)
+    : m_generations_number(ref.m_generations_number)
+    , m_colors(ref.m_colors)
+    , m_saturatiom(ref.m_saturatiom)
+    , m_value(ref.m_value)
+    , m_for_each(ref.m_for_each)
+    , m_mode(ref.m_mode)
 {}
 
 const nlohmann::json Data::CColorSettings::to_json()  const
@@ -27,6 +38,7 @@ const nlohmann::json Data::CColorSettings::to_json()  const
         json["gen_num"] = m_generations_number;
         json["sat"] = m_saturatiom;
         json["val"] = m_value;
+        json["for_each"] = m_for_each;
     }
     else
     {
@@ -44,6 +56,7 @@ void Data::CColorSettings::from_jsom(const nlohmann::json & json)
         json.at("gen_num").get_to(m_generations_number);
         json.at("sat").get_to(m_saturatiom);
         json.at("val").get_to(m_value);
+        json.at("for_each").get_to(m_for_each);
     }
     else if(json.at("mode") == Data::CColorSettings::Mode::ENUMERATION)
     {

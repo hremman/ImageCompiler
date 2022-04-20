@@ -14,6 +14,7 @@
 #include "SpinLock.hpp"
 #include "Exceptions.hpp"
 
+
 class CCompiler : public QObject
 {
     Q_OBJECT
@@ -21,7 +22,6 @@ public:
     class Event;
     class Task;
     class Context;
-
 
 public:
     static CCompiler& getProcessor()
@@ -64,4 +64,5 @@ private:
 
 };
 
+#include "CompilerEvent.hpp"
 #endif // CPROCESSOR_HPP

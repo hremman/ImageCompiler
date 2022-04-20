@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>420</width>
     <height>400</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>400</width>
+    <width>420</width>
     <height>400</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>400</width>
+    <width>420</width>
     <height>800</height>
    </size>
   </property>
@@ -135,7 +135,7 @@
            <string>Указывает, нужно ли при подмене цвета на указанный так же заменять насыщенность.</string>
           </property>
           <property name="text">
-           <string>Заменять насыщенность</string>
+           <string>Менять насыщенность</string>
           </property>
          </widget>
         </item>
@@ -145,7 +145,30 @@
            <string>Указывает, что при подмене цвета необходимо сдвинуть усреднённую яркость исходника к яркости выбранного цвета</string>
           </property>
           <property name="text">
-           <string>Корректировая яркость</string>
+           <string>Менять яркость</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="for_each">
+          <property name="toolTip">
+           <string>Позволяет выбирать для каждого цета, изменять ли яркость и.или насыщенность. Решаетяс случайным образом</string>
+          </property>
+          <property name="text">
+           <string>Индивидуально</string>
           </property>
          </widget>
         </item>

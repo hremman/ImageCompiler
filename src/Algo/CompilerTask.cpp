@@ -1,7 +1,7 @@
 #include "CompilerTask.hpp"
 
-CCompiler::Task::Task(CCompiler::ImageStore * ptr)
-    : m_cache(ptr)
+CCompiler::Task::Task(CImageStorage * ptr)
+    : m_store(ptr)
 {}
 
 void CCompiler::Task::resize(size_t s)

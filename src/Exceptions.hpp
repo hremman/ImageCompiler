@@ -38,6 +38,12 @@ public:
     story_out_of_range(const QString & msg) : ICException(msg) {}
 };
 
+class unsupported_version : public ICException
+{
+public:
+    unsupported_version(const QString & msg) : ICException(msg) {}
+};
+
 class nullpointer : public ICException
 {
 public:

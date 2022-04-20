@@ -17,12 +17,14 @@ namespace Data {
         };
 
         CColorSettings();
-        CColorSettings(const CColorSettings  * ptr);
+        CColorSettings(const CColorSettings  *);
+        CColorSettings(const CColorSettings &);
 
         int m_generations_number;
         std::list<CColor> m_colors;
         bool m_saturatiom;
         bool m_value;
+        bool m_for_each;
         Mode m_mode;
 
         const nlohmann::json to_json()  const;

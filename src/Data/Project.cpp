@@ -132,6 +132,7 @@ const nlohmann::json Data::CProject::to_json()  const
     nlohmann::json json = {
         {"name", m_name.toStdString()},
         {"out", m_out_path.toStdString()},
+        {"version", (static_cast<unsigned>(__M_major_ver) << 16) | __M_minor_ver },
     };
 
     for (auto it = m_layers.begin(); it != m_layers.end(); it++)
@@ -142,6 +143,10 @@ const nlohmann::json Data::CProject::to_json()  const
 
 void Data::CProject::from_jsom(const nlohmann::json & json)
 {
+    unsigned version;
+    json.at("version").get_to(version);
+    if ( (version ^ ((static_cast<unsigned>(__M_major_ver) << 16) | __M_minor_ver)) != 0 )
+        throw unsupported_version("Неподдерживаемая версия (" + QString::number( version >> 16) + "." + QString::number( version & 0xFFFF) + ") проекта");
     m_name.fromStdString(json.at("name"));
     m_out_path.fromStdString(json.at("out"));
     m_layers.clear();

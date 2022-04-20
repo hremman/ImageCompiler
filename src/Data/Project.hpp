@@ -47,6 +47,8 @@ namespace Data {
 
     protected:
         uid_t new_lid();
+        static const unsigned short __M_major_ver = 1;
+        static const unsigned short __M_minor_ver = 0;
     };
 }
 #endif // CDATAPROJECT_HPP

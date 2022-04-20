@@ -54,15 +54,22 @@ void CCompiler::Context::init_paletes(const Data::CProject & proj)
                 m_layer_to_paletes[*it] = std::vector<Data::CColor>();
                 m_layer_to_paletes[*it].resize((*it)->m_colors.m_generations_number);
                 for (size_t i = 0; i < m_layer_to_paletes[*it].size(); i++)
-                    m_layer_to_paletes[*it][i] = Data::CColor(m_color_gen(m_gen), m_color_gen(m_gen), m_color_gen(m_gen) );
+                {
+                    bool sat = (*it)->m_colors.m_saturatiom;
+                    bool val = (*it)->m_colors.m_value;
+                    if (sat && (*it)->m_colors.m_for_each)
+                        sat = (m_color_gen(m_gen) % 2) == 0;
+                    if (val && (*it)->m_colors.m_for_each)
+                        val = (m_color_gen(m_gen) % 2) == 0;
+                    m_layer_to_paletes[*it][i] = Data::CColor(m_color_gen(m_gen), m_color_gen(m_gen), m_color_gen(m_gen), sat, val );
+                }
             }
         }
     }
 }
 
 
-CCompiler::Context::CacheStatus operator|(CCompiler::Context::CacheStatus l, CCompiler::Context::CacheStatus r)
-    { return static_cast<CCompiler::Context::CacheStatus>(static_cast <char>(l) | static_cast <char>(r)); }
+
 
 CCompiler::Context::CacheStatus CCompiler::Context::build_files_cache(const Data::CProject & proj, QStringList &not_exists)
 {
@@ -85,36 +92,9 @@ CCompiler::Context::CacheStatus CCompiler::Context::build_files_cache(const Data
             ++num;
         }
     }
-    return CacheStatus::OK | (not_exists.size() ? CacheStatus::NOTEXISTS : CacheStatus::OK) | (m_file_cache.isEmpty() ? CacheStatus::EMPTYSET : CacheStatus::OK);
+    return static_cast <CacheStatus>(static_cast <char>(CacheStatus::OK) | (not_exists.size() ? static_cast <char>(CacheStatus::NOTEXISTS) : static_cast <char>(CacheStatus::OK)) | (m_file_cache.isEmpty() ? static_cast <char>(CacheStatus::EMPTYSET) : static_cast <char>(CacheStatus::OK)));
 }
 
-template <class FUNC>
-CCompiler::Context::CacheStatus CCompiler::Context::build_files_cache(const Data::CProject & proj, QStringList &not_exists, FUNC onProgress, size_t every)
-{
-    not_exists.clear();
-    auto layers = proj.layers();
-    size_t tnum = 0;
-    size_t num = 0;
-    size_t precount = 0;
-    for (auto it = layers.begin(); it != layers.end(); it++)
-        precount += (*it)->m_files.size();
+//template <class FUNC>
+//CCompiler::Context::CacheStatus CCompiler::Context::build_files_cache(const Data::CProject & proj, QStringList &not_exists, FUNC onProgress, size_t every)
 
-    for (auto it = layers.begin(); it != layers.end(); it++)
-    {
-        for (auto file = (*it)->m_files.begin(); file != (*it)->m_files.end(); file++ )
-        {
-            ++tnum;
-            if (tnum % every == 0)
-                onProgress(precount, tnum);
-            if ( ! QFile::exists(*file) )
-            {
-                not_exists.append(*file);
-                continue;
-            }
-            QImage img(*file);
-            auto id = m_file_cache.put(*file, img);
-            ++num;
-        }
-    }
-    return CacheStatus::OK | (not_exists.size() ? CacheStatus::NOTEXISTS : CacheStatus::OK) | (m_file_cache.isEmpty() ? CacheStatus::EMPTYSET : CacheStatus::OK);
-}

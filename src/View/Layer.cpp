@@ -19,7 +19,11 @@ CLayer::CLayer(Data::CLayer * const data, QWidget *parent) :
     ui->probe_val->setValue(m_data->m_use_probability);
     ui->noise_probe->setValue(m_data->m_noise_probability);
     ui->lid->setText(QString::number(m_data->get_lid()));
-
+    ui->blinked->setCheckState(m_data->m_blink ?  Qt::Checked : Qt::Unchecked);
+    if(ui->blinked->isChecked())
+        ui->probe_val->setEnabled(false);
+    else
+        ui->probe_val->setEnabled(false);
 
 
     QObject::connect(ui->settings, &QToolButton::clicked, this, &CLayer::settings_button);
@@ -28,6 +32,7 @@ CLayer::CLayer(Data::CLayer * const data, QWidget *parent) :
     QObject::connect(ui->probe_val, &QDoubleSpinBox::valueChanged, this, &CLayer::probe_changed);
     QObject::connect(ui->noise_probe, &QDoubleSpinBox::valueChanged, this, &CLayer::noise_changed);
     QObject::connect(ui->path_buton, &QToolButton::clicked, this, &CLayer::file_edit);
+    QObject::connect(ui->blinked, &QCheckBox::clicked, this, &CLayer::slot_blink);
 
 
 }
@@ -136,6 +141,19 @@ void CLayer::probe_changed(double)
     if (m_data->m_use_probability != ui->probe_val->value())
     {
         m_data->m_use_probability = ui->probe_val->value();
+        emit changed();
+    }
+}
+
+void CLayer::slot_blink(bool)
+{
+    if(ui->blinked->isChecked())
+        ui->probe_val->setEnabled(false);
+    else
+        ui->probe_val->setEnabled(false);
+    if (m_data->m_blink != ui->blinked->isChecked())
+    {
+        m_data->m_blink = ui->blinked->isChecked();
         emit changed();
     }
 }

@@ -31,6 +31,7 @@ private slots:
     void name_changed();
     void noise_changed(double);
     void probe_changed(double);
+    void slot_blink(bool);
 
 private:
     Ui::UiLayer *ui;

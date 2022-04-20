@@ -266,7 +266,7 @@
       <widget class="QLabel" name="probe_label">
        <property name="minimumSize">
         <size>
-         <width>150</width>
+         <width>100</width>
          <height>20</height>
         </size>
        </property>
@@ -281,7 +281,7 @@
 От 0 до 1</string>
        </property>
        <property name="text">
-        <string>Вероятность использования</string>
+        <string>Шанс использовать</string>
        </property>
       </widget>
      </item>
@@ -315,6 +315,20 @@
        <property name="singleStep">
         <double>0.001000000000000</double>
        </property>
+       <property name="value">
+        <double>1.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="blinked">
+       <property name="toolTip">
+        <string>Есвли включено, то при генерации будет, как-будто, добавлена пустая картинка.
+</string>
+       </property>
+       <property name="text">
+        <string>Пропадающий</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -334,13 +348,13 @@
       <widget class="QLabel" name="noise_label">
        <property name="minimumSize">
         <size>
-         <width>105</width>
+         <width>60</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>105</width>
+         <width>70</width>
          <height>16777215</height>
         </size>
        </property>
@@ -349,7 +363,7 @@
 Значение от 0 до 1</string>
        </property>
        <property name="text">
-        <string>Вероятность шума</string>
+        <string>Шанс шума</string>
        </property>
       </widget>
      </item>

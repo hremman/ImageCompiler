@@ -3,16 +3,15 @@
 #include <QImage>
 #include "ProcessingTypes.h"
 
-class CImageProcessing
+namespace CImageProcessing
 {
-public:
-    static AverageRange getAverageSaturation(const QImage &, size_t, size_t);
-    static AverageRange getAverageValue(const QImage &, size_t, size_t);
+//public:
+    AverageRange getAverageSaturation(const QImage &, size_t, size_t);
+    AverageRange getAverageValue(const QImage &, size_t, size_t);
+    bool getAverage(const QImage &, size_t, size_t, AverageRange &, AverageRange &);
+    bool CompositeAlpha(QImage *, const QImage &, size_t, size_t );
     template <bool SATURATION, bool VALUE>
-    static void getAverage(const QImage &, size_t, size_t, AverageRange &, AverageRange &);
-    static void CompositeAlpha(QImage *, const QImage &, size_t, size_t );
-    template <bool SATURATION, bool VALUE>
-    static void ChangeColor(QImage *, int, size_t, size_t,  const RangeMapper* saturation = nullptr, const RangeMapper* value = nullptr );
+    bool ChangeColor(QImage *, int, size_t, size_t,  const RangeMapper* saturation = nullptr, const RangeMapper* value = nullptr );
 
 };
 
