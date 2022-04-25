@@ -14,7 +14,7 @@ public:
 
     std::map<CImageStorage::iid_t, std::list<ImageCache>::iterator> m_id_to_cache;
 
-    std::map<Data::CLayer *, std::vector<Data::CColor>>     m_layer_to_paletes;
+    std::map<Data::CLayer *, std::list<Data::CColor>>     m_layer_to_paletes;
     std::list<ImageCache> m_caches;
 
 
@@ -30,11 +30,13 @@ public:
 
     };
 
-    Context();
+    Context(long long limit = 1 * CImageStorage::GB);
     Context(CImageStorage &);
 
     void init_random(const Data::CProject &);
     void init_paletes(const Data::CProject &);
+
+
     CacheStatus build_files_cache(const Data::CProject &, QStringList &);
 
     template <class FUNC>

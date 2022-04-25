@@ -22,7 +22,6 @@ public:
         RANDOMISE_PREPARE,
         IMAGE_CHECK_AND_CAHCHE,
         IMAGE_COLOR_CACHE,
-        TASK_BUILD,
         COMPILING,
         SAVE,
 

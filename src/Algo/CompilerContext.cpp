@@ -1,12 +1,12 @@
 #include "CompilerContext.hpp"
 
 
-CCompiler::Context::Context()
+CCompiler::Context::Context(long long limit)
     : m_color_gen(0,255)
     , m_layer_to_noise()
     , m_layer_to_use()
     , m_layer_to_paletes()
-    , m_file_cache_private(2*CImageStorage::GB)
+    , m_file_cache_private(limit)
     , m_file_cache(m_file_cache_private)
     , m_gen(std::random_device()())
 {}
@@ -51,9 +51,9 @@ void CCompiler::Context::init_paletes(const Data::CProject & proj)
         {
             if ((*it)->m_colors.m_mode == Data::CColorSettings::Mode::GENERATION)
             {
-                m_layer_to_paletes[*it] = std::vector<Data::CColor>();
+                m_layer_to_paletes[*it] = std::list<Data::CColor>();
                 m_layer_to_paletes[*it].resize((*it)->m_colors.m_generations_number);
-                for (size_t i = 0; i < m_layer_to_paletes[*it].size(); i++)
+                for (auto i = m_layer_to_paletes[*it].begin(); i != m_layer_to_paletes[*it].end(); i++)
                 {
                     bool sat = (*it)->m_colors.m_saturatiom;
                     bool val = (*it)->m_colors.m_value;
@@ -61,7 +61,7 @@ void CCompiler::Context::init_paletes(const Data::CProject & proj)
                         sat = (m_color_gen(m_gen) % 2) == 0;
                     if (val && (*it)->m_colors.m_for_each)
                         val = (m_color_gen(m_gen) % 2) == 0;
-                    m_layer_to_paletes[*it][i] = Data::CColor(m_color_gen(m_gen), m_color_gen(m_gen), m_color_gen(m_gen), sat, val );
+                    *i = Data::CColor(m_color_gen(m_gen), m_color_gen(m_gen), m_color_gen(m_gen), sat, val );
                 }
             }
         }

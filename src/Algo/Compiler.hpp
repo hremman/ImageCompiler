@@ -23,6 +23,7 @@ public:
     class Task;
     class Context;
 
+
 public:
     static CCompiler& getProcessor()
         {return __M_instance;}
@@ -42,6 +43,7 @@ signals:
     void sendEvent(Event);
 
 private:
+    class Cursor;
     enum class Signal
     {
         WORK = 0,
@@ -51,6 +53,7 @@ private:
         PAUSE
     };
 
+private:
     Signal m_signal;
     CSpinLock m_lock;
     bool eventLoop(Context **, Context *);

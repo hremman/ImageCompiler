@@ -13,6 +13,7 @@ SOURCES += \
     src/Algo/ColorFunctions.cpp \
     src/Algo/Compiler.cpp \
     src/Algo/CompilerContext.cpp \
+    src/Algo/CompilerCursor.cpp \
     src/Algo/CompilerEvent.cpp \
     src/Algo/CompilerTask.cpp \
     src/Algo/ImageProcessing.cpp \
@@ -36,6 +37,7 @@ HEADERS += \
     src/Algo/ColorFunctions.h \
     src/Algo/Compiler.hpp \
     src/Algo/CompilerContext.hpp \
+    src/Algo/CompilerCursor.hpp \
     src/Algo/CompilerEvent.hpp \
     src/Algo/CompilerTask.hpp \
     src/Algo/ImageProcessing.hpp \

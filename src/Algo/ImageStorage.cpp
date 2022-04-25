@@ -19,10 +19,10 @@ CImageStorage::CImageStorage(long long limit)
 CImageStorage::iid_t CImageStorage::put(const QString &file, const QImage &img)
 {
     ImageHolder holder;
-    iid_t temp_id = 0;
+    iid_t temp_id = 1;
     while ( m_index_primary.find(temp_id) != m_index_primary.end() )
         ++temp_id;
-    if ( temp_id == ERROR)
+    if ( temp_id > _ID_MAX)
         throw TooBigId("Свободные идентификаторы концились!");
     holder.m_id = temp_id;
 
@@ -57,7 +57,7 @@ CImageStorage::iid_t CImageStorage::put(const QImage & img)
     iid_t temp_id = 0;
     while ( m_index_primary.find(temp_id) != m_index_primary.end() )
         ++temp_id;
-    if ( temp_id == ERROR)
+    if ( temp_id > _ID_MAX)
         throw TooBigId("Свободные идентификаторы концились!");
     holder.m_id = temp_id;
     holder.m_size = img.sizeInBytes();

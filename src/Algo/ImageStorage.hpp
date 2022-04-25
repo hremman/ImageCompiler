@@ -12,8 +12,15 @@ class CImageStorage
 {
 public:
     using iid_t = unsigned long long;
-    static const  iid_t __M_ID_MAX = 0xFFFFFFFFFFFFFFFE;
-    static const  iid_t ERROR = 0xFFFFFFFFFFFFFFFE;
+    enum Consts : iid_t
+    {
+        _NULL = 0x0,
+        _FIRST = 0x1,
+        _ID_MAX = 0xFFFFFFFFFFFFFFFE,
+        _ERROR = 0xFFFFFFFFFFFFFFFF,
+    };
+
+
 
     enum sizes_e : long long
     {

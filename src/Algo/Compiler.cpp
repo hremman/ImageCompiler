@@ -31,6 +31,8 @@ bool CCompiler::BuildOne(Task &task)
 bool CCompiler::buildOne(Task &task)
 {return true;}
 
+
+
 bool CCompiler::build(const Data::CProject & proj, Context ** ctx_ptr)
 {
     if (m_signal != Signal::WAIT)
@@ -137,18 +139,13 @@ bool CCompiler::build(const Data::CProject & proj, Context ** ctx_ptr)
     emit sendEvent(Event(Event::Stage::IMAGE_COLOR_CACHE, Event::Type::OK));
     if ( !eventLoop(ctx_ptr, ctx_ptr_local) ) return false;
 
-    //add_line("Подготовка заданий");
-
-    std::list<Task> tasks;
-    auto layers = proj.layers();
+    //add_line("Компиляция");
 
 
 
-
-    //add_line("Генерация изображений");
-
-
+    return true;
 }
+
 
 bool CCompiler::eventLoop(Context ** ctx_ptr, Context *ctx_ptr_local)
 {
