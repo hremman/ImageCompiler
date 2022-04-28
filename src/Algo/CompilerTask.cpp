@@ -1,28 +1,51 @@
 #include "CompilerTask.hpp"
 
-CCompiler::Task::Task()
-    : m_images()
-    , m_trans()
+
+TaskStorage::TaskStorage(CImageStorage &ref)
+    : CCompiler::TaskInterface()
+    , m_images()
+    , m_storage(ref)
+{
+}
+
+void TaskStorage::push(CImageStorage::iid_t img, Data::CColor* color, const ImageCache &cache)
+{
+    m_images.push_back(img);
+    m_trans.push_back(color);
+    m_cache.push_back(cache);
+}
+
+void TaskStorage::clear()
+{
+    m_images.clear();
+    m_cache.clear();
+    m_trans.clear();
+}
+
+CCompiler::TaskInterface::LayerInfo TaskStorage::at(size_t pos)
+    { return {m_storage.get(m_images[pos]), m_trans[pos], m_cache[pos]}; }
+
+
+
+
+Task::Task()
+    : CCompiler::TaskInterface()
+    , m_images()
 {}
 
-void CCompiler::Task::resize(size_t s)
+void Task::push(const QImage & img, Data::CColor* color, const ImageCache &cache)
 {
-    m_images.resize(s);
-    m_trans.resize(s);
+    m_images.push_back(img);
+    m_trans.push_back(color);
+    m_cache.push_back(cache);
 }
 
-size_t CCompiler::Task::size() const
-    { return m_trans.size(); }
-
-
-void CCompiler::Task::push(const QImage & i, Data::CColor* c)
+void Task::clear()
 {
-    m_trans.push_back(c);
-    m_images.push_back(i);
-}
-
-void CCompiler::Task::clear()
-{
-    m_trans.clear();
     m_images.clear();
+    m_cache.clear();
+    m_trans.clear();
 }
+
+CCompiler::TaskInterface::LayerInfo Task::at(size_t pos)
+    { return {m_images[pos], m_trans[pos], m_cache[pos]}; }

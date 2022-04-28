@@ -20,7 +20,7 @@ class CCompiler : public QObject
     Q_OBJECT
 public:
     class Event;
-    class Task;
+    class TaskInterface;
     class Context;
 
 
@@ -29,11 +29,12 @@ public:
         {return __M_instance;}
 
     static bool Build(const Data::CProject &);
-    static bool BuildOne(Task &);
+    static bool BuildOne(TaskInterface *, QImage &);
 
 public:
+    CCompiler();
     bool build(const Data::CProject & proj, Context ** ctx_ptr = nullptr);
-    bool buildOne(Task &);
+
 
     void resume();
     void pause();
@@ -61,7 +62,7 @@ private:
 
 private:
     static CCompiler __M_instance;
-    CCompiler();
+    bool buildOne(TaskInterface *, QImage &);
     void wait();
     void work();
 

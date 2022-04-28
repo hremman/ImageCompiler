@@ -18,9 +18,9 @@ public:
         FIRST = 0,
 
         PREPARE = FIRST,
+        IMAGE_CHECK_AND_CAHCHE,
         GENERATE_PALETE,
         RANDOMISE_PREPARE,
-        IMAGE_CHECK_AND_CAHCHE,
         IMAGE_COLOR_CACHE,
         COMPILING,
         SAVE,

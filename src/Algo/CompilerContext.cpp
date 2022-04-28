@@ -21,31 +21,44 @@ CCompiler::Context::Context(CImageStorage &storage)
     , m_gen(std::random_device()())
 {}
 
-void CCompiler::Context::init_random(const Data::CProject & proj)
+void CCompiler::Context::init_random()
 {
-    auto layers = proj.layers();
 
-    //add_line("Подготовка случайных генераторов");
 
-    for (auto it = layers.begin(); it != layers.end(); it++)
+    for (auto it = m_layers.begin(); it != m_layers.end(); it++)
     {
-        if ( (*it)->m_noise_probability != 0.0 )
+        if ( (*it)->m_noise_probability != 0.0 && (*it)->m_noise_probability != 1.0)
         {
             m_layer_to_noise[*it] = std::bernoulli_distribution((*it)->m_use_probability < 1.0 ? (*it)->m_use_probability : 1);
         }
 
-        if ( (*it)->m_use_probability != 0.0 )
+        if ( (*it)->m_use_probability != 0.0 && (*it)->m_noise_probability != 1.0 )
         {
             m_layer_to_use[*it] = std::bernoulli_distribution((*it)->m_use_probability < 1.0 ? (*it)->m_use_probability: 1 );
         }
     }
 }
 
-
-void CCompiler::Context::init_paletes(const Data::CProject & proj)
+bool CCompiler::Context::noise(Data::CLayer* l)
 {
-    auto layers = proj.layers();
-    for (auto it = layers.begin(); it != layers.end(); it++)
+    if ( l->m_noise_probability == 0.0 )
+        return false;
+    if ( l->m_noise_probability == 1.0 )
+        return true;
+    return m_layer_to_noise[l](m_gen);
+}
+
+bool CCompiler::Context::usage(Data::CLayer* l)
+{
+    if ( l->m_use_probability == 1.0 )
+        return true;
+    return m_layer_to_use[l](m_gen);
+}
+
+
+void CCompiler::Context::init_paletes()
+{
+    for (auto it = m_layers.begin(); it != m_layers.end(); it++)
     {
         if ( (*it)->m_type == Data::CLayer::WorkType::ENUMERATION )
         {
@@ -88,7 +101,9 @@ CCompiler::Context::CacheStatus CCompiler::Context::build_files_cache(const Data
                 continue;
             }
             QImage img(*file);
-            m_files.push_back(m_file_cache.put(*file, img));
+            if (m_layers.begin() == m_layers.end() || m_layers.back() != *it)
+                m_layers.push_back(*it);
+            m_layer_to_file[*it].push_back(m_file_cache.put(*file, img));
             ++num;
         }
     }

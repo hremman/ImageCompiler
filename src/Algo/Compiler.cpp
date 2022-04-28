@@ -2,6 +2,7 @@
 #include "CompilerEvent.hpp"
 #include "CompilerContext.hpp"
 #include "CompilerTask.hpp"
+#include "CompilerCursor.hpp"
 #include "Exceptions.hpp"
 
 
@@ -24,11 +25,11 @@ CCompiler::CCompiler()
 bool CCompiler::Build(const Data::CProject & proj)
 {return __M_instance.build(proj);}
 
-bool CCompiler::BuildOne(Task &task)
-    {{return __M_instance.buildOne(task);}}
+bool CCompiler::BuildOne(TaskInterface *task, QImage &img)
+    {{return __M_instance.buildOne(task, img);}}
 
 
-bool CCompiler::buildOne(Task &task)
+bool CCompiler::buildOne(TaskInterface *task, QImage &img)
 {return true;}
 
 
@@ -51,19 +52,6 @@ bool CCompiler::build(const Data::CProject & proj, Context ** ctx_ptr)
 
     emit sendEvent(Event(Event::Stage::PREPARE, Event::Type::OK));
 
-    ctx.init_random(proj);
-
-    emit sendEvent(Event(Event::Stage::RANDOMISE_PREPARE, Event::Type::OK));
-
-    if ( !eventLoop(ctx_ptr, ctx_ptr_local) ) return false;
-
-
-    ctx.init_paletes(proj);
-
-    emit sendEvent(Event(Event::Stage::GENERATE_PALETE, Event::Type::OK));
-
-
-    if ( !eventLoop(ctx_ptr, ctx_ptr_local) ) return false;
 
     {
         QStringList not_exists;
@@ -86,60 +74,120 @@ bool CCompiler::build(const Data::CProject & proj, Context ** ctx_ptr)
         }
     }
 
+
+
+    emit sendEvent(Event(Event::Stage::RANDOMISE_PREPARE, Event::Type::OK, std::make_pair(0,0)));
+
+    ctx.init_random();
+
+    emit sendEvent(Event(Event::Stage::RANDOMISE_PREPARE, Event::Type::OK));
     if ( !eventLoop(ctx_ptr, ctx_ptr_local) ) return false;
 
+
+    ctx.init_paletes();
+
+    emit sendEvent(Event(Event::Stage::GENERATE_PALETE, Event::Type::OK));
+    emit sendEvent(Event(Event::Stage::RANDOMISE_PREPARE, Event::Type::OK, std::make_pair(0,0)));
+    if ( !eventLoop(ctx_ptr, ctx_ptr_local) ) return false;
+
+
+
     {
-        auto layers = proj.layers();
+
+
         size_t done = 0;
-        for (auto it = ctx.m_files.begin(); it != ctx.m_files.end(); it++)
-        {
-            ++done;
-            QImage img = ctx.m_file_cache.get(*it);
-            std::vector<ImageCache> cache;
-            cache.resize(m_pool.maxThreadCount());
-            QFutureWatcher<void> * watchdog = new QFutureWatcher<void>[m_pool.maxThreadCount()] ;
-
-            for (size_t i = 0 ; i < m_pool.maxThreadCount(); i++)
+        for (auto files = ctx.m_layer_to_file.begin(); files != ctx.m_layer_to_file.end(); ++files)
+            for (auto it = files->second.begin(); it != files->second.end(); it++)
             {
-                //watchdog.emplace_back(nullptr);
-                watchdog[i].setFuture(QtConcurrent::run(&m_pool,[&](){ CImageProcessing::getAverage(img, static_cast<size_t>(0), static_cast<size_t>(m_pool.maxThreadCount()), cache[i].m_saturation, cache[i].m_value);}));
+                ++done;
+                QImage img = ctx.m_file_cache.get(*it);
+                std::vector<ImageCache> cache;
+                cache.resize(m_pool.maxThreadCount());
+                QFutureWatcher<void> * watchdog = new QFutureWatcher<void>[m_pool.maxThreadCount()] ;
+
+                for (size_t i = 0 ; i < m_pool.maxThreadCount(); i++)
+                {
+                    //watchdog.emplace_back(nullptr);
+                    watchdog[i].setFuture(QtConcurrent::run(&m_pool,[&](){ CImageProcessing::getAverage(img, static_cast<size_t>(0), static_cast<size_t>(m_pool.maxThreadCount()), cache[i].m_saturation, cache[i].m_value);}));
+                }
+                for (size_t i = 0 ; i < m_pool.maxThreadCount(); i++)
+                    watchdog[i].waitForFinished();
+
+                ImageCache fin;
+
+                for (size_t i = 0 ; i < cache.size(); i++)
+                {
+                    if ( fin.m_saturation.m_down > cache[i].m_saturation.m_down )
+                        fin.m_saturation.m_down = cache[i].m_saturation.m_down;
+                    if ( fin.m_value.m_down > cache[i].m_value.m_down )
+                        fin.m_value.m_down = cache[i].m_value.m_down;
+                    if ( fin.m_saturation.m_top < cache[i].m_saturation.m_top )
+                        fin.m_saturation.m_top = cache[i].m_saturation.m_top;
+                    if ( fin.m_value.m_top > cache[i].m_value.m_top )
+                        fin.m_value.m_top = cache[i].m_value.m_top;
+                    fin.m_saturation.m_average += cache[i].m_saturation.m_average;
+                    fin.m_value.m_average += cache[i].m_value.m_average;
+                }
+                fin.m_saturation.m_average /= cache.size();
+                fin.m_value.m_average /= cache.size();
+
+
+                ctx.m_caches.push_back(fin);
+                ctx.m_id_to_cache[*it] = --ctx.m_caches.end();
+
+                delete [] watchdog;
+                if (done % 10 == 0)
+                    emit sendEvent(Event(Event::Stage::IMAGE_COLOR_CACHE, Event::Type::OK, std::make_pair(ctx.m_file_cache.count(),done)));
+
+                if ( !eventLoop(ctx_ptr, ctx_ptr_local) ) return false;
             }
-            for (size_t i = 0 ; i < m_pool.maxThreadCount(); i++)
-                watchdog[i].waitForFinished();
-
-            ImageCache fin;
-
-            for (size_t i = 0 ; i < cache.size(); i++)
-            {
-                if ( fin.m_saturation.m_down > cache[i].m_saturation.m_down )
-                    fin.m_saturation.m_down = cache[i].m_saturation.m_down;
-                if ( fin.m_value.m_down > cache[i].m_value.m_down )
-                    fin.m_value.m_down = cache[i].m_value.m_down;
-                if ( fin.m_saturation.m_top < cache[i].m_saturation.m_top )
-                    fin.m_saturation.m_top = cache[i].m_saturation.m_top;
-                if ( fin.m_value.m_top > cache[i].m_value.m_top )
-                    fin.m_value.m_top = cache[i].m_value.m_top;
-                fin.m_saturation.m_average += cache[i].m_saturation.m_average;
-                fin.m_value.m_average += cache[i].m_value.m_average;
-            }
-            fin.m_saturation.m_average /= cache.size();
-            fin.m_value.m_average /= cache.size();
-
-
-            ctx.m_caches.push_back(fin);
-            ctx.m_id_to_cache[*it] = --ctx.m_caches.end();
-
-            delete [] watchdog;
-            if (done % 10 == 0)
-                emit sendEvent(Event(Event::Stage::RANDOMISE_PREPARE, Event::Type::OK, std::make_pair(ctx.m_file_cache.count(),done)));
-        }
 
     }
 
     emit sendEvent(Event(Event::Stage::IMAGE_COLOR_CACHE, Event::Type::OK));
     if ( !eventLoop(ctx_ptr, ctx_ptr_local) ) return false;
 
-    //add_line("Компиляция");
+    CImageStorage out_storage(CImageStorage::GB);
+    {
+        emit sendEvent(Event(Event::Stage::COMPILING, Event::Type::OK, std::make_pair(0,0)));
+        Cursor cur;
+        cur.m_colors.resize(ctx.m_layers.size());
+        cur.m_files.resize(ctx.m_layers.size());
+        cur.m_current_color.resize(ctx.m_layers.size());
+        cur.m_current_file.resize(ctx.m_layers.size());
+        auto layer = ctx.m_layers.begin();
+        for (size_t it = 0; it < cur.m_current_color.size() && layer != ctx.m_layers.end(); ++it, ++layer)
+        {
+            cur.m_current_file[it] = 0;
+            cur.m_files[it].insert(cur.m_files[it].begin(), ctx.m_layer_to_file[*layer].begin(), ctx.m_layer_to_file[*layer].end());
+            if(ctx.m_layer_to_paletes.find(*layer) != ctx.m_layer_to_paletes.end())
+                cur.m_colors[it] = &ctx.m_layer_to_paletes[*layer];
+            else
+                cur.m_colors[it] = &((*layer)->m_colors.m_colors);
+            cur.m_current_color[it] = cur.m_colors[it]->begin();
+        }
+
+        Cursor::Sequence seq;
+        while (cur.get_next(seq))
+        {
+            layer = ctx.m_layers.begin();
+            TaskStorage task(ctx.m_file_cache);
+            TaskStorage taskAlter(ctx.m_file_cache);
+            for (size_t it = 0; it < seq.size() && layer != ctx.m_layers.end(); ++it, ++layer)
+            {
+                if ( (*layer)->m_blink )
+                    task.push(seq[it].first, seq[it].second, *(ctx.m_id_to_cache[seq[it].first]));
+                else
+                    if ( ctx.usage(*layer) )
+                        task.push(seq[it].first, seq[it].second, *(ctx.m_id_to_cache[seq[it].first]));
+            }
+            QImage img;
+            if ( buildOne(&task, img) )
+                out_storage.put(img);
+
+        }
+
+    }
 
 
 

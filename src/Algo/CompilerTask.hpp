@@ -3,22 +3,67 @@
 
 #include "Compiler.hpp"
 
-class CCompiler::Task
+class CCompiler::TaskInterface
+{
+public:
+    struct LayerInfo
+    {
+        const QImage& img;
+        Data::CColor* color;
+        const ImageCache & cache;
+    };
+public:
+    TaskInterface()
+        : m_trans()
+        , m_cache()
+    {}
+
+    virtual ~TaskInterface()
+    {}
+
+    virtual LayerInfo at(size_t) = 0;
+    size_t size() const
+        { return m_trans.size(); }
+    virtual void clear() = 0;
+protected:
+    std::vector<Data::CColor*> m_trans;
+    std::vector<ImageCache> m_cache;
+};
+
+
+class TaskStorage : public CCompiler::TaskInterface
+{
+public:
+    TaskStorage(CImageStorage &);
+
+    void push(CImageStorage::iid_t, Data::CColor*, const ImageCache &);
+
+    virtual void clear() override;
+    virtual LayerInfo at(size_t) override;
+
+    virtual ~TaskStorage()
+    {}
+
+protected:
+    std::vector<CImageStorage::iid_t> m_images;
+    CImageStorage & m_storage;
+};
+
+class Task : public CCompiler::TaskInterface
 {
 public:
     Task();
 
-    size_t size() const;
+    void push(const QImage &, Data::CColor*, const ImageCache &);
 
-    void push(const QImage &, Data::CColor*);
-    void clear();
+    virtual void clear() override;
+    virtual LayerInfo at(size_t) override;
 
+    virtual ~Task()
+    {}
 protected:
-    void resize(size_t);
     std::vector<QImage> m_images;
-    std::vector<Data::CColor*> m_trans;
 
-    friend class CCompiler;
 };
 
 #endif // TASK_HPP

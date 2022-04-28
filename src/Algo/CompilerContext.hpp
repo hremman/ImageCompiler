@@ -17,8 +17,8 @@ public:
     std::map<Data::CLayer *, std::list<Data::CColor>>     m_layer_to_paletes;
     std::list<ImageCache> m_caches;
 
-
-    std::list<CImageStorage::iid_t> m_files;
+    std::map<Data::CLayer *, std::list<CImageStorage::iid_t>>     m_layer_to_file;
+    std::list<Data::CLayer*> m_layers;
 
 
     enum class CacheStatus : char
@@ -33,8 +33,11 @@ public:
     Context(long long limit = 1 * CImageStorage::GB);
     Context(CImageStorage &);
 
-    void init_random(const Data::CProject &);
-    void init_paletes(const Data::CProject &);
+    void init_random();
+    void init_paletes();
+
+    bool noise(Data::CLayer*);
+    bool usage(Data::CLayer*);
 
 
     CacheStatus build_files_cache(const Data::CProject &, QStringList &);
@@ -63,9 +66,25 @@ public:
                     continue;
                 }
                 QImage img(*file);
-                m_files.push_back(m_file_cache.put(*file, img));
+
+                if (m_layers.begin() == m_layers.end() || m_layers.back() != *it)
+                    m_layers.push_back(*it);
+                m_layer_to_file[*it].push_back(m_file_cache.put(*file, img));
+
                 ++num;
             }
+        }
+
+        QImage empty(2,2,m_file_cache.get(*(m_file_cache.begin())).format());
+        empty.setPixelColor(0,0, QColor(0,0,0,0));
+        empty.setPixelColor(0,1, QColor(0,0,0,0));
+        empty.setPixelColor(1,0, QColor(0,0,0,0));
+        empty.setPixelColor(1,1, QColor(0,0,0,0));
+        auto empty_iid = m_file_cache.put(empty);
+        for (auto it = m_layers.begin(); it != m_layers.end(); it++)
+        {
+            if ( (*it)->m_blink )
+                m_layer_to_file[*it].push_back(empty_iid);
         }
         return static_cast <CacheStatus>(static_cast <char>(CacheStatus::OK) | (not_exists.size() ? static_cast <char>(CacheStatus::NOTEXISTS) : static_cast <char>(CacheStatus::OK)) | (m_file_cache.isEmpty() ? static_cast <char>(CacheStatus::EMPTYSET) : static_cast <char>(CacheStatus::OK)));
     }

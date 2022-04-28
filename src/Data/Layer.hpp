@@ -19,19 +19,7 @@ namespace Data {
 
         };
         using uid_t = unsigned short;
-        class CState
-        {
-        public:
-            CState()
-                : m_current_file(-1)
-                , m_palete()
-                , m_current_color(-1)
-            {}
 
-            int m_current_file;
-            std::list<Data::CColor> m_palete;
-            int m_current_color;
-        };
 
     public: //fields
         QString m_name;

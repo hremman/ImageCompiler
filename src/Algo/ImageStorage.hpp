@@ -45,6 +45,44 @@ protected:
     };
 
 public:
+    class iterator : public std::iterator<std::forward_iterator_tag, ImageHolder>
+    {
+        std::list<ImageHolder>::iterator m_pos;
+    public:
+        iterator() : m_pos() {}
+        iterator(std::list<ImageHolder>::iterator &ref) : m_pos(ref) {}
+        ~iterator() {}
+
+        iterator  operator++(int)
+        {
+            iterator copy = *this;
+            m_pos++;
+            return copy;
+        }
+        iterator& operator++()
+        {
+            ++m_pos;
+            return *this;
+        }
+
+        iid_t operator* () const
+            { return m_pos->m_id; }
+
+
+        iid_t *operator->() const
+            { return &(m_pos->m_id); }
+
+
+        bool      operator==(const iterator& rhs) const
+        { return m_pos == rhs.m_pos; }
+
+        bool      operator!=(const iterator& rhs) const
+        { return m_pos != rhs.m_pos; }
+    };
+
+
+
+public:
     CImageStorage(long long limit = 8 * GB);
 
     iid_t put(const QString &, const QImage &);
@@ -82,6 +120,11 @@ public:
         if (m_file.isOpen())
             m_file.close();
     }
+
+    iterator begin() { return m_holders.begin(); }
+    iterator end() { return m_holders.end(); }
+
+
 protected:
     struct ImageHolder_iterator_hash {
         size_t operator()(const std::list<ImageHolder>::iterator &i) const {
