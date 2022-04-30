@@ -80,6 +80,12 @@ public:
     WrongType(const QString & msg) : CompilerError(msg) {}
 };
 
+class PathInaccessible : public CompilerError
+{
+public:
+    PathInaccessible(const QString & msg) : CompilerError(msg) {}
+};
+
 class ImageStorage : public ICException
 {
 public:

@@ -4,6 +4,7 @@ const QString & CCompiler::Event::desc(Type type)
 {
     static QString types[] = {
         "Выполнено",
+        "В работе",
         "Предупреждение",
         "Ошибка",
         "Прогресс"

@@ -19,24 +19,27 @@ class DialogProgress : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogProgress(QWidget *parent = nullptr);
+    explicit DialogProgress(Data::CProject *, QWidget *parent = nullptr);
     ~DialogProgress();
 
 public slots:
-    void slot_clicked(bool);
+    void slot_cancel(bool);
+    void slot_pause_start(bool);
     void slot_processorEvent(CCompiler::Event);
 
 private:
     Ui::DialogProgress *ui;
-    int m_current_line;
     QPixmap m_wait;
     QPixmap m_done;
     QPixmap m_error;
     QPixmap m_warn;
     QMovie m_pending;
-    CCompiler & m_processor;
+    CCompiler m_compiler;
     CSpinLock m_lock;
     std::list<CCompiler::Event> m_event_que;
+    bool m_paused;
+    bool m_started;
+    Data::CProject *m_proj;
 
 
 protected:
@@ -44,9 +47,11 @@ protected:
 private:
     void add_line(const QString &);
 
-    void set_in_work();
-    void set_error(const QString &);
-    void set_warn(const QString &);
+    void set_done(CCompiler::Event::Stage);
+    void set_in_work(CCompiler::Event::Stage);
+    void set_error(CCompiler::Event::Stage, const QString &);
+    void set_warn(CCompiler::Event::Stage, const QString &);
+
 };
 
 #endif // DIALOGPROGRESS_H

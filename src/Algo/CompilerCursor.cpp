@@ -19,7 +19,8 @@ bool CCompiler::Cursor::get_next(Sequence &out)
     {
         for (size_t layer = m_files.size() - 1; layer != 0; --layer )
         {
-            m_current_color[layer]++;
+            if ( m_colors[layer]->begin() != m_colors[layer]->end() )
+                m_current_color[layer]++;
             if(m_current_color[layer] == m_colors[layer]->end())
             {
                 m_current_color[layer] = m_colors[layer]->begin();

@@ -17,6 +17,10 @@ public:
         : m_trans()
         , m_cache()
     {}
+    TaskInterface(const TaskInterface &ref)
+        : m_trans(ref.m_trans)
+        , m_cache(ref.m_cache)
+    {}
 
     virtual ~TaskInterface()
     {}
@@ -35,6 +39,7 @@ class TaskStorage : public CCompiler::TaskInterface
 {
 public:
     TaskStorage(CImageStorage &);
+    TaskStorage(const TaskStorage &);
 
     void push(CImageStorage::iid_t, Data::CColor*, const ImageCache &);
 

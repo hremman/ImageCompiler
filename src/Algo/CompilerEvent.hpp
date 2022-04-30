@@ -8,6 +8,7 @@ public:
     enum class Type
     {
         OK,
+        INWORK,
         WARNING,
         ERROR,
         ONPROGRESS
@@ -31,6 +32,19 @@ public:
 public:
     static const QString * stages();
 
+    static Event Progress(Stage s, std::pair<size_t, size_t> d)
+        { return Event(s,d); }
+    static Event Ok(Stage s)
+        { return Event(s); }
+    static Event Startted(Stage s)
+        { return Event(s); }
+    static Event Ok(Stage s, const QString &str)
+        { return Event(s, Type::OK, str); }
+    static Event Error(Stage s, const QString &str)
+        { return Event(s, Type::ERROR, str); }
+    static Event Warn(Stage s, const QString &str)
+        { return Event(s, Type::WARNING, str); }
+
 
 public:
     Event(Stage s, Type t, const QString & m)
@@ -43,24 +57,19 @@ public:
         m_data = new QString(m);
     }
 
-    Event(Stage s, Type t, std::pair<size_t, size_t> d)
+    Event(Stage s, std::pair<size_t, size_t> d)
         : m_stage(s)
-        , m_type(t)
+        , m_type(Type::ONPROGRESS)
         , m_data(nullptr)
     {
-        if ( t != Type::ONPROGRESS )
-            WrongType("Некорректный тип события " + desc(t));
         m_data = new std::pair<size_t, size_t>(d);
     }
 
-    Event(Stage s, Type t)
+    Event(Stage s)
         : m_stage(s)
-        , m_type(t)
+        , m_type( Type::OK )
         , m_data(nullptr)
-    {
-        if ( t != Type::OK )
-            WrongType("Некорректный тип события " + desc(t));
-    }
+    {}
 
 
     ~Event()
@@ -83,6 +92,9 @@ public:
 
     const QString & message() const
         { return m_data != nullptr ? *(reinterpret_cast<QString*>(m_data)) : ""; }
+
+    std::pair<size_t, size_t> progress() const
+        { return m_data != nullptr ? *(reinterpret_cast<std::pair<size_t, size_t>*>(m_data)) : std::make_pair<size_t, size_t>(0,0); }
 
     const void* raw() const
         { return m_data; }

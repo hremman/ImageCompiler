@@ -23,7 +23,6 @@ Data::CProject::CProject()
     : m_name("Новый проект")
     , m_out_path("./")
     , m_file("")
-    , m_current_chain(nullptr)
     , m_used_lid()
     , m_layers()
 {
@@ -32,30 +31,9 @@ Data::CProject::CProject()
 
 Data::CProject::~CProject()
 {
-    if ( m_current_chain != nullptr)
-        delete m_current_chain;
 }
 
-bool Data::CProject::hasChain() const
-{
-    return m_current_chain != nullptr;
-}
 
-void Data::CProject::useChain(bool use)
-{
-    if ( use )
-    {
-        if ( m_current_chain != nullptr)
-            return;
-        m_current_chain = new CChain();
-        for (auto it = m_layers.begin(); it != m_layers.end(); it++ )
-            m_current_chain->operator[](*it) = CLayer::CState();
-    }
-    else
-        if ( m_current_chain != nullptr)
-            delete m_current_chain;
-
-}
 
 Data::CProject::CProject(const CProject& ref)
     : m_name(ref.m_name)

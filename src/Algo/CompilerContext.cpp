@@ -109,7 +109,3 @@ CCompiler::Context::CacheStatus CCompiler::Context::build_files_cache(const Data
     }
     return static_cast <CacheStatus>(static_cast <char>(CacheStatus::OK) | (not_exists.size() ? static_cast <char>(CacheStatus::NOTEXISTS) : static_cast <char>(CacheStatus::OK)) | (m_file_cache.isEmpty() ? static_cast <char>(CacheStatus::EMPTYSET) : static_cast <char>(CacheStatus::OK)));
 }
-
-//template <class FUNC>
-//CCompiler::Context::CacheStatus CCompiler::Context::build_files_cache(const Data::CProject & proj, QStringList &not_exists, FUNC onProgress, size_t every)
-

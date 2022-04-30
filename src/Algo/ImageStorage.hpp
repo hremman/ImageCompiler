@@ -50,7 +50,8 @@ public:
         std::list<ImageHolder>::iterator m_pos;
     public:
         iterator() : m_pos() {}
-        iterator(std::list<ImageHolder>::iterator &ref) : m_pos(ref) {}
+        iterator(const std::list<ImageHolder>::iterator &ref) : m_pos(ref) {}
+        iterator(const iterator &ref) : m_pos(ref.m_pos) {}
         ~iterator() {}
 
         iterator  operator++(int)
@@ -121,8 +122,8 @@ public:
             m_file.close();
     }
 
-    iterator begin() { return m_holders.begin(); }
-    iterator end() { return m_holders.end(); }
+    iterator begin() { return iterator(m_holders.begin()); }
+    iterator end() { return iterator(m_holders.end()); }
 
 
 protected:

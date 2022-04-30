@@ -13,13 +13,9 @@ namespace Data {
     class CProject
     {
     public:
-        using CChain = std::map<const CLayer* const, CLayer::CState>;
-
-    public:
         QString m_name;
         QString m_out_path;
         QString m_file;
-        CChain *m_current_chain;
 
 
     public:

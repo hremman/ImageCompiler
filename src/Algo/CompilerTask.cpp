@@ -8,6 +8,13 @@ TaskStorage::TaskStorage(CImageStorage &ref)
 {
 }
 
+TaskStorage::TaskStorage(const TaskStorage & ref)
+    : CCompiler::TaskInterface(ref)
+    , m_images(ref.m_images)
+    , m_storage(ref.m_storage)
+{}
+
+
 void TaskStorage::push(CImageStorage::iid_t img, Data::CColor* color, const ImageCache &cache)
 {
     m_images.push_back(img);
