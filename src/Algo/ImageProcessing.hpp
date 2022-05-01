@@ -9,9 +9,10 @@ namespace CImageProcessing
     AverageRange getAverageSaturation(const QImage &, size_t, size_t);
     AverageRange getAverageValue(const QImage &, size_t, size_t);
     bool getAverage(const QImage &, size_t, size_t, AverageRange &, AverageRange &);
-    bool CompositeAlpha(QImage *, const QImage &, size_t, size_t );
-    template <bool SATURATION, bool VALUE>
-    bool ChangeColor(QImage *, int, size_t, size_t,  const RangeMapper* saturation = nullptr, const RangeMapper* value = nullptr );
+    void CompositeAlpha(QImage *, const QImage &, size_t, size_t );
+    void ChangeColor(QImage *, int, size_t, size_t,  const RangeMapper* saturation = nullptr, const RangeMapper* value = nullptr );
+    void WhiteNoise(QImage *, size_t, size_t,  const ImageCache &);
+    QImage PaddToSize(const QImage &, const QSize &);
 
 };
 

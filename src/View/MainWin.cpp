@@ -561,6 +561,7 @@ void CompilerMainWin::show_counters(ProjTab *temp)
 
 void CompilerMainWin::slot_generate(bool)
 {
-    DialogProgress dialog(this);
+
+    DialogProgress dialog(&*(m_proj_index[static_cast<ProjTab*>(ui->tabs->widget(ui->tabs->currentIndex()))->getId()]), this);
     dialog.exec();
 }

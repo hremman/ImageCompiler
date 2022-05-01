@@ -8,17 +8,22 @@ class CCompiler::TaskInterface
 public:
     struct LayerInfo
     {
-        const QImage& img;
+        QImage img;
         Data::CColor* color;
         const ImageCache & cache;
     };
+
+public:
+    QSize m_max;
 public:
     TaskInterface()
-        : m_trans()
+        : m_max(0,0)
+        , m_trans()
         , m_cache()
     {}
     TaskInterface(const TaskInterface &ref)
-        : m_trans(ref.m_trans)
+        : m_max(ref.m_max)
+        , m_trans(ref.m_trans)
         , m_cache(ref.m_cache)
     {}
 

@@ -25,7 +25,7 @@ public:
 
 
 public:
-    static CCompiler& getProcessor()
+    static CCompiler& getGlobal()
         {return __M_instance;}
 
     static bool Build(const Data::CProject &);
@@ -39,6 +39,7 @@ public:
     void resume();
     void pause();
     void stop();
+    bool isFree() const;
 
 signals:
     void sendEvent(Event);
@@ -65,6 +66,7 @@ private:
     bool buildOne(TaskInterface *, QImage &);
     void wait();
     void work();
+    void transform(void *);
 
 };
 

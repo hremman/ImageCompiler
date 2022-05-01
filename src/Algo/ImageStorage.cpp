@@ -25,23 +25,23 @@ CImageStorage::iid_t CImageStorage::put(const QString &file, const QImage &img)
     if ( temp_id > _ID_MAX)
         throw TooBigId("Свободные идентификаторы концились!");
     holder.m_id = temp_id;
-
+    holder.m_size = img.size();
     holder.m_filename = file;
-    holder.m_size = img.sizeInBytes();
+    holder.m_lenght = img.sizeInBytes();
 
     if ( m_limitation > m_size_in_memory && m_limitation - m_size_in_memory > img.sizeInBytes() )
     {
         m_images.push_back(img);
         holder.m_img = (--m_images.end());
         holder.m_in_file = -1;
-        m_size_in_memory += holder.m_size;
+        m_size_in_memory += holder.m_lenght;
         m_index_loaded_reverse[holder.m_img] = holder.m_id;
     }
     else
     {
         holder.m_img = m_images.end();
         holder.m_in_file = to_file(img);
-        m_size_in_file += holder.m_size;
+        m_size_in_file += holder.m_lenght;
     }
 
     m_holders.push_back(holder);
@@ -58,22 +58,23 @@ CImageStorage::iid_t CImageStorage::put(const QImage & img)
     while ( m_index_primary.find(temp_id) != m_index_primary.end() )
         ++temp_id;
     if ( temp_id > _ID_MAX)
-        throw TooBigId("Свободные идентификаторы концились!");
+        throw TooBigId("Свободные идентификаторы кончились!");
     holder.m_id = temp_id;
-    holder.m_size = img.sizeInBytes();
+    holder.m_size = img.size();
+    holder.m_lenght = img.sizeInBytes();
     if ( m_limitation > m_size_in_memory && m_limitation - m_size_in_memory > img.sizeInBytes() )
     {
         m_images.push_back(img);
         holder.m_img = (--m_images.end());
         holder.m_in_file = -1;
-        m_size_in_memory += holder.m_size;
+        m_size_in_memory += holder.m_lenght;
         m_index_loaded_reverse[holder.m_img] = holder.m_id;
     }
     else
     {
         holder.m_img = m_images.end();
         holder.m_in_file = to_file(img);
-        m_size_in_file += holder.m_size;
+        m_size_in_file += holder.m_lenght;
     }
 
     m_holders.push_back(holder);
@@ -90,6 +91,14 @@ CImageStorage::iid_t CImageStorage::put(const QString & file)
         throw LoadImageError("Не удалось загрузить указанный файл");
 
     return put(file, img);
+}
+
+QSize CImageStorage::size(iid_t id)
+{
+    auto holder = m_index_primary.find(id);
+    if ( holder == m_index_primary.end() )
+        throw NoSuchImage("Изображение с идентификатором " + QString::number(id) + " нет в хранилище");
+    return holder->second->m_size;
 }
 
 QImage CImageStorage::getCopy(iid_t id)

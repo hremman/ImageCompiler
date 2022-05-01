@@ -30,7 +30,7 @@ void TaskStorage::clear()
 }
 
 CCompiler::TaskInterface::LayerInfo TaskStorage::at(size_t pos)
-    { return {m_storage.get(m_images[pos]), m_trans[pos], m_cache[pos]}; }
+    { return {m_storage.getCopy(m_images[pos]), m_trans[pos], m_cache[pos]}; }
 
 
 

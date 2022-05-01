@@ -107,5 +107,13 @@ CCompiler::Context::CacheStatus CCompiler::Context::build_files_cache(const Data
             ++num;
         }
     }
+    QImage empty(2,2,m_file_cache.get(*(m_file_cache.begin())).format());
+    empty.fill(QColor(0,0,0,0));
+    auto empty_iid = m_file_cache.put(empty);
+    for (auto it = m_layers.begin(); it != m_layers.end(); it++)
+    {
+        if ( (*it)->m_blink )
+            m_layer_to_file[*it].push_back(empty_iid);
+    }
     return static_cast <CacheStatus>(static_cast <char>(CacheStatus::OK) | (not_exists.size() ? static_cast <char>(CacheStatus::NOTEXISTS) : static_cast <char>(CacheStatus::OK)) | (m_file_cache.isEmpty() ? static_cast <char>(CacheStatus::EMPTYSET) : static_cast <char>(CacheStatus::OK)));
 }

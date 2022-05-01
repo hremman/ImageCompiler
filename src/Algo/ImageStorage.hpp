@@ -41,7 +41,8 @@ protected:
         qint64 m_in_file;
         QString m_filename;
         iid_t m_id;
-        qint64 m_size;
+        qint64 m_lenght;
+        QSize m_size;
     };
 
 public:
@@ -104,6 +105,8 @@ public:
     size_t count() const
         { return m_index_primary.size(); }
 
+    QSize size(iid_t);
+
     size_t sizeInBytes() const
         { return m_file.size();}
 
@@ -147,6 +150,7 @@ protected:
     QTemporaryFile m_file;
 
     std::map<iid_t, std::list<ImageHolder>::iterator>   m_index_primary;
+
 
     std::unordered_map<std::list<ImageHolder>::iterator, iid_t, ImageHolder_iterator_hash>
                                                         m_index_primary_reverse;

@@ -1,4 +1,5 @@
-#include <QThreadPool>
+#include <QPainter>
+#include <random>
 #include "Exceptions.hpp"
 #include "ImageProcessing.hpp"
 #include "ColorFunctions.h"
@@ -53,7 +54,7 @@ AverageRange CImageProcessing::getAverageValue(const QImage & image, size_t num,
     return ret;
 }
 
-bool CImageProcessing::CompositeAlpha(QImage *down, const QImage &top, size_t num, size_t count )
+void CImageProcessing::CompositeAlpha(QImage *down, const QImage &top, size_t num, size_t count )
 {
     if ( count < 1)
         throw wrong_arg("[CImageProcessing::CompositeAlpha]: Передано число потоков обработки меньше одного");
@@ -66,36 +67,52 @@ bool CImageProcessing::CompositeAlpha(QImage *down, const QImage &top, size_t nu
     for (int row = num; row < top.height(); row += count)
         for (int col = 0; col < top.width(); col ++)
             down->setPixelColor(col + v_shift, row + h_shift, CColorFunctions::CompositeAlphaPixel(top.pixelColor(col, row), down->pixelColor(col + v_shift, row + h_shift)));
-    return true;
 }
 
-template <bool SATURATION, bool VALUE>
-bool CImageProcessing::ChangeColor(QImage * image, int hue, size_t num, size_t count,  const RangeMapper* saturation, const RangeMapper* value )
+void WhiteNoise(QImage * image, size_t num, size_t count,  const ImageCache & cache)
 {
     if ( count < 1)
-        throw wrong_arg("[CImageProcessing::ChangeColor]: Передано число потоков обработки меньше одного");
-    if (SATURATION && saturation == nullptr)
-        throw nullpointer("Получен нулевой указатель на необходимый объект RangeMapper для насыщенности");
+        throw wrong_arg("[CImageProcessing::WhiteNoise]: Передано число потоков обработки меньше одного");
 
-    if (VALUE && saturation == nullptr)
-        throw nullpointer("Получен нулевой указатель на необходимый объект RangeMapper для яркости");
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<unsigned char> color_gen;
 
     for (int row = num; row < image->height(); row += count)
     {
         for (int col = 0; col < image->width(); col ++)
         {
-            if (SATURATION)
-            {
-                image->setPixelColor(col, row, CColorFunctions::SetSaturation(image->pixelColor(col, row), *saturation));
-            }
-            if (VALUE)
-            {
-                image->setPixelColor(col, row, CColorFunctions::SetValue(image->pixelColor(col, row), *value));
-            }
-            image->setPixelColor(col, row, CColorFunctions::SetHue(image->pixelColor(col, row), hue));
+            QColor color(color_gen(gen),color_gen(gen),color_gen(gen));
+            RangeMapper sat(cache.m_saturation, color.saturation());
+            RangeMapper val(cache.m_value, color.value());
+            QColor pixel = image->pixelColor(col, row);
+            CColorFunctions::SetSaturation(pixel, sat);
+            CColorFunctions::SetValue(pixel, val);
+            image->setPixelColor(col, row, CColorFunctions::SetHue(pixel, color.hsvHue()));
         }
     }
-    return true;
+
+
+}
+
+void CImageProcessing::ChangeColor(QImage * image, int hue, size_t num, size_t count,  const RangeMapper* saturation, const RangeMapper* value )
+{
+    if ( count < 1)
+        throw wrong_arg("[CImageProcessing::ChangeColor]: Передано число потоков обработки меньше одного");
+
+
+    for (int row = num; row < image->height(); row += count)
+    {
+        for (int col = 0; col < image->width(); col ++)
+        {
+            QColor pixel = image->pixelColor(col, row);
+            if (saturation)
+                CColorFunctions::SetSaturation(pixel, *saturation);
+            if (value)
+                CColorFunctions::SetValue(pixel, *value);
+            image->setPixelColor(col, row, CColorFunctions::SetHue(pixel, hue));
+        }
+    }
 }
 
 bool CImageProcessing::getAverage(const QImage & image, size_t num, size_t count, AverageRange & saturation, AverageRange & value)
@@ -132,6 +149,16 @@ bool CImageProcessing::getAverage(const QImage & image, size_t num, size_t count
     return true;
 }
 
-
+QImage CImageProcessing::PaddToSize(const QImage & img, const QSize & new_size)
+{
+    if ( img.size().height() > new_size.height() || img.size().width() > new_size.width() )
+        throw wrong_arg("[CImageProcessing::PaddToSize]: Новый размер меньше изначального");
+    QImage new_img(new_size, img.format());
+    new_img.fill(QColor(0,0,0,0));
+    QPainter p(&new_img);
+    QSize padded = new_size - img.size();
+    p.drawImage(padded.width() / 2,padded.height() / 2,img);
+    return new_img;
+}
 
 
