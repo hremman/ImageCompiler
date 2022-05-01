@@ -5,6 +5,7 @@
 #include <QPixmap>
 #include <QLabel>
 #include <QMovie>
+#include <QFutureWatcher>
 #include "Data/Project.hpp"
 #include "Algo/Compiler.hpp"
 #include "Algo/SpinLock.hpp"
@@ -21,11 +22,14 @@ class DialogProgress : public QDialog
 public:
     explicit DialogProgress(Data::CProject *, QWidget *parent = nullptr);
     ~DialogProgress();
+    void closeEvent (QCloseEvent *event);
 
 public slots:
     void slot_cancel(bool);
+    void slot_close(bool);
     void slot_pause_start(bool);
     void slot_processorEvent(CCompiler::Event);
+    void slot_finished();
 
 private:
     Ui::DialogProgress *ui;
@@ -40,6 +44,7 @@ private:
     bool m_paused;
     bool m_started;
     Data::CProject *m_proj;
+    QFutureWatcher<bool> m_watchdog;
 
 
 protected:

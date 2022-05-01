@@ -1,4 +1,5 @@
-
+#include <QCloseEvent>
+#include <QMessageBox>
 #include "dialogprogress.h"
 #include "ui_dialogprogress.h"
 
@@ -15,7 +16,8 @@ DialogProgress::DialogProgress(Data::CProject *proj, QWidget *parent) :
     m_compiler(),
     m_paused(false),
     m_started(false),
-    m_proj(proj)
+    m_proj(proj),
+    m_watchdog(this)
 {
     ui->setupUi(this);
     ui->tableWidget->setColumnWidth(0, 25);
@@ -152,7 +154,8 @@ void DialogProgress::slot_pause_start(bool)
 {
     if ( !m_started )
     {
-        m_compiler.build(*m_proj);// TODO ЗАпустить в QtConcurent
+        m_watchdog.setFuture( QtConcurrent::run([this]() -> bool { return this->m_compiler.build(*m_proj); }) );
+        QObject::connect(&this->m_watchdog, &QFutureWatcher<bool>::finished, this, &DialogProgress::slot_finished);
         ui->pause_start->setText("Пауза");
         m_paused = false;
         return;
@@ -176,4 +179,45 @@ void DialogProgress::slot_processorEvent(CCompiler::Event event)
     m_lock.lock();
     m_event_que.push_back(event);
     m_lock.unlock();
+}
+
+void DialogProgress::slot_finished()
+{
+    QObject::disconnect(&this->m_watchdog, &QFutureWatcher<bool>::finished, this, &DialogProgress::slot_finished);
+    ui->pause_start->setEnabled(false);
+    ui->pause_start->setHidden(true);
+    ui->progressBar->setHidden(true);
+    QObject::disconnect(ui->Cancel, &QPushButton::clicked, this, &DialogProgress::slot_cancel);
+    ui->Cancel->setText("Закрыть");
+    QObject::connect(ui->Cancel, &QPushButton::clicked, this, &DialogProgress::slot_close);
+
+}
+
+void DialogProgress::closeEvent (QCloseEvent *event)
+{
+    if ( m_compiler.isFree() )
+    {
+        QMessageBox dialog(this);
+        dialog.setWindowTitle("Отмена компиляции");
+        dialog.setText("Компиляция в процессе. Отменить её выполнение или оставить?");
+        QPushButton * yes = dialog.addButton("Отменить", QMessageBox::ButtonRole::YesRole);
+        dialog.addButton("Оставить", QMessageBox::ButtonRole::NoRole);
+        dialog.setDefaultButton(yes);
+
+        dialog.exec();
+        if (dialog.clickedButton() == yes)
+        {
+            event->accept();
+            slot_close(true);
+        }
+        else
+            event->ignore();
+    }
+    event->accept();
+    slot_close(true);
+}
+
+void DialogProgress::slot_close(bool)
+{
+    this->accept();
 }

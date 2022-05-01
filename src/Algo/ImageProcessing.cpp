@@ -69,7 +69,7 @@ void CImageProcessing::CompositeAlpha(QImage *down, const QImage &top, size_t nu
             down->setPixelColor(col + v_shift, row + h_shift, CColorFunctions::CompositeAlphaPixel(top.pixelColor(col, row), down->pixelColor(col + v_shift, row + h_shift)));
 }
 
-void WhiteNoise(QImage * image, size_t num, size_t count,  const ImageCache & cache)
+void CImageProcessing::WhiteNoise(QImage * image, size_t num, size_t count,  const ImageCache & cache)
 {
     if ( count < 1)
         throw wrong_arg("[CImageProcessing::WhiteNoise]: Передано число потоков обработки меньше одного");
