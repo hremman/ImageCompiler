@@ -20,6 +20,16 @@ public:
         {return m_data;}
 
 public:
+    bool preview_have_file_next() const;
+    bool preview_have_file_prev() const;
+    bool preview_have_color_next() const;
+    bool preview_have_color_prev() const;
+    bool preview_file_next();
+    bool preview_file_prev();
+    bool preview_color_next();
+    bool preview_color_prev();
+    const QString * preview_get_file() const;
+    Data::CColor * preview_get_color() const;
 
 signals:
     void changed();
@@ -37,6 +47,9 @@ private:
     Ui::UiLayer *ui;
     Data::CLayer * const m_data;
     void switchElements();
+
+    ssize_t m_file;
+    ssize_t m_color;
 };
 
 #endif // LAYER_H

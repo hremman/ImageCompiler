@@ -1,5 +1,6 @@
 #include "Exceptions.hpp"
 #include "Data/Layer.hpp"
+#include <QDir>
 
 Data::CLayer::CLayer(uid_t lid)
     : m_name("Новый Слой")
@@ -38,6 +39,24 @@ const nlohmann::json Data::CLayer::to_json() const
     return json;
 }
 
+const nlohmann::json Data::CLayer::to_json(const QString & root) const
+{
+    nlohmann::json json = {{"name",m_name.toStdString()},
+                           {"use", m_use_probability},
+                           {"noise", m_noise_probability},
+                           {"blink", m_blink},
+                           {"type", m_type},
+                           {"lid", m_lid}
+                          };
+    if (m_type == WorkType::ENUMERATION)
+        json["colors_settings"] = m_colors.to_json();
+    QDir root_dir(root);
+
+    for (auto i: m_files)
+        json["files"].push_back(root_dir.relativeFilePath(i).toStdString());
+    return json;
+}
+
 void Data::CLayer::from_jsom(const nlohmann::json & json)
 {
     m_name.fromStdString(json.at("name").get<std::string>());
@@ -50,7 +69,10 @@ void Data::CLayer::from_jsom(const nlohmann::json & json)
         throw wrong_mode("Ошибка разбора файла: неверное значение \"type\" объекта \"layer\". Допустимы: [-1, 0, 1]");
     if (m_type == WorkType::ENUMERATION)
         m_colors.from_jsom(json.at("colors_settings"));
+    for (auto it = json.at("files").begin(); it != json.end(); ++it)
+        m_files.emplace_back(QString::fromStdString(it->get<std::string>()));
 }
+
 size_t  Data::CLayer::count() const
 {
     if ( ! m_files.count() && !m_blink)

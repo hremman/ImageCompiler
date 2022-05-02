@@ -87,7 +87,7 @@ void CCompiler::Context::init_paletes()
 CCompiler::Context::CacheStatus CCompiler::Context::build_files_cache(const Data::CProject & proj, QStringList &not_exists)
 {
     not_exists.clear();
-    auto layers = proj.layers();
+    const std::list<Data::CLayer *> & layers = proj.layers();
     size_t tnum = 0;
     size_t num = 0;
     for (auto it = layers.begin(); it != layers.end(); it++)

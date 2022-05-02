@@ -28,10 +28,12 @@ namespace Data {
         void moveLayerDown(size_t);
         bool hasChain() const;
         void useChain(bool);
+        CLayer * editable(const CLayer * );
 
         const std::list<CLayer*> & layers() const;
         const nlohmann::json to_json()  const;
-        void from_jsom(const nlohmann::json & json);
+        const nlohmann::json to_json(const QString &)  const;
+        void from_json(const nlohmann::json & json);
         CProject& operator =(const CProject &);
         size_t count() const;
     protected:

@@ -1,7 +1,8 @@
 #include "View/MainWin.h"
 #include <QApplication>
+#include <QDir>
+#include <QFileInfo>
 
-#include <QImage>
 #include <iostream>
 
 int main(int argc, char *argv[])
@@ -10,5 +11,4 @@ int main(int argc, char *argv[])
     CompilerMainWin w;
     w.show();
     return a.exec();
-
 }

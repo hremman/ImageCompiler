@@ -7,7 +7,9 @@
 #include <stdexcept>
 #include "Data/ProjectStory.hpp"
 #include "Data/Project.hpp"
+#include "Algo/CompilerTask.hpp"
 
+class CLayer;
 
 namespace Ui {
 class UiProjTab;
@@ -36,28 +38,39 @@ public:
 
 
     const Data::CProject& getLast() const;
-    int getId() const
+    unsigned int getId() const
         {return m_id;}
 
+    void count_vars();
+    const CLayer* get_single_selected();
+
+    void task(std::vector<QString> &, std::vector<Data::CColor *> &);
+    bool next_file();
+    bool prev_file();
+    bool next_color();
+    bool prev_color();
+
+
 public slots:
-    void changes();
-    void name_edited();
-    void path_edited();
-    void folder_clicked(bool);
-    void rem_clicked(bool);
-    void add_clicked(bool);
-    void up_clicked(bool);
-    void down_clicked(bool);
+    void slot_changes();
+    void slot_name_edited();
+    void slot_path_edited();
+    void slot_folder(bool);
+    void slot_rem(bool);
+    void slot_add(bool);
+    void slot_up(bool);
+    void slot_down(bool);
     void slot_select_changed();
 
 public:
 signals:
-    void changed(unsigned int);
-    void project_renamed(unsigned int);
+    void sig_changed(unsigned int);
+    void sig_project_renamed(unsigned int, const QString &);
+    void sig_can_change_preview(unsigned int, bool);
 
 public:
     int m_number;
-    void count_vars();
+    bool m_preview;
 private:
     Ui::UiProjTab *ui;
     Data::CProjectStory m_proj_v;

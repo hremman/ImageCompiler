@@ -1,6 +1,6 @@
 #include "MainWin.h"
 #include "ui_MainWin.h"
-
+#include <QFileInfo>
 #include <QPixmap>
 #include <QImage>
 #include <QGraphicsPixmapItem>
@@ -12,8 +12,7 @@
 #include "Exceptions.hpp"
 
 #include "View/dialogprogress.h"
-
-QImage img;
+#include "View/Layer.h"
 
 CompilerMainWin::CompilerMainWin(QWidget *parent)
     : QMainWindow(parent)
@@ -22,13 +21,16 @@ CompilerMainWin::CompilerMainWin(QWidget *parent)
     , m_item()
     , m_projects()
     , m_tabs_index()
+    , m_watchdog()
 {
     ui->setupUi(this);
     setWindowIcon(QIcon(":/image/icon/resourses/App.ico"));
     setWindowTitle("Компилятор изображений");
     ui->tabs->clear();
 
-    ui->label_curr->setText("0");
+
+
+
     ui->label_outof->setText("0");
 
 
@@ -61,6 +63,10 @@ CompilerMainWin::CompilerMainWin(QWidget *parent)
 
     QObject::connect(ui->do_it, &QPushButton::clicked, this, &CompilerMainWin::slot_generate);
 
+    QObject::connect(ui->next_color, &QToolButton::clicked, this, &CompilerMainWin::slot_next_color);
+    QObject::connect(ui->prev_color, &QToolButton::clicked, this, &CompilerMainWin::slot_prev_color);
+    QObject::connect(ui->next_file, &QToolButton::clicked, this, &CompilerMainWin::slot_next_file);
+    QObject::connect(ui->prev_file, &QToolButton::clicked, this, &CompilerMainWin::slot_prev_file);
 
 
     ui->menu_save->setEnabled(false);
@@ -73,10 +79,10 @@ CompilerMainWin::CompilerMainWin(QWidget *parent)
     ui->menu_close->setEnabled(false);
     ui->toolbar_redo->setEnabled(false);
     ui->toolbar_undo->setEnabled(false);
+    ui->preview_progress->setVisible(false);
+    QDir::setCurrent(QDir::homePath());
 
-
-
-
+    switch_preview_buttons(false);
 
 
 
@@ -136,16 +142,51 @@ void CompilerMainWin::resizeEvent(QResizeEvent* event)
 {
     QMainWindow::resizeEvent(event);
     /*m_scene.clear();
-    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(img.scaled(ui->show_img->width(), ui->show_img->height(), Qt::KeepAspectRatio)));
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(img.scaled(ui->graphicsView->width(), ui->graphicsView->height(), Qt::KeepAspectRatio)));
     m_scene.addItem(item);
     m_scene.setSceneRect(m_scene.itemsBoundingRect());
-    ui->show_img->update();*/
+    ui->graphicsView->update();*/
 
 }
 
 CompilerMainWin::~CompilerMainWin()
 {
     delete ui;
+}
+
+void CompilerMainWin::switch_preview_buttons(bool val)
+{
+    if ( !ui->preview_enable->isChecked() || !ui->tabs->count() )
+    {
+        ui->prev_color->setEnabled(false);
+        ui->next_color->setEnabled(false);
+        ui->next_file->setEnabled(false);
+        ui->prev_file->setEnabled(false);
+        return;
+    }
+
+    ProjTab *temp_tab = static_cast<ProjTab*>(ui->tabs->widget(ui->tabs->currentIndex()));
+    const CLayer *temp_layer = temp_tab->get_single_selected();
+
+    if ( temp_layer && temp_layer->preview_have_color_next() )
+        ui->next_color->setEnabled(val);
+    else
+        ui->next_color->setEnabled(false);
+
+    if ( temp_layer && temp_layer->preview_have_color_prev() )
+        ui->prev_color->setEnabled(val);
+    else
+        ui->prev_color->setEnabled(false);
+
+    if ( temp_layer && temp_layer->preview_have_file_next() )
+        ui->next_file->setEnabled(val);
+    else
+        ui->next_file->setEnabled(false);
+
+    if ( temp_layer && temp_layer->preview_have_file_prev() )
+        ui->prev_file->setEnabled(val);
+    else
+        ui->prev_file->setEnabled(false);
 }
 
 void CompilerMainWin::slot_create(bool)
@@ -159,8 +200,9 @@ void CompilerMainWin::slot_create(bool)
     int index = ui->tabs->addTab(temp_tab, "Новый проект");
     ui->tabs->setCurrentIndex(index);
 
-    QObject::connect(temp_tab, &ProjTab::changed, this, &CompilerMainWin::slot_tab_edited);
-    QObject::connect(temp_tab, &ProjTab::project_renamed, this, &CompilerMainWin::slot_tab_renamed);
+    QObject::connect(temp_tab, &ProjTab::sig_changed, this, &CompilerMainWin::slot_tab_edited);
+    QObject::connect(temp_tab, &ProjTab::sig_project_renamed, this, &CompilerMainWin::slot_tab_renamed);
+    QObject::connect(temp_tab, &ProjTab::sig_can_change_preview, this, &CompilerMainWin::slot_enable_preview_button);
 
     ui->menu_close->setEnabled(true);
     ui->menu_close_all->setEnabled(true);
@@ -191,6 +233,59 @@ void CompilerMainWin::slot_open(bool){
         return;
     }
 
+    QString old_path = QDir::currentPath();
+    QDir::setCurrent(QFileInfo(temp_proj.m_file).absolutePath());
+
+    const std::list<Data::CLayer*> &layers = temp_proj.layers();
+
+    std::set<int> hashes;
+    QStringList errored;
+    QStringList errors;
+
+    for (Data::CLayer* layer: layers)
+    {
+        for (QString image_file: layer->m_files)
+        {
+            QFile test;
+            test.setFileName(image_file);
+            if ( !test.open(QIODeviceBase::ReadOnly) )
+            {
+                size_t hash = qHash(image_file);
+                if ( hashes.find(hash) == hashes.end() )
+                {
+                    errored.append(image_file);
+                    errors.append(test.errorString());
+                    hashes.insert(hash);
+                }
+
+            }
+            else
+                test.close();
+        }
+    }
+    QString text = "Не удалось получить доступ к фалам ниже. Убрать их из проекта?";
+
+    auto errored_ = errored.begin();
+    auto errors_ = errors.begin();
+    for (; errored_ != errored.end() && errors_ != errors.end() ; ++errored_, ++errors_ )
+        text += "\n\t" + QFileInfo(*errored_).absolutePath() + " [" + *errors_ + "]";
+
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Файлы не достижимы", text);
+
+    if (reply == QMessageBox::Yes)
+    {
+        for (Data::CLayer* layer: layers)
+        {
+            QMutableListIterator<QString> file(layer->m_files);
+            while (file.hasNext()) {
+                file.next();
+                if ( hashes.find(qHash(file.value())) != hashes.end() )
+                    file.remove();
+            }
+        }
+    }
+
+
     ProjTab *temp_tab = nullptr;
     try {
         temp_tab = new ProjTab(temp_proj);
@@ -199,6 +294,7 @@ void CompilerMainWin::slot_open(bool){
         QMessageBox::critical(this, "Невозможно отобразить проект", "Возникла неустранимая ошибка:\n" + e.message() + "\nПроект будет закрыт. Следует закрыть хотя бы 1 открытый проект перед повторной попыткой");
         m_projects.pop_front();
         delete temp_tab;
+        QDir::setCurrent(old_path);
         return;
     }
 
@@ -208,13 +304,16 @@ void CompilerMainWin::slot_open(bool){
     int index = ui->tabs->addTab(temp_tab, temp_proj.m_name);
     ui->tabs->setCurrentIndex(index);
 
-    QObject::connect(temp_tab, &ProjTab::changed, this, &CompilerMainWin::slot_tab_edited);
-    QObject::connect(temp_tab, &ProjTab::project_renamed, this, &CompilerMainWin::slot_tab_renamed);
+    QObject::connect(temp_tab, &ProjTab::sig_changed, this, &CompilerMainWin::slot_tab_edited);
+    QObject::connect(temp_tab, &ProjTab::sig_project_renamed, this, &CompilerMainWin::slot_tab_renamed);
+    QObject::connect(temp_tab, &ProjTab::sig_can_change_preview, this, &CompilerMainWin::slot_enable_preview_button);
+
 
     ui->menu_close->setEnabled(true);
     ui->menu_close_all->setEnabled(true);
     ui->toolbar_close_all->setEnabled(true);
     ui->menu_save_copy->setEnabled(true);
+
 
 }
 
@@ -376,7 +475,6 @@ void CompilerMainWin::slot_close_tab(int index)
         ui->menu_save_all->setEnabled(false);
         ui->toolbar_save_all->setEnabled(false);
         ui->menu_save_copy->setEnabled(false);
-        ui->label_curr->setText("0");
         ui->label_outof->setText("0");
         ui->toolbar_undo->setEnabled(false);
         ui->toolbar_redo->setEnabled(false);
@@ -436,7 +534,7 @@ void CompilerMainWin::slot_tab_changed(int index)
     if (ui->tabs->count() == 0)
         return;
     if ( ! m_proj_index[id]->m_file.isEmpty() )
-        QDir::setCurrent(m_proj_index[id]->m_file);
+        QDir::setCurrent(QFileInfo(m_proj_index[id]->m_file).absolutePath());
     if (m_tabs_index[id]->have_redo())
         ui->toolbar_redo->setEnabled(true);
     else
@@ -451,7 +549,7 @@ void CompilerMainWin::slot_tab_changed(int index)
 
 void CompilerMainWin::save(const Data::CProject &data) const
 {
-    nlohmann::json out = data.to_json();
+    nlohmann::json out = data.to_json(QFileInfo(data.m_file).absolutePath());
     QFile file(data.m_file);
     file.open(QIODeviceBase::WriteOnly | QIODeviceBase::Truncate);
     std::string raw = out.dump();
@@ -464,7 +562,6 @@ void CompilerMainWin::load(Data::CProject & data)
 {
     QFile file(data.m_file);
     file.open(QIODeviceBase::ReadOnly | QIODeviceBase::ExistingOnly);
-    //auto raw = nlohmann::json::from_bson();
     char buffer[1024];
     long long c = 0;
     std::vector<unsigned char> bson;
@@ -475,7 +572,7 @@ void CompilerMainWin::load(Data::CProject & data)
         memcpy(bson.data()+old,buffer, c);
     }
     file.close();
-    data.from_jsom(nlohmann::json::parse(bson));
+    data.from_json(nlohmann::json::parse(bson));
     //data.from_jsom(nlohmann::json::from_bson(bson));
 }
 
@@ -541,14 +638,14 @@ void CompilerMainWin::slot_undo(bool)
     show_counters(temp);
 }
 
-void CompilerMainWin::slot_tab_renamed(unsigned int id)
+void CompilerMainWin::slot_tab_renamed(unsigned int id, const QString & name)
 {
     auto temp_tab = m_tabs_index[id];
     int i = 0;
     for (  ; i < ui->tabs->count(); i++)
     {
         if (ui->tabs->widget(i) == temp_tab)
-            ui->tabs->setTabText(i, m_proj_index[id]->m_name);
+            ui->tabs->setTabText(i, name);
     }
 }
 
@@ -564,4 +661,54 @@ void CompilerMainWin::slot_generate(bool)
 
     DialogProgress dialog(&*(m_proj_index[static_cast<ProjTab*>(ui->tabs->widget(ui->tabs->currentIndex()))->getId()]), this);
     dialog.exec();
+}
+
+void CompilerMainWin::slot_enable_preview_button(unsigned int id, bool can_be)
+{
+    if ( static_cast<ProjTab*>(ui->tabs->widget(ui->tabs->currentIndex()))->getId() != id )
+        return;
+    switch_preview_buttons(can_be);
+}
+
+void CompilerMainWin::slot_next_color(bool)
+{
+    auto tab = static_cast<ProjTab*>(ui->tabs->widget(ui->tabs->currentIndex()));
+    ui->next_color->setEnabled(tab->next_color());
+    build_preview();
+}
+
+void CompilerMainWin::slot_prev_color(bool)
+{
+    auto tab = static_cast<ProjTab*>(ui->tabs->widget(ui->tabs->currentIndex()));
+    ui->next_color->setEnabled(tab->prev_color());
+    build_preview();
+}
+
+void CompilerMainWin::slot_next_file(bool)
+{
+    auto tab = static_cast<ProjTab*>(ui->tabs->widget(ui->tabs->currentIndex()));
+    ui->next_color->setEnabled(tab->next_file());
+    build_preview();
+}
+
+void CompilerMainWin::slot_prev_file(bool)
+{
+    auto tab = static_cast<ProjTab*>(ui->tabs->widget(ui->tabs->currentIndex()));
+    ui->next_color->setEnabled(tab->prev_file());
+    build_preview();
+}
+
+void CompilerMainWin::build_preview()
+{
+    ui->preview_progress->setVisible(true);
+    int current = ui->tabs->currentIndex();
+    auto tab = static_cast<ProjTab*>(ui->tabs->widget(current));
+    ui->tabs->setTabsClosable(false);
+    for (int i = 0; i < ui->tabs->count() ; i++)
+        if (i != current)
+            ui->tabs->setTabEnabled(i, false);
+
+    std::vector<QString> images;
+    std::vector<Data::CColor*> colors;
+    tab->task(images, colors);
 }

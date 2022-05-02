@@ -2,7 +2,7 @@
 #include "ColorSettings.h"
 
 Data::CColorSettings::CColorSettings()
-    : m_generations_number(10)
+    : m_generations_number(3)
     , m_colors()
     , m_saturatiom(false)
     , m_value(false)

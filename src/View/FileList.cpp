@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include <QPainter>
 #include <QFile>
 #include <QVector>
@@ -63,8 +64,35 @@ void CFileList::accept_clicked(bool)
                 it.remove();
         }
     }
-        m_files.swap(temp_list);
-        this->accept();
+    QStringList errored;
+    QStringList errors;
+    for (QString &item: temp_list)
+    {
+        QFile test;
+        test.setFileName(item);
+        if ( !test.open(QIODeviceBase::ReadOnly) )
+        {
+            errored.append(item);
+            errors.append(test.errorString());
+        }
+        else
+            test.close();
+    }
+
+    if ( errored.size() )
+    {
+        QString text("Файлы не могут быть открыты на чтение:");
+        auto errored_ = errored.begin();
+        auto errors_ = errors.begin();
+        for (; errored_ != errored.end() && errors_ != errors.end() ; ++errored_, ++errors_ )
+            text += "\n\t" + *errored_ + " [" + *errors_ + "]";
+        QMessageBox::warning(this, "Нет доступа к файлам", text);
+        ui->plainTextEdit->setPlainText(temp_list.join("\n"));
+        return;
+    }
+
+    m_files.swap(temp_list);
+    this->accept();
 
 }
 

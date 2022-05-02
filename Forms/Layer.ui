@@ -322,6 +322,12 @@
      </item>
      <item>
       <widget class="QCheckBox" name="blinked">
+       <property name="minimumSize">
+        <size>
+         <width>97</width>
+         <height>17</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string>Есвли включено, то при генерации будет, как-будто, добавлена пустая картинка.
 </string>
@@ -338,7 +344,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>1</width>
          <height>20</height>
         </size>
        </property>
@@ -349,7 +355,7 @@
        <property name="minimumSize">
         <size>
          <width>60</width>
-         <height>0</height>
+         <height>22</height>
         </size>
        </property>
        <property name="maximumSize">

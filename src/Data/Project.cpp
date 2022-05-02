@@ -119,7 +119,21 @@ const nlohmann::json Data::CProject::to_json()  const
     return json;
 }
 
-void Data::CProject::from_jsom(const nlohmann::json & json)
+const nlohmann::json Data::CProject::to_json(const QString & root)  const
+{
+    nlohmann::json json = {
+        {"name", m_name.toStdString()},
+        {"out", m_out_path.toStdString()},
+        {"version", (static_cast<unsigned>(__M_major_ver) << 16) | __M_minor_ver },
+    };
+
+    for (auto it = m_layers.begin(); it != m_layers.end(); it++)
+        json["layers"].push_back( (*it)->to_json() );
+
+    return json;
+}
+
+void Data::CProject::from_json(const nlohmann::json & json)
 {
     unsigned version;
     json.at("version").get_to(version);

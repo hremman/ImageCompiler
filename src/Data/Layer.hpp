@@ -37,6 +37,7 @@ namespace Data {
             {return m_lid;}
         bool operator == (const CLayer &);
         const nlohmann::json to_json()  const;
+        const nlohmann::json to_json(const QString &)  const;
         void from_jsom(const nlohmann::json & json);
         size_t count() const;
 
