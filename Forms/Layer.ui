@@ -87,7 +87,7 @@
       <widget class="QLabel" name="label_2">
        <property name="minimumSize">
         <size>
-         <width>60</width>
+         <width>65</width>
          <height>16</height>
         </size>
        </property>
@@ -183,7 +183,7 @@
       <widget class="QLabel" name="path_label">
        <property name="minimumSize">
         <size>
-         <width>60</width>
+         <width>65</width>
          <height>16</height>
         </size>
        </property>

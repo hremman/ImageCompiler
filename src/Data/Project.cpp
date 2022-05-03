@@ -78,7 +78,7 @@ void  Data::CProject::moveLayerUp(size_t row)
     if (row == 0)
         return;
     auto i = m_layers.begin();
-    for (size_t j = 0; j <= row; j++)
+    for (size_t j = 0; j < row; j++)
     {
         i++;
     }
@@ -91,7 +91,7 @@ void  Data::CProject::moveLayerDown(size_t row)
     if (row == m_layers.size())
         return;
     auto i = m_layers.begin();
-    for (size_t j = 0; j <= row; j++)
+    for (size_t j = 0; j < row; j++)
     {
         i++;
     }

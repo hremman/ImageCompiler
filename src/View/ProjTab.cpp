@@ -15,6 +15,7 @@ ProjTab::ProjTab(Data::CProject& proj, QWidget *parent) :
     QWidget(parent),
     m_number(0),
     m_preview(false),
+    m_preview_img(),
     ui(new Ui::UiProjTab),
     m_proj_v(proj),
     m_proj(m_proj_v.getCurrent()),
@@ -289,12 +290,15 @@ void ProjTab::count_vars()
 
 void ProjTab::task(std::vector<QString> & images, std::vector<Data::CColor *> & colors)
 {
+    images.resize(ui->layer_list->count());
+    colors.resize(ui->layer_list->count());
     for (int i = 0; i < ui->layer_list->count(); ++i )
     {
         CLayer* layer = static_cast<CLayer*>(ui->layer_list->itemWidget(ui->layer_list->item(i)));
-        if(layer->preview_get_file() == nullptr)
+        const QString *temp_ptr = layer->preview_get_file();
+        if(temp_ptr == nullptr)
             continue;
-        images[i] = *layer->preview_get_file();
+        images[i] = *(temp_ptr);
         colors[i] = layer->preview_get_color();
     }
 }
@@ -334,4 +338,13 @@ bool ProjTab::prev_color()
         layer->preview_color_prev();
     return layer->preview_have_color_prev();
 }
+
+bool ProjTab::have_next_file()
+    { return static_cast<CLayer*>(ui->layer_list->itemWidget(ui->layer_list->selectedItems().front()))->preview_have_file_next(); }
+bool ProjTab::have_prev_file()
+    { return static_cast<CLayer*>(ui->layer_list->itemWidget(ui->layer_list->selectedItems().front()))->preview_have_file_prev(); }
+bool ProjTab::have_next_color()
+    { return static_cast<CLayer*>(ui->layer_list->itemWidget(ui->layer_list->selectedItems().front()))->preview_have_color_next(); }
+bool ProjTab::have_prev_color()
+    { return static_cast<CLayer*>(ui->layer_list->itemWidget(ui->layer_list->selectedItems().front()))->preview_have_color_prev(); }
 

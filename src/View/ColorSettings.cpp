@@ -22,8 +22,8 @@ ColorSettings::ColorSettings(Data::CColorSettings * data, QWidget *parent):
         ui->generation_number->setValue(m_data->m_generations_number);
         ui->random_saturation->setCheckState(m_data->m_saturatiom ?  Qt::Checked : Qt::Unchecked);
         ui->random_value->setCheckState(m_data->m_value ?  Qt::Checked : Qt::Unchecked);
-
-
+        ui->random_ch->setChecked(true);
+        ui->enumer_ch->setChecked(false);
     }
     else
     {
@@ -51,6 +51,8 @@ ColorSettings::ColorSettings(Data::CColorSettings * data, QWidget *parent):
             // Associate the custom widget to the list entry
             ui->colors_list->setItemWidget(item, row);
         }
+        ui->random_ch->setChecked(false);
+        ui->enumer_ch->setChecked(true);
     }
     QObject::connect(ui->random_ch, &QRadioButton::clicked, this, &ColorSettings::react_toogled_rand);
     QObject::connect(ui->enumer_ch, &QRadioButton::clicked, this, &ColorSettings::react_toogled_enum);
@@ -127,6 +129,8 @@ void ColorSettings::react_toogled_rand(bool)
 
 void ColorSettings::react_accepted()
 {
+    qDebug() << QString("random: %1").arg(ui->random_ch->isChecked());
+    qDebug() << QString("enum: %1").arg(ui->enumer_ch->isChecked());
     if ( ui->random_ch->isChecked() )
     {
         m_data->m_mode = Data::CColorSettings::Mode::GENERATION;

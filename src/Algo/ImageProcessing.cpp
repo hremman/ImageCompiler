@@ -100,7 +100,8 @@ void CImageProcessing::ChangeColor(QImage * image, int hue, size_t num, size_t c
     if ( count < 1)
         throw wrong_arg("[CImageProcessing::ChangeColor]: Передано число потоков обработки меньше одного");
 
-
+    if (hue < -1)
+        hue = -1;
     for (int row = num; row < image->height(); row += count)
     {
         for (int col = 0; col < image->width(); col ++)
@@ -161,4 +162,24 @@ QImage CImageProcessing::PaddToSize(const QImage & img, const QSize & new_size)
     return new_img;
 }
 
+ImageCache CImageProcessing::CollapseCache(ImageCache * cache, size_t size)
+{
+    ImageCache fin;
+    for (size_t i = 0 ; i < size; i++)
+    {
+        if ( fin.m_saturation.m_down > cache[i].m_saturation.m_down )
+            fin.m_saturation.m_down = cache[i].m_saturation.m_down;
+        if ( fin.m_value.m_down > cache[i].m_value.m_down )
+            fin.m_value.m_down = cache[i].m_value.m_down;
+        if ( fin.m_saturation.m_top < cache[i].m_saturation.m_top )
+            fin.m_saturation.m_top = cache[i].m_saturation.m_top;
+        if ( fin.m_value.m_top < cache[i].m_value.m_top )
+            fin.m_value.m_top = cache[i].m_value.m_top;
+        fin.m_saturation.m_average += cache[i].m_saturation.m_average;
+        fin.m_value.m_average += cache[i].m_value.m_average;
+    }
+    fin.m_saturation.m_average /= size;
+    fin.m_value.m_average /= size;
 
+    return fin;
+}

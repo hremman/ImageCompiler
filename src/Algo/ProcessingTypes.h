@@ -1,12 +1,13 @@
 #ifndef PROCESSINGTYPES_H
 #define PROCESSINGTYPES_H
 
+#define MAX_VAL 255
 
 struct AverageRange
 {
     int m_top = 0;
     int m_average = 0;
-    int m_down = 100;
+    int m_down = 255;
 };
 
 struct ImageCache {
@@ -17,6 +18,7 @@ struct ImageCache {
 class RangeMapper
 {
 public:
+
     RangeMapper()
         : m_k(0)
         , m_down(0)
@@ -28,14 +30,17 @@ public:
         AverageRange new_range;
         new_range.m_average= new_val - range.m_average;
         new_range.m_top = range.m_top + new_range.m_average;
-        new_range.m_down = range.m_top + new_range.m_average;
-        if ( new_range.m_top > 100 ) new_range.m_top = 100;
-        if ( new_range.m_down >= 100 ) new_range.m_down = 95;
+        new_range.m_down = range.m_down + new_range.m_average;
+        if ( new_range.m_top > MAX_VAL ) new_range.m_top = MAX_VAL;
+        if ( new_range.m_down >= MAX_VAL ) new_range.m_down = MAX_VAL*0.95;
         if ( new_range.m_down < 0 ) new_range.m_down = 0;
-        if ( new_range.m_top <= 0 ) new_range.m_top = 95;
+        if ( new_range.m_top <= 0 ) new_range.m_top = MAX_VAL*0.05;
 
-        m_k = (double)(new_range.m_top - new_range.m_down) / (double)(range.m_top - range.m_down);
-
+        if (range.m_top - range.m_down != 0)
+            m_k = (double)(new_range.m_top - new_range.m_down) / (double)(range.m_top - range.m_down);
+        else m_k = 1.0;
+        m_down_old = range.m_down;
+        m_down = new_range.m_down;
     }
 
     __attribute__((always_inline)) int map(int val) const

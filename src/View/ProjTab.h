@@ -49,6 +49,10 @@ public:
     bool prev_file();
     bool next_color();
     bool prev_color();
+    bool have_next_file();
+    bool have_prev_file();
+    bool have_next_color();
+    bool have_prev_color();
 
 
 public slots:
@@ -71,6 +75,7 @@ signals:
 public:
     int m_number;
     bool m_preview;
+    QImage m_preview_img;
 private:
     Ui::UiProjTab *ui;
     Data::CProjectStory m_proj_v;

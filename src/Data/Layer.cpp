@@ -8,7 +8,7 @@ Data::CLayer::CLayer(uid_t lid)
     , m_use_probability(1.0)
     , m_noise_probability(0.0)
     , m_blink(false)
-    , m_type(WorkType::NO_TYPE)
+    , m_type(WorkType::NOTHING)
     , m_colors()
     , m_lid(lid)
 {

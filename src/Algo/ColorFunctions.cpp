@@ -1,5 +1,6 @@
 #include "ColorFunctions.h"
 
+#include <QDebug>
 
 QColor CColorFunctions::CompositeAlphaPixel(const QColor & top, const QColor &down)
 {
@@ -21,13 +22,25 @@ QColor CColorFunctions::CompositeAlphaPixel(const QColor & top, const QColor &do
 QColor CColorFunctions::SetHue(const QColor & pixel, int hue)
 {
     QColor p;
-    p.setHsv(hue % 361, pixel.saturation(), pixel.value(), pixel.alpha());
+    if (hue < -1 || pixel.value() > 255 || pixel.value() < 0 || pixel.alpha() > 255 || pixel.alpha() < 0 || pixel.hsvSaturation() > 255 || pixel.hsvSaturation() < 0)
+        qDebug() << QString("[SetSaturation]Hue: %1; Sat: %2; Val: %3; Alpha: %4")
+                    .arg(hue)
+                    .arg(pixel.hsvSaturation())
+                    .arg(pixel.value())
+                    .arg(pixel.alpha());
+    p.setHsv(hue % 361, pixel.hsvSaturation(), pixel.value(), pixel.alpha());
     return p;
 }
 
 QColor CColorFunctions::SetSaturation(const QColor & pixel, const RangeMapper & mapper)
 {
     QColor p;
+    if (pixel.hsvHue() < -1 || pixel.value() > 255 || pixel.value() < 0 || pixel.alpha() > 255 || pixel.alpha() < 0 || mapper(pixel.hsvSaturation()) > 255 || mapper(pixel.hsvSaturation()) < 0)
+        qDebug() << QString("[SetSaturation]Hue: %1; Sat: %2; Val: %3; Alpha: %4")
+                    .arg(pixel.hsvHue())
+                    .arg(mapper(pixel.hsvSaturation()))
+                    .arg(pixel.value())
+                    .arg(pixel.alpha());
     p.setHsv(pixel.hsvHue(), mapper(pixel.hsvSaturation()), pixel.value(), pixel.alpha());
     return p;
 }
@@ -35,6 +48,13 @@ QColor CColorFunctions::SetSaturation(const QColor & pixel, const RangeMapper & 
 QColor CColorFunctions::SetValue(const QColor & pixel, const RangeMapper & mapper)
 {
     QColor p;
+    if (pixel.hsvHue() < -1 || mapper(pixel.value()) > 255 || mapper(pixel.value()) < 0 || pixel.alpha() > 255 || pixel.alpha() < 0 || pixel.hsvSaturation() > 255 || pixel.hsvSaturation() < 0)
+        qDebug() << QString("[SetSaturation]Hue: %1; Sat: %2; Val: %3; Alpha: %4")
+                    .arg(pixel.hsvHue())
+                    .arg(pixel.hsvSaturation())
+                    .arg(mapper(pixel.value()))
+                    .arg(pixel.alpha());
     p.setHsv(pixel.hsvHue(), pixel.hsvSaturation(), mapper(pixel.value()), pixel.alpha());
     return p;
 }
+

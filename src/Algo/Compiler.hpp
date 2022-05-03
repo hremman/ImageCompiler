@@ -30,6 +30,15 @@ public:
 
     static bool Build(const Data::CProject &);
     static bool BuildOne(TaskInterface *, QImage &);
+    static int threadsAvalible()
+    {
+        int threads = QThread::idealThreadCount();
+        if ( threads  <= 4)
+            threads = 2;
+        else
+            threads -= 3;
+        return threads;
+    }
 
 public:
     CCompiler();

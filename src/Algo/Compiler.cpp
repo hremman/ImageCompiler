@@ -11,16 +11,11 @@ CCompiler CCompiler::__M_instance = CCompiler();
 
 CCompiler::CCompiler()
     : QObject(nullptr)
-    , m_signal(Signal::WORK)
+    , m_signal(Signal::WAIT)
     , m_lock()
     , m_pool()
 {
-    int threads = QThread::idealThreadCount();
-    if ( threads  <= 4)
-        threads = 2;
-    else
-        threads -= 3;
-    m_pool.setMaxThreadCount(threads);
+    m_pool.setMaxThreadCount(threadsAvalible());
 }
 
 bool CCompiler::Build(const Data::CProject & proj)
@@ -94,9 +89,6 @@ bool CCompiler::buildOne(TaskInterface *task, QImage &img)
 
         if ( out.size().height() < li.img.size().height() || out.size().width() < li.img.size().width() )
             out = CImageProcessing::PaddToSize(out, li.img.size());
-
-        RangeMapper sat(li.cache.m_saturation,li.color->m_color.saturation());
-        RangeMapper val(li.cache.m_value,li.color->m_color.value());
 
         QFutureWatcher<void> * watchdog = new QFutureWatcher<void>[m_pool.maxThreadCount()] ;
 

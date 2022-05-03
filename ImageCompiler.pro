@@ -18,6 +18,7 @@ SOURCES += \
     src/Algo/CompilerTask.cpp \
     src/Algo/ImageProcessing.cpp \
     src/Algo/ImageStorage.cpp \
+    src/Algo/PreviewBuilder.cpp \
     src/Data/ColorSettings.cpp \
     src/Data/Layer.cpp \
     src/Data/Project.cpp \
@@ -42,6 +43,7 @@ HEADERS += \
     src/Algo/CompilerTask.hpp \
     src/Algo/ImageProcessing.hpp \
     src/Algo/ImageStorage.hpp \
+    src/Algo/PreviewBuilder.hpp \
     src/Algo/ProcessingTypes.h \
     src/Algo/SpinLock.hpp \
     src/Algo/json.hpp \

@@ -13,7 +13,7 @@ namespace CImageProcessing
     void ChangeColor(QImage *, int, size_t, size_t,  const RangeMapper* saturation = nullptr, const RangeMapper* value = nullptr );
     void WhiteNoise(QImage *, size_t, size_t,  const ImageCache &);
     QImage PaddToSize(const QImage &, const QSize &);
-
+    ImageCache CollapseCache(ImageCache *, size_t);
 };
 
 #endif // CIMAGEPROCSSING_HPP

@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QFileDialog>
+#include "Algo/PreviewBuilder.hpp"
 
 #include "Exceptions.hpp"
 
@@ -68,6 +69,8 @@ CompilerMainWin::CompilerMainWin(QWidget *parent)
     QObject::connect(ui->next_file, &QToolButton::clicked, this, &CompilerMainWin::slot_next_file);
     QObject::connect(ui->prev_file, &QToolButton::clicked, this, &CompilerMainWin::slot_prev_file);
 
+    QObject::connect(ui->preview_enable, &QCheckBox::toggled, this, &CompilerMainWin::slot_preview_allowed);
+
 
     ui->menu_save->setEnabled(false);
     ui->toolbar_save->setEnabled(false);
@@ -84,69 +87,16 @@ CompilerMainWin::CompilerMainWin(QWidget *parent)
 
     switch_preview_buttons(false);
 
+    ui->graphicsView->setScene(&m_scene);
 
 
-
-
-
-    /*QImage img_1, img_2;
-    img_1.load("h:\\mix_r.png");
-    img_2.load("h:\\mix_b.png");
-    img.~QImage();
-    new (&img) QImage(img_1.width(),img_1.height(),img_1.format());
-    for (auto col = 0; col < img_1.width(); col++)
-    {
-        for (auto row = 0; row < img_1.height(); row++)
-        {
-            QColor p1 = img_1.pixelColor(col, row);
-            QColor p2 = img_2.pixelColor(col, row);
-            QColor p_res;
-            if ( p2.alpha() == 0 && p1.alpha() == 0 )
-            {
-                p_res.setRgba(qRgba(255,255,255,0));
-                img.setPixelColor(col, row, p_res);
-                continue;
-            }
-            if ( p2.alpha() == 0 )
-            {
-                img.setPixelColor(col, row, p1);
-                continue;
-            }
-            if ( p1.alpha() == 0 )
-            {
-                img.setPixelColor(col, row, p2);
-                continue;
-            }
-            p_res.setAlphaF( p1.alphaF() + p2.alphaF()*(1-p1.alphaF()) );
-            //RRGB = (SRGB×SA + DRGB×DA×(1 − SA)) / RA
-            p_res.setRed((p1.red()*p1.alphaF() + p2.red()*p2.alphaF()*(1-p1.alphaF()))/p_res.alphaF() );
-            p_res.setGreen((p1.green()*p1.alphaF() + p2.green()*p2.alphaF()*(1-p1.alphaF()))/p_res.alphaF());
-            p_res.setBlue((p1.blue()*p1.alphaF() + p2.blue()*p2.alphaF()*(1-p1.alphaF()))/p_res.alphaF());
-
-
-            img.setPixelColor(col, row, p_res);
-
-        }
-    }
-
-    ui->show_img->setScene(&m_scene);
-    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(img.scaled(ui->show_img->width(), ui->show_img->height(), Qt::KeepAspectRatio)));
-    m_scene.addItem(item);
-    ui->show_img->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->show_img->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->show_img->update();
-*/
 }
 
 void CompilerMainWin::resizeEvent(QResizeEvent* event)
 {
     QMainWindow::resizeEvent(event);
-    /*m_scene.clear();
-    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(img.scaled(ui->graphicsView->width(), ui->graphicsView->height(), Qt::KeepAspectRatio)));
-    m_scene.addItem(item);
-    m_scene.setSceneRect(m_scene.itemsBoundingRect());
-    ui->graphicsView->update();*/
-
+    if ( ui->tabs->count())
+        setPreview( static_cast<ProjTab*>(ui->tabs->widget(ui->tabs->currentIndex())) );
 }
 
 CompilerMainWin::~CompilerMainWin()
@@ -514,6 +464,7 @@ void CompilerMainWin::slot_tab_edited(unsigned int id)
     ui->toolbar_save_all->setEnabled(true);
     ui->menu_save_all->setEnabled(true);
     show_counters();
+    setPreview(m_tabs_index[id]);
 }
 
 void CompilerMainWin::slot_tab_changed(int index)
@@ -544,6 +495,7 @@ void CompilerMainWin::slot_tab_changed(int index)
     else
         ui->toolbar_undo->setEnabled(false);
     show_counters();
+    setPreview(m_tabs_index[id]);
 
 }
 
@@ -674,28 +626,68 @@ void CompilerMainWin::slot_next_color(bool)
 {
     auto tab = static_cast<ProjTab*>(ui->tabs->widget(ui->tabs->currentIndex()));
     ui->next_color->setEnabled(tab->next_color());
+    ui->prev_color->setEnabled(tab->have_prev_color());
     build_preview();
 }
 
 void CompilerMainWin::slot_prev_color(bool)
 {
     auto tab = static_cast<ProjTab*>(ui->tabs->widget(ui->tabs->currentIndex()));
-    ui->next_color->setEnabled(tab->prev_color());
+    ui->prev_color->setEnabled(tab->prev_color());
+    ui->next_color->setEnabled(tab->have_next_color());
     build_preview();
 }
 
 void CompilerMainWin::slot_next_file(bool)
 {
     auto tab = static_cast<ProjTab*>(ui->tabs->widget(ui->tabs->currentIndex()));
-    ui->next_color->setEnabled(tab->next_file());
+    ui->next_file->setEnabled(tab->next_file());
+    ui->prev_file->setEnabled(tab->have_prev_file());
     build_preview();
 }
 
 void CompilerMainWin::slot_prev_file(bool)
 {
     auto tab = static_cast<ProjTab*>(ui->tabs->widget(ui->tabs->currentIndex()));
-    ui->next_color->setEnabled(tab->prev_file());
+    ui->prev_file->setEnabled(tab->prev_file());
+    ui->next_file->setEnabled(tab->have_next_file());
     build_preview();
+}
+
+void CompilerMainWin::slot_preview_finished()
+{
+    int current = ui->tabs->currentIndex();
+    auto tab = static_cast<ProjTab*>(ui->tabs->widget(current));
+    tab->m_preview_img = m_watchdog.result();
+    QObject::disconnect(&m_watchdog, &QFutureWatcherBase::finished, this, &CompilerMainWin::slot_preview_finished );
+    setPreview(tab);
+    ui->preview_progress->setVisible(false);
+    switch_preview_buttons(true);
+
+    ui->tabs->setTabsClosable(true);
+    for (int i = 0; i < ui->tabs->count() ; i++)
+        if (i != current)
+            ui->tabs->setTabEnabled(i, true);
+}
+
+void CompilerMainWin::setPreview(ProjTab* tab)
+{
+    auto items = m_scene.items();
+    m_scene.clear();
+    if ( tab->m_preview_img.isNull() )
+        return;
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(tab->m_preview_img.scaled(ui->graphicsView->width(), ui->graphicsView->height(), Qt::KeepAspectRatio)));
+    m_scene.addItem(item);
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->update();
+}
+
+void CompilerMainWin::slot_preview_allowed(bool checked)
+{
+    switch_preview_buttons(checked);
+    if (checked && ui->tabs->count())
+        build_preview();
 }
 
 void CompilerMainWin::build_preview()
@@ -707,8 +699,11 @@ void CompilerMainWin::build_preview()
     for (int i = 0; i < ui->tabs->count() ; i++)
         if (i != current)
             ui->tabs->setTabEnabled(i, false);
+    switch_preview_buttons(false);
 
     std::vector<QString> images;
     std::vector<Data::CColor*> colors;
     tab->task(images, colors);
+    m_watchdog.setFuture(QtConcurrent::run(CPreviewBuilder::buildPreview, std::move(images), std::move(colors)));
+    QObject::connect(&m_watchdog, &QFutureWatcherBase::finished, this, &CompilerMainWin::slot_preview_finished );
 }

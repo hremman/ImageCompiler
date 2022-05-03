@@ -50,9 +50,12 @@ private slots:
     void slot_prev_color(bool);
     void slot_next_file(bool);
     void slot_prev_file(bool);
+    void slot_preview_finished();
+    void slot_preview_allowed(bool);
 
 private:
     void build_preview();
+    void setPreview(ProjTab*);
 
 private:
      Ui::UiMainWin *ui;
